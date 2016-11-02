@@ -1,0 +1,44 @@
+!!! РАБОТАЕТ ТОЛЬКО НА "TOMCAT" И "JETTY"
+
+Существует проблема доступа к статическим ресурсам при использовании шаблона FrontController в web-приложении.
+
+Т.е. если у нас все запросы обрабатываются одним сервлетом <url-pattern>/</url-pattern>:
+
+<servlet>
+	<servlet-name>servlet</servlet-name>
+	<servlet-class>com.kai.dev.servlet.MainServlet</servlet-class>
+</servlet>					
+<servlet-mapping>
+	<servlet-name>servlet</servlet-name>
+	<url-pattern>/</url-pattern>
+</servlet-mapping>
+
+
+То у нас не получится получить, например, style.css файл лежащий в webapp/resources/styles/style.css, т.к. запрос:
+http://localhost:8080/AppName/resources/styles/style.css будет обрабатываться сервлетом как запрос к странице.
+
+Чтобы этого избежать необходимо добавить самым первым среди тегов <servlet-mapping> следующий тег:
+
+<servlet-mapping>
+	<servlet-name>default</servlet-name>
+	<url-pattern>/resources/*</url-pattern>
+</servlet-mapping>
+
+
+Т.е. в результате получим вот так:
+
+<servlet>
+	<servlet-name>servlet</servlet-name>
+	<servlet-class>com.payments.web.servlet.MainServlet</servlet-class>
+</servlet>
+			
+<servlet-mapping>
+	<servlet-name>default</servlet-name>
+	<url-pattern>/resources/*</url-pattern>
+</servlet-mapping>
+					
+<servlet-mapping>
+	<servlet-name>servlet</servlet-name>
+	<url-pattern>/</url-pattern>
+</servlet-mapping>
+

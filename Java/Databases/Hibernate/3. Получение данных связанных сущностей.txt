@@ -1,0 +1,171 @@
+[Описывается пример "Hibernate full example"]
+
+
+В примере объявляются 3 сущности: КОНТИНЕНТ, ЛОКАЦИЯ, СЕРВЕР.
+ОДИН КОНТИНЕНТ может соержать МНОГО ЛОКАЦИЙ.
+ОДНА ЛОКАЦИЯ может содержать МНОГО СЕРВЕРОВ.
+
+   КОНТИНЕНТ [ОДИН-КО-МНОГИМ ЛОКАЦИЯМ]
+       |
+       |
+    ЛОКАЦИЯ [МНОГИЕ-К-ОДНОМУ КОНТИНЕНТУ] [ОДНА-КО-МНОГИМ СЕРВЕРАМ]
+       |
+       |
+    СЕРВЕР [МНОГИЕ-К-ОДНОЙ ЛОКАЦИИ]
+
+
+Для получения данных в данном примере используем Hibernate Criteria, так же можно использовать HQL и Native SQL.
+
+
+ОПИСАНИЕ ЗАПРОСОВ В ПРИМЕРЕ:
+----------------------------
+
+
+1) Необходимо получить КОНТИНЕНТ по ID и связанные с ним ЛОКАЦИИ.
+
+1.1 - Запрос можно сформировать 2умя способами:
+
+1.1.1 - Получаем КОНТИНЕНТ по ID и далее инициализируем коллекцию сущностей ЛОКАЦИЯ List<Location> locations, т.е. инициализирем сущности ЛОКАЦИЯ, связанные с полученным КОНТИНЕНТОМ.
+---------------------------------------------
+	Continent continent = (Continent) session.createCriteria(Continent.class).add(Restrictions.eq("id", id)).uniqueResult();
+	Hibernate.initialize(continent.getLocations());
+---------------------------------------------
+Инициализация коллекции ЛОКАЦИЙ необходима по той причине, что в объявлении связи @OneToMany в классе сущности КОНТИНЕНТ используется fetch = FetchType.LAZY, что говорит о том, что когда мы запрашиваем сущность КОНТИНЕНТ, мы не получаем связанные с ним ЛОКАЦИИ. Инициализации позволяем получить ЛОКАЦИИ связанные с КОНТИНЕНТОМ в результате запроса. 
+Иництализация производится вызовом метода getLocations сущности КОНТИНЕНТ для получения коллекции ЛОКАЦИЙ внутри статического метода Hibernate.initialize().
+!!! Инициализацию необходимо производить в рамках той же сессии, что и запрос на получение КОНТИНЕНТА.
+
+1.1.2 - Получаем КОНТИНЕНТ с связанные с ним ЛОКАЦИИ одним запросом, используя FetchMode.JOIN
+---------------------------------------------
+	Continent continent = (Continent) session.createCriteria(Continent.class).add(Restrictions.eq("id", id)).setFetchMode("locations", FetchMode.JOIN).uniqueResult();
+---------------------------------------------
+"locations" - это название поля, через которое сущность КОНТИНЕНТ связана с коллекцией сущностей ЛОКАЦИЯ.
+Таким образом можно получать данные непосредственно связанных сущностей, т.е. КОНТИНЕНТ и связ. с ним ЛОКАЦИИ. 
+А вот получить КОНТИНЕНТ, связ. с ним ЛОКАЦИИ и связ. с ЛОКАЦИЯМИ СЕРВЕРА таким способом не получится, т.к. КОНТИНЕНТ и СЕРВЕР не имеют ссылки друг на друга, т.е. не связ. напрямую (В этом случаем необх. использовать первый способ "с инициализацией"). 
+!!! Это ограничение можно обойти используя аннотацию @LazyCollection(LazyCollectionOption.FALSE) перед объявления связи @OneToMany и не использовать fetch = FetchType.LAZY. Но так лучше не делать, т.к. любой запрос сущности будет инициализировать (загрузка из БД в объект-сущность) все связанные с ней сущности, что отрицательно скажется на быстродействии.
+
+1.2 - Для вывода результата (запрашиваем КОНТИНЕНТ с ID = 1) используется следующий код:
+---------------------------------------------
+	Continent continent = Factory.getInstance().getContinentDAO().getContinentByIdWithLocations(1);
+	System.out.println("---------------------------");
+	System.out.println("Continent: "+continent.getName());
+	List<Location> locations = continent.getLocations();
+	for (Location location : locations){
+		System.out.println("    Location: "+location.getName());
+	}
+	System.out.println("---------------------------");
+---------------------------------------------
+РЕЗУЛЬТАТ:
+---------------------------
+Continent: North America
+    Location: USA, New York
+---------------------------
+
+
+
+
+
+2) Необходимо получить КОНТИНЕНТ по ID, связанные с ним ЛОКАЦИИ и связ. с каждой ЛОКАЦИЕЙ СЕРВЕРА
+
+2.1 - Получаем КОНТИНЕНТ по ID, далее инициализируем коллекцию сущностей ЛОКАЦИЯ List<Location> locations и далее инициализируем коллекцию сущностей СЕРВЕР List<Server> servers для каждой ЛОКАЦИИ используя цикл FOR в стиле FOR EACH.
+Т.е. последовательно инициализирем сущности ЛОКАЦИЯ, связанные с полученным КОНТИНЕНТОМ и далее инициализирем сущности СЕРВЕР, связ. с каждой ЛОКАЦИЕЙ.
+---------------------------------------------
+	Continent continent = (Continent) session.createCriteria(Continent.class).add(Restrictions.eq("id", id)).uniqueResult();
+	Hibernate.initialize(continent.getLocations());
+	List<Location> locations = continent.getLocations();
+	for (Location location : locations)
+		Hibernate.initialize(location.getServers()); 
+---------------------------------------------
+
+2.2 - Для вывода результата (запрашиваем КОНТИНЕНТ с ID = 2) используется следующий код:
+---------------------------------------------
+	Continent continent = Factory.getInstance().getContinentDAO().getContinentByIdWithLocationsAndServers(2);
+	System.out.println("---------------------------");
+	System.out.println("Continent: "+continent.getName());
+	List<Location> locations = continent.getLocations();
+	for (Location location : locations){
+		System.out.println("    Location: "+location.getName());
+		List<Server> servers = location.getServers();
+		for (Server server : servers){
+			System.out.println("        Server: "+server.getName());
+		}
+	}
+	System.out.println("---------------------------");
+---------------------------------------------
+РЕЗУЛЬТАТ:
+---------------------------
+Continent: Europe
+    Location: Germany, Berlin
+        Server: Server #2.1
+        Server: Server #2.2
+---------------------------
+
+
+
+
+
+3) Необходимо по ID получить ЛОКАЦИЮ и связанные с ней СЕРВЕРА и КОНТИНЕНТ.
+
+3.1 - Запрос можно сформировать 2умя способами:
+
+3.1.1 - Получаем ЛОКАЦИЮ по ID и далее инициализируем коллекцию сущностей СЕРВЕР List<Server> servers и инициализируем сущность КОНТИНЕНТ, кот. связ. с ЛОКАЦИЕЙ
+---------------------------------------------
+	Location location = (Location) session.createCriteria(Location.class).add(Restrictions.eq("id", id)).uniqueResult();
+	Hibernate.initialize(location.getServers());
+	Hibernate.initialize(location.getContinent());
+---------------------------------------------
+
+3.1.2 - Получаем ЛОКАЦИЮ, связанные ней СЕРВЕРА и КОНТИНЕНТ одним запросом, используя FetchMode.JOIN
+---------------------------------------------
+	Location location = (Location) session.createCriteria(Location.class).add(Restrictions.eq("id", id)).setFetchMode("servers", FetchMode.JOIN).setFetchMode("continent", FetchMode.JOIN).uniqueResult();
+--------------------------------------------- 
+
+3.2 - Для вывода результата (запрашиваем ЛОКАЦИЮ с ID = 3) используется следующий код:
+---------------------------------------------
+	Location location = Factory.getInstance().getLocationDAO().getLocationByIdWithServersAndContinent(3);        
+	System.out.println("---------------------------");      
+	System.out.println("Continent: "+location.getContinent().getName());
+	System.out.println("    Location: "+location.getName());
+	List<Server> servers = location.getServers();
+	for (Server server : servers){
+		System.out.println("        Server: "+server.getName());
+	}
+	System.out.println("---------------------------");
+---------------------------------------------
+РЕЗУЛЬТАТ:
+---------------------------
+Continent: Australia
+    Location: Australia, Canberra
+        Server: Server #3.1
+        Server: Server #3.2
+---------------------------
+
+
+
+
+
+4) Необходимо по ID получить СЕРВЕР, связанную с ним ЛОКАЦИЮ и связ. с ЛОКАЦИЕЙ КОНТИНЕНТ
+
+4.1 - Получаем СЕРВЕР по ID, далее инициализируем сущность ЛОКАЦИЯ, кот. связ. с СЕРВЕРОМ и далее инициализируем сущность КОНТИНЕНТ, связ. с ЛОКАЦИЕЙ.
+---------------------------------------------
+	Server server = (Server) session.createCriteria(Server.class).add(Restrictions.eq("id", id)).uniqueResult();
+	Hibernate.initialize(server.getLocation());
+	Location location = server.getLocation();
+	Hibernate.initialize(location.getContinent());
+---------------------------------------------
+
+4.2 - Для вывода результата (запрашиваем СЕРВЕР с ID = 4) используется следующий код:
+---------------------------------------------
+	Server server = Factory.getInstance().getServerDAO().getServerByIdWithLocationAndContinent(4);
+	System.out.println("---------------------------");
+	System.out.println("Continent: "+server.getLocation().getContinent().getName());
+	System.out.println("    Location: "+server.getLocation().getName());
+	System.out.println("        Server: "+server.getName());
+	System.out.println("---------------------------");
+---------------------------------------------
+РЕЗУЛЬТАТ:
+---------------------------
+Continent: Europe
+    Location: Germany, Berlin
+        Server: Server #2.2
+---------------------------
+

@@ -1,0 +1,53 @@
+[Java 8. Полное руководство. Г. Шилдт. 9 издание 2015 год]
+
+--------------------------------------------------------------------
+
+При создании Java-приложений бывает удобно выносить некоторые параметры во внешние конфигурационные файлы.
+
+ПРИМЕР:
+--------
+
+Пусть в пакете my.resources создан конфигурационный файл myconf.properties 
+Формат [имя_файла_конфигурации].properties ОБЯЗАТЕЛЕН.
+Его содежимое следующее:
+
+username=Admin
+role=superuser
+
+
+Тогда для доступа к параметрам, объявленным в конфигурационном файле необходимо использовать экземпляр типа ResourceBundle:
+----------------------
+package main;
+
+import java.util.ResourceBundle;
+
+
+public class Main { 
+    
+    public static void main(String[] args) { 
+        
+        // Создаем экземпляр типа ResourceBundle на основе конфигурацииного файла 
+        // myconf.properties из пакета my.resources
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("my.resources.myconf"); 
+        // Читаем параметр username из конфиграционного файла
+        String userName = resourceBundle.getString("username");
+        // Читаем параметр role из конфиграционного файла
+        String role = resourceBundle.getString("role");
+        // -----
+        System.out.println("User name: "+userName);
+        System.out.println("Role: "+role);
+        
+    } 
+    
+}
+-----------------------
+
+
+Данные код возвращает в консоль следующий результат:
+
+User name: Admin
+Role: superuser
+
+
+
+

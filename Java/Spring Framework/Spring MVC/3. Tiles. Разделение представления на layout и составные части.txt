@@ -1,0 +1,204 @@
+Чтобы Tiles корректно работал со Spring и проект собирался в NetBeans необходимо:
+
+1) Создаем проект: Java Web -> Web-приложение + добавляем к проекту Spring Web MVC (библиотека Spring Framework 4.0.1)
+2) Добаляем к проекту библиотеки Tiles и сопутствующие библиотеки:
+----------------------------
+aopalliance-1.0.jar
+commons-beanutils-1.8.0.jar
+commons-digester-2.0.jar
+jcl-over-slf4j-1.5.8.jar
+log4j-over-slf4j-1.5.8.jar
+slf4j-api-1.5.8.jar
+slf4j-jdk14-1.5.8.jar
+slf4j-log4j12-1.5.8.jar
+slf4j-nop-1.5.8.jar
+slf4j-simple-1.5.8.jar
+tiles-api-2.2.2.jar
+tiles-core-2.2.2.jar
+tiles-jsp-2.2.2.jar
+tiles-servlet-2.2.2.jar
+tiles-template-2.2.2.jar
+----------------------------
+
+
+Описание:
+---------
+
+1) web.xml [/WEB-INF/web.xml]
+
+В этом файле мы указываем путь к конфигурации сервлета-диспетчера (путь может быть произвольным)
+-----------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<servlet>
+		<servlet-name>dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring-mvc/dispatcher-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+		
+	<servlet-mapping>
+		<servlet-name>dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+</web-app>
+------------------------------------------------------------------
+
+
+
+2) dispatcher-servlet.xml [/WEB-INF/spring-mvc/dispatcher-servlet.xml]
+
+В настройках сервлета-диспетчера мы указываем в какой библиотеке искать классы-контроллеры [context:component-scan]
+Также в TilesConfigurer указывается путь к файлу, кот. содержит определения шаблонов страниц и самих страниц (путь может быть произвольным)
+Также определяется арбитр представлний, который будет искать определия страниц и шаблонов по псевдониму страницы в файле /WEB-INF/tiles/tiles-scheme.xml
+-----------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/mvc"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:beans="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc 
+                http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd
+				http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+	<annotation-driven />
+
+	<context:component-scan base-package="kai.spring.dev"/>
+
+	<beans:bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer">
+		<beans:property name="definitions">
+			<beans:list>
+				<beans:value>/WEB-INF/tiles/tiles-scheme.xml</beans:value>
+			</beans:list>
+		</beans:property>
+	</beans:bean>
+
+	<beans:bean id="viewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+		<beans:property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
+	</beans:bean>
+
+</beans:beans>
+----------------------------------------------------------------- 
+
+
+
+3) HomeController.java [kai.spring.dev.HomeController]
+-----------------------------------------------------------------
+package kai.spring.dev;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class HomeController {
+    
+    @RequestMapping({"/", "/index"})
+    public String actionIndex() {
+        return "index";
+    }
+}
+-----------------------------------------------------------------
+
+
+
+4) tiles-scheme.xml [/WEB-INF/tiles/tiles-scheme.xml]
+В данном файле описываются шаблоны страниц и сами страницы.
+4.1 - Для удобства именуем шаблоны страниц исп. префикс контроллера, т.е. HomeController -> homeLayout
+4.2 - данный шаблон - это файл /WEB-INF/views/layouts/layout.jsp, в кот. выводятся атрибуты header, content и footer (имена атрибутов произвольны)
+4.3 - определние index расширяет шаблон homeLayout, добавлением атрибута content, кот. представлен файлом /WEB-INF/views/index.jsp
+4.4 - арбитр представлений находит это определение "index" по псевдониму страницы, кот. возвращает метод actionIndex() контроллера HomeController 
+и отображает полную страницу homeLayout(header, footer) + index(content).
+-----------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd"> 
+<tiles-definitions>
+    
+	<definition name="homeLayout" template="/WEB-INF/views/layouts/layout.jsp">
+		<put-attribute name="title" value="TILES" />
+		<put-attribute name="header" value="/WEB-INF/views/layouts/header.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layouts/footer.jsp" />
+	</definition>
+
+	<definition name="index" extends="homeLayout">
+		<put-attribute name="title" value="index page" />
+		<put-attribute name="content" value="/WEB-INF/views/index.jsp" />
+	</definition>
+        
+</tiles-definitions>
+-----------------------------------------------------------------
+
+
+
+5) Файлы шаблонов и представлений:
+
+layout.jsp [/WEB-INF/views/layouts/layout.jsp]
+В данном файле шаблона атрибуты header, content, footer выводятся с помощью спецтегов tiles:insertAttribute
+Чтобы подключить их поддержку в JSP необходимо вверху добавить строку <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+-----------------------------------------------------------------
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<html>
+<head>
+<title><tiles:insertAttribute name="title" ignore="true" /></title>
+</head>
+<body>
+
+	<tiles:insertAttribute name="header" />
+	<tiles:insertAttribute name="content" />
+	<tiles:insertAttribute name="footer" />
+
+</body>
+</html>
+-----------------------------------------------------------------
+
+
+header.jsp [/WEB-INF/views/layouts/header.jsp]
+-----------------------------------------------------------------
+<div style="width: 100%;
+            padding: 40px 0px;
+            background-color: #3097de;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;">
+    Header
+</div>
+-----------------------------------------------------------------
+
+
+footer.jsp [/WEB-INF/views/layouts/footer.jsp]
+-----------------------------------------------------------------
+<div style="width: 100%;
+            padding: 40px 0px;
+            background-color: #666666;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;">
+    Footer
+</div>
+-----------------------------------------------------------------
+
+
+index.jsp [/WEB-INF/views/index.jsp]
+-----------------------------------------------------------------
+<div style="width: 100%;
+            padding: 150px 0px;
+            background-color: #eeeeee;
+            font-size: 25px;
+            text-align: center;
+            color: #333333;">
+    Content: Index page
+</div>
+-----------------------------------------------------------------
+
+
+

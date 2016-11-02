@@ -1,0 +1,147 @@
+Продемонстрируем пример двухстронней связи двух сущностей: ЛОКАЦИЯ и СЕРВЕР.
+ОДНА сущность ЛОКАЦИЯ может содержать МНОГО сущностей СЕРВЕР, т.е. между этими сущностями объявим связь ОДИН-КО-МНОГИМ (относительно сущности ЛОКАЦИЯ).
+МНОГО (несколько) сущностей СЕРВЕР может находится в ОДНОЙ ЛОКАЦИИ, т.е. между этими сущностями мы также объявим связь МНОГИЕ-К-ОДНОМУ (относительно сущности СЕРВЕР).
+
+Свяжем сущность ЛОКАЦИЯ и сущность СЕРВЕР. 
+
+В одной ЛОКАЦИИ может быть много СЕРВЕРОВ (ОДИН-КО-МНОГИМ).
+
+Сущность ЛОКАЦИЯ:
+------------------
+
+@Entity
+@Table(name="LOCATIONS")
+public class Location {
+    
+    private Integer id;	
+    private String name;
+    private List<Server> servers = new ArrayList<Server>();
+    
+    public Location(){
+        name = null;
+    }
+    
+    public Location(Location location){
+        name = location.getName();
+    }
+    
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
+    @Column(name="ID")
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer i){
+        id = i;		
+    }
+    
+    @Column(name="NAME")
+    public String getName(){
+        return name;
+    }
+    public void setName(String n){
+        name = n;
+    }
+    
+    //---------------------------------------
+    @OneToMany (
+            mappedBy = "location",
+            fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    
+    public List<Server> getServers(){
+        return servers;
+    }    
+    public void setServers(List<Server> s){
+        servers = s;
+    }
+    
+}
+
+-----------------------------------------------------------------
+
+Несколько СЕРВЕРОВ может находится в одной ЛОКАЦИИ (МНОГИЕ-К-ОДНОМУ)
+
+Сущность СЕРВЕР
+----------------
+
+@Entity
+@Table(name="SERVERS")
+public class Server {
+    
+    private Integer id;	
+    private String name;
+    private Location location;
+    
+    public Server(){
+        name = null;
+    }
+    
+    public Server(Server server){
+        name = server.getName();
+    }
+    
+    @Id
+    @GeneratedValue(generator="increment")
+    @GenericGenerator(name="increment", strategy = "increment")
+    @Column(name="ID")
+    public Integer getId() {
+        return id;
+    }
+    public void setId(Integer i){
+        id = i;		
+    }
+    
+    @Column(name="NAME")
+    public String getName(){
+        return name;
+    }
+    public void setName(String n){
+        name = n;
+    }
+    
+    //--------------------------------    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID") 
+    
+    public Location getLocation(){
+        return location;
+    }    
+    public void setLocation(Location l){
+        location = l;
+    }    
+    
+}
+
+
+------------------------------------------------------------
+
+
+КОММЕНТАРИИ:
+
+
+1) Объявления полей должны быть выше @Анотаций иначе рискуем получить исключение типа:
+Caused by: org.hibernate.MappingException: Could not determine type for: XXX, at table: XXXX, for columns: YYYY
+
+
+2) В объявлении связи @OneToMany:
+
+2.1 - в параметре mappedBy указывается название поля из класса-сущности СЕРВЕР, которое содержит ссылку на сущность ЛОКАЦИЯ, т.е. поле location. Т.е. сущность СЕРВЕР связывается с сущностью ЛОКАЦИЯ через поле location.
+
+2.2 - FetchType.LAZY говорит о том, что когда мы будем запрашивать сущность ЛОКАЦИЯ из БД, то мы получим только ЛОКАЦИЮ без связанных с ней СЕРВЕРОВ, т.е. коллекция List<Server> servers будет пуста. Для того чтобы получить связанные с ЛОКАЦИЕЙ СЕРВЕРА, необходимо проинициализировать коллекцию List<Server> servers следующим образом:
+Hibernate.initialize(location.getServers()); где location - это полученная из БД сущность ЛОКАЦИЯ (объект типа Location)
+
+2.3 - cascade = CascadeType.ALL и orphanRemoval = true говорят о том, что если будет удалена ЛОКАЦИЯ, то должны быть удалены все СЕРВЕРа связанные с данной локацией для сохранения целостности данных. В БД не объявляется ON DELETE CASCADE ON UPDATE CASCADE при связи таблиц LOCATIONS и SERVERS вместо этого HIBERNATE при запросе на удаление ЛОКАЦИИ находит все СЕРВЕРа связанные с этой ЛОКАЦИЕЙ, удаляет их, а затем удаляет ЛОКАЦИЮ.
+
+
+3) В объявлении связи @ManyToOne:
+
+3.1 - @JoinColumn(name = "LOCATION_ID", referencedColumnName = "ID") необходима для создания нового поля LOCATION_ID в таблице SERVERS, в котором будет хратиться ID (referencedColumnName = "ID") сущности ЛОКАЦИЯ, с которой связана данная сущность СЕРВЕР.
+
+
+
+
+

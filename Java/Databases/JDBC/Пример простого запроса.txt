@@ -1,0 +1,79 @@
+﻿На примере взаимодействия с MySQL:
+
+1) Скачиваем JDBC (Java DB Connector) MySQL (Connector/J):
+http://dev.mysql.com/downloads/connector/j/3.1.html
+
+2) Подключаем пакет mysql-connector-java-3.1.14-bin.jar из скачанного архива к нашему проекту в NetBeans:
+Проекты -> раскрываем наш проект -> rightclick по папке Библиотеки -> Добавить JAR -> выбираем mysql-connector-java-3.1.14-bin.jar -> Открыть
+
+3) Пример кода работы с БД MySQL:
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+public class UsingDB
+{
+    public static void main (String[] args)
+    {
+        Connection con = null;
+        Statement stmt = null;
+        ResultSet rs = null;
+        try {
+			// инициализируем класс JDBC
+            Class.forName("com.mysql.jdbc.Driver");
+			// задаем url доступа к БД, логин и пароль
+            String url = "jdbc:mysql://localhost:3306/test_db";
+            String user = "root";
+            String password = "";
+			// создаем объект соединения
+            con = DriverManager.getConnection(url, user, password);
+			// создаем объект запроса
+            stmt = con.createStatement();
+			// создаем объект результата запроса (представляет собой коллекцию)
+            rs = stmt.executeQuery("SELECT * FROM test_table");
+			// обходим коллекцию
+			// т.е. коллекция в переменной "rs" - это таблица-результат sql-запроса.
+			// В цикле while мы получаем строки этой таблицы.
+			// Далее методом getString(n) получает элементы данной строки (значения, кот. хранятся в ячейках таблицы в формате String)
+			// т.е. если в таблице 5 столбцов, то мы можем получить их значения опособом описанным ниже в переменной "str".
+            while (rs.next()) {
+                String str = rs.getString(1) + ", " + rs.getString(2) + ", " + rs.getString(3) + ", " + rs.getString(4) + ", " + rs.getString(5);
+                System.out.println(str);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Закрываем соединение с базой
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (stmt != null) {
+                    stmt.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.err.println("Error: " + ex.getMessage());
+            }
+       }
+
+    }
+}
+
+Метод getString() объекта результата запроса ResultSet позволяет получить значение поля как по индексу поля так и по его имени. В данном случае мы получаем значение поля записи по его индексу (индексация начинается с единицы).
+
+
+4) Если необходимо взаимодействовать с какой-либо иной БД, то:
+4.1 - Добавляем в CLASSPATH библиотеку JDBC соотв. БД
+4.2 - Инициализируем данный класс JDBC
+4.3 - Изменяем строку соединения с БД, например, для MSSQL на:
+
+jdbc:sqlserver://SERVER\\INSTANCE:PORT;DatabaseName=DB_NAME
+
+

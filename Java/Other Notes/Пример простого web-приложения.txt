@@ -1,0 +1,120 @@
+Суть приложения:
+1) Если приходит GET запрос без параметров на URL: http://localhost:8080/SimpleWebApp/hello - выводим "Hello, World !"
+2) Если приходит GET запрос с параметром name, например, http://localhost:8080/SimpleWebApp/hello?name=Leha - выводим "Hello, Leha MAN :) !".
+
+Проект должен содержать следующую структуру папок и файлок:
+
+SimpleWebApp/	
+----WEB-INF/		
+----|---classes/
+----|-----|-simple/
+----|-----|-----web/
+----|-----|---------app/
+----|-----|------------ HelloWorldServlet.class
+----|--web.xml
+--hello.jsp
+
+#Файл web.xml, кот. указывает Web-серверу, какой сервлет 
+отвечает за обработку того или иного URL-запроса
+----------------------------------------------------------------
+
+<web-app>
+
+  <servlet>
+    <servlet-name>hello</servlet-name>
+    <servlet-class>simple.web.app.HelloWorldServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>hello</servlet-name>
+    <url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+
+</web-app>
+ 
+----------------------------------------------------------------
+
+
+
+#Файл класса-контроллера (сервлета) HelloWorldServlet.java:
+----------------------------------------------------------------
+
+package simple.web.app;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class HelloWorldServlet extends HttpServlet {
+    
+    String result = null;
+    
+    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		// пытаемся получить значение параметра name из URL-запроса 
+        result = req.getParameter("name");
+		// Если значение name не задано в URL-запросе
+        if (result == null){
+            result = "World";
+        }
+		// Если значение name задано в URL-запросе
+        else {
+            result = result+" MAN :)";
+        }
+		// Добавляем строку-результат к объекту запроса 
+        req.setAttribute("Result", result);
+		// Отрисовываем страницу hello.jsp и передаем ей объекты запроса и ответа
+        getServletContext().getRequestDispatcher("/hello.jsp").forward(req, resp);
+    }    
+    
+}
+
+----------------------------------------------------------------
+
+
+
+#Файл представления (сервлета) hello.jsp:
+----------------------------------------------------------------
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>
+            Hello World Sample
+        </title>
+    </head>
+
+    <body>
+        <h1>
+            <%
+				// Получаем значение из объекта запроса значение атрибута Result, 
+				// кот. мы добавили в классе-контроллере и явно преобразуем (это обязательно)
+				//его к необходимому нам типу, в данном случаем типу String 
+                String resultStr = (String) request.getAttribute("Result");
+				// Если значение name не было задано в URL-запросе
+                if(resultStr == null){
+            %>
+            Hello world !
+            <%
+                }
+				// Если значение name задано в URL-запросе
+                else {
+            %>
+            Hello, <%= resultStr %> !
+            <%
+                }
+            %>
+        </h1>
+    </body>
+</html>
+
+----------------------------------------------------------------
+
+
+NO: Помимо использования объекта запроса Request, данные из класса-контроллера 
+можно передавать в представление (JSP) исспользуя объект сессии (Session), JSTL, Custom Tag и т.д.
+

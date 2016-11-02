@@ -1,0 +1,78 @@
+На примере вызова хранимой процедуры MSSQL.
+
+Пусть на стороне MSSQL сервера реализованиа хранимая процедура Pr_Item_Name_And_Cost.
+В качестве входных параметров она принимает дату в формате дд.мм.гггг и название магазина.
+А возвращает результат, соотв. следующему SQL-запросу. Т.е. записи содержащие название товара и его цену
+
+SELECT name, cost FROM Items WHERE date = @date AND shop = @shopName;
+
+Для вызова данной процедуры можно использовать следующий код:
+(не забудь добавить JDBC для MSSQL в classpath проекта)
+
+
+Query.java
+-----------
+
+package main;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Calendar;
+import java.util.Formatter;
+
+
+public class Query {
+
+    public static void main(String[] args) {
+        
+        Connection c = null;
+        PreparedStatement s = null;
+        ResultSet r = null;
+		// Форматируем текущую дату как дд.мм.гггг
+        Formatter f = new Formatter();
+        String currentDateStr = f.format("%td.%<tm.%<tY", Calendar.getInstance()).toString();
+        
+        try {
+            // задаем url доступа к БД, логин и пароль
+            String url = "jdbc:sqlserver://SERVER\\INSTANCE:PORT;DatabaseName=DB_NAME";
+            String user = "MSSQL_User";
+            String password = "MSSQL_Password";
+            // создаем объект соединения
+            c = DriverManager.getConnection(url, user, password);
+            // создаем объект запроса как вызов хранимой процедуры
+            s = c.prepareCall("{call Pr_Item_Name_And_Cost(?, ?)}");
+            // устанавливаем входные параметры хранимой процедуры
+            s.setString(1, currentDateStr);
+			s.setString(2, "Gippo");
+            // создаем объект результата запроса
+            r = s.executeQuery();
+            while (r.next()){
+                System.out.println("Item name: "+r.getString("name")+" ----> Cost: "+r.getString("cost"));
+            }  
+        } 
+        catch (Exception e) {
+            e.printStackTrace();
+        } 
+        finally {
+            try {
+                if (c != null) {
+                    c.close();
+                }
+            } 
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+    }
+    
+}
+
+
+Метод getString() объекта результата запроса ResultSet позволяет получить значение поля как по индексу поля так и по его имени.
+В данном случае мы получаем значение поля записи по имени поля.
+
+

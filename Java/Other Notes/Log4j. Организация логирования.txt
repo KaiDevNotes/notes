@@ -1,0 +1,76 @@
+Для организации логирования в Java-приложениях можно использовать библиотеку Log4j.
+
+
+ОРГАНИЗАЦИЯ ЛОГИРОВАНИЯ:
+
+1) Добавляем в classpath библитеку log4j, например: log4j-1.2.14.jar
+
+----------------------------------------------------------------------------------------------------
+
+2) Создаем в пакете по-умолчанию конфигурационный файл log4j.properties:
+-----------------------
+# Уровень логирования
+log4j.rootLogger=DEBUG, file 
+# Апендер для работы с файлами
+log4j.appender.file=org.apache.log4j.RollingFileAppender
+# Путь где будет создаваться лог файл
+log4j.appender.file.File=D:\\Log4j\\log_file.log
+# Указываем максимальный размер файла с логами
+log4j.appender.file.MaxFileSize=1MB
+# Конфигурируем шаблон вывода логов в файл
+log4j.appender.file.layout=org.apache.log4j.PatternLayout
+log4j.appender.file.layout.ConversionPattern=%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n
+------------------------
+
+Значения:
+
+%d{yyyy-MM-dd HH:mm:ss} — выводит дату в формате 2014-01-14 23:55:57
+
+%-5p — выводит уровень лога (ERROR, DEBUG, INFO …), цифра 5 означает что всегда использовать 5 символов  остальное дополнится пробелами, а минус (-), то что позиционирование по левой стороне.
+
+%c{1} — категория, в скобках указывается сколько уровней выдавать. Так как у нас 1 уровень то писаться будет только имя класса.
+
+%L — номер строки в которой произошёл вызов записи в лог.
+
+%m — сообщение, которое передали в лог.
+
+%n — переход на новую строку.
+
+----------------------------------------------------------------------------------------------------
+
+
+3) Создаем экземпляр Logger'a и осуществляем логирование:
+
+-----------------------
+package main;
+
+import org.apache.log4j.Logger;
+
+
+public class LoggingSample {
+    
+    // Создаем Logger
+    private static final Logger LOG = Logger.getLogger(LoggingSample.class);
+
+    public static void main(String[] args) { 
+        // Запись в лог
+        LOG.debug("--- Log message 1 !");  
+        // Запись в лог
+        LOG.debug("--- Log message 2 !"); 
+        // Запись в лог
+        LOG.debug("--- Log message 3 !");        
+        System.out.println("Hello world !");        
+    }    
+}
+-----------------------
+
+В результате выполнения данной прогаммы в консоль выводится: Hello world !
+Также в директории D:\Log4j\ создается файл log_file.log в который выводятся наши лог-сообщения. Его содержимое:
+
+2016-03-05 16:25:49 DEBUG LoggingSample:13 - --- Log message 1 !
+2016-03-05 16:25:49 DEBUG LoggingSample:15 - --- Log message 2 !
+2016-03-05 16:25:49 DEBUG LoggingSample:17 - --- Log message 3 !
+
+
+
+ 

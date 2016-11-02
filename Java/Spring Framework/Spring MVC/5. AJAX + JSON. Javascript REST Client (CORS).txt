@@ -1,0 +1,419 @@
+ПРЕДИСЛОВИЕ:
+
+Допустим необходимо организовать сервис для предоставления REST-ресурсов.
+Причем клиентом такого REST сервиса будет браузер и он будет делать КРОССДОМЕННЫЕ запросы, т.е. запросы из другого домена.
+Нам необходимо организовать обработку HTTP-запросов в стиле RESTful (POST, GET, PUT, DELETE) от всех браузеров, даже тех, которые не поддерживают HTML5, т.е. не поддерживают все типы HTTP-запросов за исключением POST и GET (это обычно старые версии браузеров).
+
+---------------------------------------------------------------------------------------------
+
+Проект для демонстрации такого REST сервиса должен содержать следующие библиотеки:
+
+commons-logging-1.1.3.jar
+jackson-annotations-2.4.0.jar
+jackson-core-2.4.0.jar
+jackson-databind-2.4.0.jar
+spring-aop-4.1.4.RELEASE.jar
+spring-beans-4.2.0.RELEASE.jar
+spring-context-4.2.0.RELEASE.jar
+spring-core-4.2.0.RELEASE.jar
+spring-expression-4.1.4.RELEASE.jar
+spring-web-4.2.0.RELEASE.jar
+spring-webmvc-4.2.0.RELEASE.jar
+
+---------------------------------------------------------------------------------------------
+
+[СЕРВЕРНАЯ ЧАСТЬ]
+
+1)------------------------------
+Создадим Web-проект и назовем его SpringREST_AJAX_JSON_CORS
+
+
+2)------------------------------ 
+2.1 - Запрос приходит на web-сервер, который с помощью файла web.xml определяет какому сервлету-диспетчеру необходимо передать данный запрос. В данном случае сервлету с именем spring-mvc. 
+2.2 - Также определяем фильтр HTTP-запросов httpMethodFilter и привязываем его к сервлету-диспетчеру. 
+Этот фильтр необходим для преобразования типа HTTP-запроса от браузера на случай, если браузер не поддерживает типы HTTP-запросов кроме POST и GET.
+Под преобразованием типа HTTP-запроса подразумевается, что если необходимо из браузера послать PUT или DELETE запрос, то нужно послать POST запрос, а в параметре _method указать необходимый тип запроса, т.е. _method=PUT или _method=DELETE. Далее когда такой запрос приходит на web-сервер, фильтр httpMethodFilter приводит его к требуемом типу, кот. указан в параметре _method (т.е. PUT или DELETE). И далее преобазованный запрос передается REST контроллеру, кот. передает его необходимому методу для обработки.
+
+[WEB-INF\web.xml]:
+----------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app 
+    version="3.1" 
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="
+        http://xmlns.jcp.org/xml/ns/javaee 
+        http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+>
+    <servlet>
+        <servlet-name>spring-mvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>spring-mvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+    
+    <filter>
+        <filter-name>httpMethodFilter</filter-name>
+        <filter-class>
+            org.springframework.web.filter.HiddenHttpMethodFilter
+        </filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>httpMethodFilter</filter-name>
+        <servlet-name>spring-mvc</servlet-name>
+    </filter-mapping>
+
+</web-app>
+
+
+
+
+3)------------------------------
+В файле сервлета-диспетчера (в файле КОНТЕКСТА Spring MVC приложения) определяется пакет, в котором сервлет-диспетчер будет искать класс-контроллер, содержащий методы для обработки входящих запроса.
+В данном случае это пакет: com.kai.spring.rest
+Также в КОНТЕКСТЕ включается поддержка аннотаций: <mvc:annotation-driven/>
+
+[WEB-INF\spring-mvc-servlet.xml]:
+-------------------------
+<?xml version='1.0' encoding='UTF-8' ?>
+<!-- was: <?xml version="1.0" encoding="UTF-8"?> -->
+<beans     
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> 
+
+    <context:component-scan base-package="com.kai.spring.rest"/>
+    
+    <mvc:annotation-driven/>
+
+</beans>
+
+
+
+
+4)------------------------------
+Далее создаем класс (тип) ресурса Resource.
+В данном примере сервер будет возвращать данный ресурс в случае необходимости (в зависимости от запроса).
+При объявлении класса данного ресурса обязательно наличие конструктора по-умолчанию, GET-ров и SET-ров. Иначе будем получать HTTP 400 при отправке POST с данными на сервер.
+http://www.systemoutprintln.de/2014/12/status-400-when-using-ajax-json-and-spring-mvc/
+Данный информационный ресурс содержит id ресурса, тип запроса и описание.
+
+[Resource.java]:
+-------------------------
+package com.kai.spring.rest;
+
+
+public class Resource {
+    
+    private int id;
+    private String requestType;
+    private String description;
+    
+    public Resource(){}
+    
+    public int getId(){
+        return id;
+    }
+    public void setId(int id){
+        this.id = id;
+    }
+    
+    public String getRequestType(){
+        return requestType;
+    }
+    public void setRequestType(String requestType){
+        this.requestType = requestType;
+    }
+    
+    public String getDescription(){
+        return description;
+    }
+    public void setDescription(String description){
+        this.description = description;
+    }
+}
+
+
+
+
+5)------------------------------
+5.1 - В указанном пакете создан класс RESTController (название произвольно), который содержит методы для обработки входящих запросов на выполнение дейтсвий над ресурсом.
+5.2 - Для поддержки КРОССДОМЕННЫХ запросов мы активируем в классе-контроллере механизм CORS (Cross-origin Resource Sharing) путем добавления аннотации @CrossOrigin на уровне объявления класса. 
+Поддержа CORS в Spring осуществляется начиная с версии 4.2.0. По этой причине в библиотеке классов используем spring-beans, spring-context, spring-core,
+spring-web, spring-webmvc версии 4.2.0.
+CORS можно настраивать путем добавления параметров в аанотации @CrossOrigin, но по-умолчанию разрешены запросы с любых доменов и все HTTP-методы, объявленные в аннотациях @RequestMapping методов-обработчиков класса-контроллера. Подробнее о настройке CORS в Spring:
+http://docs.spring.io/spring/docs/current/spring-framework-reference/html/cors.html
+
+
+[RESTController.java]:
+-------------------------
+package com.kai.spring.rest;
+
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+
+@CrossOrigin
+@RestController
+@RequestMapping("/resources")
+public class RESTController {
+    
+    // REST CRUD operation: CREATE
+    @RequestMapping(method = RequestMethod.POST,
+                    headers="Accept=application/json")
+    public Resource createResource(@RequestBody Resource resource){
+        Resource newResource = new Resource();
+        newResource.setId(resource.getId());
+        newResource.setRequestType("POST");
+        newResource.setDescription("REST CRUD operation: CREATE");
+        return newResource;
+    }
+    
+    // REST CRUD operation: READ
+    @RequestMapping(value = "/{id}",
+                    method = RequestMethod.GET,
+                    headers="Accept=application/json")
+    public Resource getResource(@PathVariable int id){
+        Resource resource = new Resource();
+        resource.setId(id);
+        resource.setRequestType("GET");
+        resource.setDescription("REST CRUD operation: READ");
+        return resource;
+    }
+    
+    // REST CRUD operation: UPDATE
+    @RequestMapping(method = RequestMethod.PUT,
+                    headers="Accept=application/json")
+    public Resource updateResource(@RequestBody Resource resource){
+        Resource updatedResource = new Resource();
+        updatedResource.setId(resource.getId());
+        updatedResource.setRequestType("PUT");
+        updatedResource.setDescription("REST CRUD operation: UPDATE");
+        return updatedResource;
+    }
+    
+    // REST CRUD operation: DELETE
+    @RequestMapping(value = "/{id}",
+                    method = RequestMethod.DELETE,
+                    headers="Accept=application/json")
+    public Resource deleteResource(@PathVariable int id){
+        Resource resource = new Resource();
+        resource.setId(id);
+        resource.setRequestType("DELETE");
+        resource.setDescription("REST CRUD operation: DELETE");
+        return resource;
+    }
+    
+}
+
+
+---------------------------------------------------------------------------------------------
+
+[КЛИЕНТСКАЯ ЧАСТЬ - БРАУЗЕР]
+
+Для осуществеления КРОССДОМЕННЫХ запросов к REST-ресурсам и осуществления операций CRUD в стиле RESTful нам необходимы следующие AJAX-вызовы.
+!!! Не забываем подключать библиотеку jQuery (в примере использовалась jquery-1.7.1.min.js).
+!!! Внимательно следим за составом параметров AJAX-вызова, т.к. они меняются в зависимости от типа HTTP-метода.
+
+1)-------------- POST-запрос ----------------
+
+<script type="text/javascript">            
+	$(document).ready(function(){ 
+		var Resource = {
+			id: 1,
+			requestType: "",
+			description: ""
+		};
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:8080/SpringREST_AJAX_JSON_CORS/resources/",
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			data: JSON.stringify(Resource),
+			success: function(json){
+				console.log("ID: "+json.id+" -- HTTP Request Type: "+json.requestType+" -- Description: "+json.description);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(XMLHttpRequest.status+" -- "+textStatus+" -- "+errorThrown);
+			}
+			
+		});   
+	}); 
+</script> 
+
+В результате получаем в консоли браузера следующий вывод:
+------
+ID: 1 -- HTTP Request Type: POST -- Description: REST CRUD operation: CREATE
+------
+Т.е. мы POSTом посылем на сервер пустой объект ресурса, содержащий только id, а в ответ получаем созданный на его основе на сервере ресурс и выводим его в консоль браузера.
+
+
+
+
+2)-------------- GET-запрос ----------------
+
+<script type="text/javascript">            
+	$(document).ready(function(){
+		$.ajax({
+			type: "GET",
+			url: "http://localhost:8080/SpringREST_AJAX_JSON_CORS/resources/2",
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: function(json){
+				console.log("ID: "+json.id+" -- HTTP Request Type: "+json.requestType+" -- Description: "+json.description);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(XMLHttpRequest.status+" -- "+textStatus+" -- "+errorThrown);
+			}
+			
+		});   
+	}); 
+</script>
+
+В результате получаем в консоли браузера следующий вывод:
+------
+ID: 2 -- HTTP Request Type: GET -- Description: REST CRUD operation: READ
+------
+
+
+
+
+3)-------------- PUT-запрос ----------------
+
+3.1 - Запрос выполняется из современного браузера, кот. поддерживает POST, GET, PUT, DELETE методы.
+
+<script type="text/javascript">            
+	$(document).ready(function(){ 
+		var Resource = {
+			id: 3,
+			requestType: "",
+			description: ""
+		};
+		$.ajax({
+			type: "PUT",
+			url: "http://localhost:8080/SpringREST_AJAX_JSON_CORS/resources/",
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			data: JSON.stringify(Resource),
+			success: function(json){
+				console.log("ID: "+json.id+" -- HTTP Request Type: "+json.requestType+" -- Description: "+json.description);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(XMLHttpRequest.status+" -- "+textStatus+" -- "+errorThrown);
+			}
+			
+		});   
+	});
+</script>
+
+
+3.2 - Если необходимо выполнить запрос из браузера, кот. не поддерживает PUT, то тип ajax-вызова будет POST, а необходимый на самом деле метод PUT мы передаем через параметр _method:
+
+<script type="text/javascript">
+	$(document).ready(function(){ 
+		var Resource = {
+			id: 3,
+			requestType: "",
+			description: ""
+		};
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:8080/SpringREST_AJAX_JSON_CORS/resources/?_method=PUT",
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			data: JSON.stringify(Resource),
+			success: function(json){
+				console.log("ID: "+json.id+" -- HTTP Request Type: "+json.requestType+" -- Description: "+json.description);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(XMLHttpRequest.status+" -- "+textStatus+" -- "+errorThrown);
+			}
+			
+		});   
+	}); 
+</script>
+
+
+В результате обоих вызовов получаем в консоли браузера следующий вывод:
+------
+ID: 3 -- HTTP Request Type: PUT -- Description: REST CRUD operation: UPDATE
+------
+
+
+
+4)-------------- DELETE-запрос ----------------
+
+4.1 - Запрос выполняется из современного браузера, кот. поддерживает POST, GET, PUT, DELETE методы.
+
+<script type="text/javascript">            
+	$(document).ready(function(){
+		$.ajax({
+			type: "DELETE",
+			url: "http://localhost:8080/SpringREST_AJAX_JSON_CORS/resources/4",
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			success: function(json){
+				console.log("ID: "+json.id+" -- HTTP Request Type: "+json.requestType+" -- Description: "+json.description);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(XMLHttpRequest.status+" -- "+textStatus+" -- "+errorThrown);
+			}
+			
+		});   
+	});
+</script>
+
+
+4.2 - Если необходимо выполнить запрос из браузера, кот. не поддерживает DELETE, то тип ajax-вызова будет POST, а необходимый на самом деле метод DELETE мы передаем через параметр _method:
+
+<script type="text/javascript">
+	$(document).ready(function(){
+		$.ajax({
+			type: "POST",
+			url: "http://localhost:8080/SpringREST_AJAX_JSON_CORS/resources/4",
+			dataType: "json",
+			data: "_method=DELETE",
+			success: function(json){
+				console.log("ID: "+json.id+" -- HTTP Request Type: "+json.requestType+" -- Description: "+json.description);
+			},
+			error: function(XMLHttpRequest, textStatus, errorThrown){
+				console.log(XMLHttpRequest.status+" -- "+textStatus+" -- "+errorThrown);
+			}
+			
+		});   
+	}); 
+</script>
+
+
+В результате обоих вызовов получаем в консоли браузера следующий вывод:
+------
+ID: 4 -- HTTP Request Type: DELETE -- Description: REST CRUD operation: DELETE
+------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

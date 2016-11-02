@@ -1,0 +1,44 @@
+Например, необходимо собрать Web-проект с использованием Ant + Ivy.
+В данном примере будет собирать Spring MVC проект.
+
+Для того, чтобы Web-проект собрался в Eclipse необходимо, чтобы jar-библиотеки (в данном случае jar-библиотеки Spring'a) лежали в директории: WebContent/WEB-INF/lib
+
+Для того, чтобы Ivy расположил jar-библиотеки указанные в зависимостях в ivy.xml именно в этой директории WebContent/WEB-INF/lib, необходимо произвести следующую настройку:
+
+1) Открываем Window -> Prefirences -> Ivy -> Classpath Container
+2) Устанавливаем флажек на "retrieved artifacts"
+3) В поле Retrieve pattern указываем: WebContent/WEB-INF/lib/[artifact]-[revision].[ext]
+4) Устанавливаем флажек на "Delete old retrieved artifacts"
+5) В поле Types указываем *
+6) Apply -> OK
+
+
+СБОРКА ПРОЕКТА И ЗАПУСК НА TOMCAT:
+
+Допустим, что исходники проекта готовы и нам осталось только его собрать.
+Для этого:
+
+1) Распологаем ivy.xml в корне проекта, т.е. на одном уровне с папками Java Resources и WebContent. Для данного проекта ivy.xml будет выглядедть следующим образом:
+----------
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0">
+	<info organisation="org.apache" module="WebProject" />
+	<configurations>
+        <conf name="compile" description="compile dependencies"/>
+        <conf name="runtime" description="runtime dependencies" extends="compile"/>
+        <conf name="test"    description="test dependencies" extends="runtime"/>
+    </configurations>    
+	<dependencies>
+		<dependency org="org.springframework" name="spring-webmvc" rev="4.0.0.RELEASE" conf="compile->default"/>
+	</dependencies>
+</ivy-module>
+----------
+
+2) Right Click на проекте -> Build Path -> Configure Build Path -> вкладка Libraries -> Add Library -> IvyDE Managed Dependencies -> Next -> Finish
+
+3) После этого в директории WebContent/WEB-INF/lib должны появиться необходимые jar-библиотеки.
+
+4) !!! Перед запуском проекта обязательно необходимо очистит папку work tomcat'a:
+Вкладка Servers -> Right Click по Tomcat -> Clean Tomcat Work Directory
+
+5) Запускаем проект.

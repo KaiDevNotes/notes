@@ -1,0 +1,167 @@
+﻿!!! Предварительно необходимо ознакомиться с использованием Hibernate без Spring: 
+Текстовые файлы в папке - Hibernate
+-------------------------------------------------------------------------------------
+
+Для интеграции Hibernate и Spring понадобятся следующие библиотеки:
+
+antlr-2.7.7.jar
+aopalliance-1.0.jar
+commons-logging-1.1.3.jar
+commons-pool-1.6.jar
+dom4j-1.6.1.jar
+hibernate-commons-annotations-4.0.5.Final.jar
+hibernate-core-4.3.6.Final.jar
+hibernate-entitymanager-4.3.6.Final.jar
+hibernate-jpa-2.1-api-1.0.0.Final.jar
+javassist-3.18.1-GA.jar
+jboss-logging-3.1.3.GA.jar
+jboss-logging-annotations-1.2.0.Beta1.jar
+jta-1.3.1.jar
+mysql-5.1.10.jar
+spring-aop-4.1.4.RELEASE.jar
+spring-beans-4.1.4.RELEASE.jar
+spring-context-4.1.4.RELEASE.jar
+spring-core-4.1.4.RELEASE.jar
+spring-expression-4.1.4.RELEASE.jar
+spring-jdbc-3.2.0.RELEASE.jar
+spring-orm-4.0.3.RELEASE.jar
+spring-tx-3.2.0.RELEASE.jar
+spring-web-4.1.4.RELEASE.jar
+spring-webmvc-4.1.4.RELEASE.jar
+
+-------------------------------------------------------------------------------------
+
+В примере интеграции Hibernate и Spring будут использоваться те же сущности КОНТИНЕНТ, ЛОКАЦИЯ, СЕРВЕР, что и в примере обычного использования Hibernate.
+
+Файл КОНТЕКСТА выглядит следующим образом:
+
+context.xml
+-----------
+
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> 
+    
+    <bean id="continentDao" class="DAO.Impl.ContinentDAOImpl">
+        <constructor-arg>
+            <ref bean="sessionFactory" />
+        </constructor-arg>
+    </bean>
+    
+    <bean id="locationDao" class="DAO.Impl.LocationDAOImpl">
+        <constructor-arg>
+            <ref bean="sessionFactory" />
+        </constructor-arg>
+    </bean>
+    
+    <bean id="serverDao" class="DAO.Impl.ServerDAOImpl">
+        <constructor-arg>
+            <ref bean="sessionFactory" />
+        </constructor-arg>
+    </bean>
+ 
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://localhost:3306/hibernate2" />
+        <property name="username" value="root" />
+        <property name="password" value="" />
+    </bean>
+ 
+    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties">
+            <props> 
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+                <prop key="hibernate.show_sql">true</prop>  
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.connection.autocommit">false</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>             
+            </props>
+        </property>
+        <property name="annotatedClasses">
+            <list>
+                <value>logic.Server</value>
+                <value>logic.Location</value>    
+                <value>logic.Continent</value>            
+            </list>
+        </property>
+    </bean>
+ 
+    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+ 
+</beans>
+
+
+1) В данном случае мы не используем файл Hiberante конфигурации hibernate.cfg.xml, а все его параметры мы указываем в свойствах объявляемы компонентов.
+Т.е. св-ва относящиеся непосредственно к соединению с БД указываются в св-вах компонента dataSource, а св-ва относящиеся к hibernate записываются в св-ва компонента sessionFactory. Значения св-в можно хранить в отдельном внешнем файле как описано на стр.145 п.3.5.3.
+Также в св-вах фабрики сессий (соединений) можно указать классы-сущности, кот. необходимо отобразить в БД.
+
+2) Также в контексте объявляются компоненты объектов доступа к данным (DAO) и через DI в их конструктор внедряется ссылка на компонент фабрики сессий (соединений) sessionFactory.
+
+3) Исходя из этого в классах, кот. реализуют DAO интерфейсы необходимо реализовать конструктор, кот. будет записавать ссылку на фабрику соединений в св-во sessionFactory. Например в LocationDAOImpl это выглядит так:
+------------------------------------------------------------------------------
+@Transactional
+public class LocationDAOImpl implements LocationDAO {
+    
+    private SessionFactory sessionFactory;
+    
+    public LocationDAOImpl(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+	...
+	Далее реализация методов доступа к данным интерфейса LocationDAO...
+------------------------------------------------------------------------------
+Очень важно в методах доступа к данным перед операцией-запросом использовать session.beginTransaction(), а после - session.getTransaction().commit():
+------------------------------------------------------------------------------
+Session session = sessionFactory.getCurrentSession();
+session.beginTransaction();
+Location location = (Location) session.createCriteria(Location.class).add(Restrictions.eq("id", id)).setFetchMode("servers", FetchMode.JOIN).setFetchMode("continent", FetchMode.JOIN).uniqueResult();
+session.getTransaction().commit();
+------------------------------------------------------------------------------
+Иначе получим Exception типа: 
+createCriteria is not valide without active trasaction
+
+4) В данном случае реализация классов-сущностей: logic.Server, logic.Location, logic.Continent и DAO интерфейсов (наборов методов доступа к данных) остается прежней, как в примере использования Hibernate без Spring.
+
+5) В клиентском методе необходимо создать экземпляр контекста на основе нашего файла КОНТЕКСТА context.xml (название произвольно) и уже из КОНТЕКСТА получить необходимый компонент DAO для получения необходимых данных.
+В данном случае в клиентском методе необходимо получить ЛОКАЦИЮ по id (2) и связанные с ней КОНТИНЕНТ и СЕРВЕРа:
+
+------------------------------------------------------------------------------
+ApplicationContext context = new ClassPathXmlApplicationContext("context.xml");
+        
+LocationDAO locationDAO = (LocationDAO) context.getBean("locationDao");
+
+
+// ПОЛУЧАЕМ ЛОКАЦИЮ (ПО ID), СВЯЗАННЫЙ С НЕЙ КОНТИНЕНТ И СВЯЗАННЫЕ С НЕЙ СЕРВЕРА
+
+Location location = locationDAO.getLocationByIdWithServersAndContinent(2);        
+System.out.println("");       
+System.out.println("Continent: "+location.getContinent().getName());
+System.out.println("    Location: "+location.getName());
+List<Server> servers = location.getServers();
+for (Server server : servers){
+	System.out.println("        Server: "+server.getName());
+}
+System.out.println("");
+------------------------------------------------------------------------------
+
+В результате мы получим вывод вида:
+
+Continent: Europe
+    Location: Germany, Berlin
+        Server: Server #2
+
+------------------------------------------------------------------------------
+
+Хорошая статья на данную тему:
+http://javaonlineguide.net/2015/03/spring-4-and-hibernate-4-integration-example-project-in-eclipse-without-maven-support.html

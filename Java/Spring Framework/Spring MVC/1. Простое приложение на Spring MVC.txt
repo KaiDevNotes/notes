@@ -1,0 +1,123 @@
+Описание основано на иллюстрации последовательности обработки входящего запроса в Spring MVC, проиллюстрированного на стр.323 книги "Java Spring MVC в действии. Уоллс К. 2013". Пункты описания соответствуют номерам стрелок в иллюстрации.
+Пример основан на главе 8 (стр. 321).
+
+Входящий запрос: http://localhost:8080/[название приложения]
+
+1) Запрос приходит на web-сервер и он с помощью файла web.xml определяет какому сервлету-диспетчеру необходимо передать данный запрос, в данном случае сервлету с именем dispatcher.
+
+web.xml [/WEB-INF/web.xml]::
+----------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app 
+    version="3.1" 
+    xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:schemaLocation="
+        http://xmlns.jcp.org/xml/ns/javaee 
+        http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+>
+    <servlet>
+        <servlet-name>dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>dispatcher</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+
+2) 
+2.1) по-умолчанию используется механизм отображения DefaultAnnotationHandlerMapping
+2.2) нам необходимо указать в конфигурационном файле сервлета-диспетчера название пакета, в кот. необх. искать классы-контроллеры. В их коде по аннотации @RequestMapping определяется какой метод класса-контроллера обрабатывает тот или иной запрос.
+2.3) конфигурационный файл сервлета-диспетчера, имеет название в формате [название диспетчера]-servlet.xml - в данном случае dispatcher-servlet.xml
+2.4) в данном случае добавляем строку: <context:component-scan base-package="kai.spring.dev"/>
+т.е. необх. искать в пакете kai.spring.dev
+
+dispatcher-servlet.xml [/WEB-INF/dispatcher-servlet.xml]:
+-------------------------
+<?xml version='1.0' encoding='UTF-8' ?>
+<!-- was: <?xml version="1.0" encoding="UTF-8"?> -->
+<beans 
+    xmlns="http://www.springframework.org/schema/beans"
+    xmlns:context="http://www.springframework.org/schema/context" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.0.xsd"
+>
+
+    <context:component-scan base-package="kai.spring.dev"/>
+
+</beans>
+
+Очень важно следить за правельностью ссылок, указ. в теге <beans> - у меня не было ссылок на "context" и проект не собирался.
+
+
+3) 
+3.1) Далее запрос отправляетя контроллеру, в кот. найдена аннотация @RequestMapping("/"), т.е. где найдена аннотация, соотв. входящему запросу без указания конкретной страницы ресурса [http://localhost:8080/[название приложения].
+В данном случае запрос передается контроллеру HomeController.
+3.2) Аннотация @RequestMapping указывает какой метод будет обрабатывать запрос. Название метода роли не играет.
+В данном случае запрос обрабатывает метод render.
+
+HomeController.java [kai.spring.dev.HomeController]:
+----------------------
+package kai.spring.dev;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class HomeController {
+    
+    public String name = "Leha";
+    
+    @RequestMapping("/")
+    public String render(Model model){
+        model.addAttribute("name", name);
+        return "/WEB-INF/views/home.jsp";
+    }
+}
+
+
+4) 
+4.1) Модель - это данные, передаваемые в представление и используемые для формирования этого представления. В Spring модель - это объект класса Model, кот. передается в кач. агрумента метода - обработчика запроса.
+4.2) В данном случае мы передаем в представление строку "Leha" используя метод addAttribute объекта model
+
+
+5) 
+5.1) В нашем примере нет АРБИТРА ПРЕДСТАВЛЕНИЙ. Вместо этого мы указываем полный путь к файлу представления в строке, кот. возвращает метод - обработчик запроса "/WEB-INF/views/home.jsp".
+5.2) Однако правельнее все таки использовать АРБИТР ПРЕДСТАВЛЕНИЙ. Для этого в [название диспетчера]-servlet.xml необходимо добавить компонент - арбитр представлений:
+
+<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+	<property name="prefix" value="/WEB-INF/views/"/>
+	<property name="suffix" value=".jsp"/>
+</bean>
+
+Если АРБИТР ПРЕДСТАВЛЕНИЙ добавлен, то метод-обработчик запроса должен возвращать не полный путь к файлу представления, а его "псевдоним" (в нашем случае home). Из этого псевдонима АРБИТР ПРЕДСТАВЛЕНИЙ сам сформирует путь к файлу представления "/WEB-INF/views/home.jsp"
+
+
+6) Представление - это файл jsp. Пременная ${name} получить строку, которую мы добавили в методе - обработчике запроса и вывести ее в представление.
+
+[home.jsp]:
+-----------
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Spring MVC project sample</title>
+    </head>
+
+    <body>
+        <h1 style="color: #777777;">Welcome home, <span style="color: #3097de;">${name}</span>!</h1>
+    </body>
+</html>
+
+

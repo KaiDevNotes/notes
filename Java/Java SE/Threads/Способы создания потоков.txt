@@ -1,0 +1,117 @@
+1) Реализовать интерфейс Runnable
+---------------
+
+package main;
+
+
+public class Main {    
+    
+    public static void main(String[] args) throws InterruptedException { 
+        // Создаем поток и он стартует сам   
+        NewThread newThread = new NewThread("TEST");
+        // Ожидаем окончания выполнения данного потока
+        newThread.t.join();
+        // ----
+        System.out.println();
+        System.out.println("Finish");
+        
+    }    
+    
+}
+
+class NewThread implements Runnable {
+    
+    String name = null;
+    Thread t = null;
+    
+    public NewThread(String name){
+        this.name = name;
+        t = new Thread(this);
+        t.start();
+    }
+    
+    public void run(){
+        for (int i = 0; i < 3; i++){
+            System.out.println("Thread: "+name+" ---> Action: "+i);
+            try {
+                Thread.sleep(2000);
+            }
+            catch (InterruptedException e){
+                System.err.println(e);
+            }
+        }
+    }
+}
+
+
+ВЫВОД:
+
+Thread: TEST ---> Action: 0
+Thread: TEST ---> Action: 1
+Thread: TEST ---> Action: 2
+
+Finish
+
+-------------------------------------------------------------------------------------
+
+
+2) Расширить класс Thread
+----------------------
+
+package main;
+
+
+public class Main {     
+    
+    public static void main(String[] args) throws InterruptedException { 
+        // Создаем поток     
+        Thread t = new NewThread("TEST");
+        // Стартуем его
+        t.start();
+        // Ожидаем окончания выполнения данного потока
+        t.join();
+        // ----
+        System.out.println();
+        System.out.println("Finish");
+        
+    }    
+    
+}
+
+class NewThread extends Thread {
+    
+    String name = null;
+    
+    public NewThread(String name){
+        this.name = name;
+    }
+    
+    public void run(){
+        for (int i = 0; i < 3; i++){
+            System.out.println("Thread: "+name+" ---> Action: "+i);
+            try {
+                Thread.sleep(2000);
+            }
+            catch (InterruptedException e){
+                System.err.println(e);
+            }
+        }
+    }
+}
+
+
+ВЫВОД (анналогичен):
+
+Thread: TEST ---> Action: 0
+Thread: TEST ---> Action: 1
+Thread: TEST ---> Action: 2
+
+Finish
+
+-------------------------------------------------------------------------------------
+
+
+3) Также можно создать объект потока, реализующий интерфейс Callable (поток возвращающий результат своего выполнения) и выполнить его с помощью объекта ИСПОЛНИТЕЛЯ, реализующего интерфейс Executor.
+
+
+

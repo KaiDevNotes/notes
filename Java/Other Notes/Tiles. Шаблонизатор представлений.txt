@@ -1,0 +1,259 @@
+Apache Tiles позволяет разделять JSP (HTML) представления на шаблон и составные части.
+
+Рассмотрим на примере простого Web-приложения:
+
+
+1) Создаем проект: File -> New Project -> Maven -> Web Application
+
+ 
+2) pom.xml
+В pom.xml помимо прочего необходимо добавить следующие зависимости необходимые для работы Tiles:
+-----------------------------------------------------------------
+<dependency>
+	<groupId>org.apache.tiles</groupId>
+	<artifactId>tiles-core</artifactId>
+	<version>2.2.2</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.tiles</groupId>
+	<artifactId>tiles-api</artifactId>
+	<version>2.2.2</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.tiles</groupId>
+	<artifactId>tiles-servlet</artifactId>
+	<version>2.2.2</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.tiles</groupId>
+	<artifactId>tiles-template</artifactId>
+	<version>2.2.2</version>
+</dependency>
+<dependency>
+	<groupId>org.apache.tiles</groupId>
+	<artifactId>tiles-jsp</artifactId>
+	<version>2.2.2</version>
+</dependency>  
+<dependency>
+	<groupId>org.slf4j</groupId>
+	<artifactId>slf4j-simple</artifactId>
+	<version>1.6.1</version>
+</dependency>
+-----------------------------------------------------------------
+
+
+3) Далее необходимо создать класс TilesContainerFactory (название произвольно), который расширяет класс BasicTilesContainerFactory и переопределяет метод "getSourceURLs".
+В этом методе мы указываем путь к конфигурационному файлу Tiles, в нашем случае этот файл "/WEB-INF/tiles/tiles-scheme.xml".
+
+TilesContainerFactory.java [com.kai.dev.tiles.TilesContainerFactory]
+-----------------------------------------------------------------
+package com.kai.dev.tiles;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+import org.apache.tiles.TilesApplicationContext;
+import org.apache.tiles.context.TilesRequestContextFactory;
+import org.apache.tiles.definition.DefinitionsFactoryException;
+import org.apache.tiles.factory.BasicTilesContainerFactory;
+
+
+public class TilesContainerFactory extends BasicTilesContainerFactory {
+    
+    @Override
+    protected List<URL> getSourceURLs(TilesApplicationContext applicationContext, TilesRequestContextFactory contextFactory) 
+    {
+        List<URL> urls = new ArrayList<URL>();
+        try {
+            urls.add(applicationContext.getResource("/WEB-INF/tiles/tiles-scheme.xml"));
+        } 
+        catch (IOException e) {
+            throw new DefinitionsFactoryException("Cannot load definition URLs", e);
+        }
+        return urls;
+    }
+    
+}
+-----------------------------------------------------------------
+
+
+4) Далее необходимо создать класс TilesListener (название произвольно), который расширяет класс AbstractTilesListener и переопределяет метод "createTilesInitializer".
+
+TilesListener.java [com.kai.dev.tiles.TilesListener]
+-----------------------------------------------------------------
+package com.kai.dev.tiles;
+
+import org.apache.tiles.TilesApplicationContext;
+import org.apache.tiles.factory.AbstractTilesContainerFactory;
+import org.apache.tiles.startup.AbstractTilesInitializer;
+import org.apache.tiles.startup.TilesInitializer;
+import org.apache.tiles.web.startup.AbstractTilesListener;
+
+
+public class TilesListener extends AbstractTilesListener {
+
+    @Override
+    protected TilesInitializer createTilesInitializer() {
+        return new TilesListenerInitializer();
+    }
+
+    private static class TilesListenerInitializer extends AbstractTilesInitializer 
+    {
+        @Override
+        protected AbstractTilesContainerFactory createContainerFactory(TilesApplicationContext context) 
+        {
+            return new TilesContainerFactory();
+        }
+    }
+}
+-----------------------------------------------------------------
+
+
+5) Далее необходимо зарегистрировать данный TilesListener в web.xml
+
+web.xml [WEB-INF/web.xml] 
+-----------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">      
+    
+        <listener>
+                <listener-class>com.kai.dev.tiles.TilesListener</listener-class>
+        </listener>
+    
+	<servlet>
+		<servlet-name>servlet</servlet-name>
+		<servlet-class>com.kai.dev.tiles.MainServlet</servlet-class>
+	</servlet>		
+	<servlet-mapping>
+		<servlet-name>servlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+</web-app>
+-----------------------------------------------------------------
+
+
+6) Конфигурационный файл Tiles tiles-scheme.xml:
+В данном файле описываются шаблоны страниц и сами страницы.
+6.1 - шаблон - это файл /WEB-INF/views/layouts/layout.jsp, в кот. выводятся атрибуты header, content и footer (имена атрибутов произвольны)
+6.2 - определние index расширяет шаблон homeLayout, добавлением атрибута content, кот. представлен файлом /WEB-INF/views/index.jsp, также переопределяется значение аттрибута "title"
+
+tiles-scheme.xml [/WEB-INF/tiles/tiles-scheme.xml]
+-----------------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" "http://tiles.apache.org/dtds/tiles-config_2_0.dtd"> 
+<tiles-definitions>
+    
+	<definition name="homeLayout" template="/WEB-INF/views/layouts/layout.jsp">
+		<put-attribute name="title" value="TILES" />
+		<put-attribute name="header" value="/WEB-INF/views/layouts/header.jsp" />
+		<put-attribute name="content" value="" />
+		<put-attribute name="footer" value="/WEB-INF/views/layouts/footer.jsp" />
+	</definition>
+
+	<definition name="index" extends="homeLayout">
+		<put-attribute name="title" value="index page" />
+		<put-attribute name="content" value="/WEB-INF/views/index.jsp" />
+	</definition>
+        
+</tiles-definitions>
+-----------------------------------------------------------------
+
+
+7) Файлы шаблонов и представлений:
+
+layout.jsp [/WEB-INF/views/layouts/layout.jsp]
+В данном файле шаблона атрибуты header, content, footer выводятся с помощью спецтегов tiles:insertAttribute
+Чтобы подключить их поддержку в JSP необходимо вверху добавить строку <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+-----------------------------------------------------------------
+<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
+<html>
+<head>
+<title><tiles:insertAttribute name="title" ignore="true" /></title>
+</head>
+<body>
+
+	<tiles:insertAttribute name="header" />
+	<tiles:insertAttribute name="content" />
+	<tiles:insertAttribute name="footer" />
+
+</body>
+</html>
+-----------------------------------------------------------------
+
+
+header.jsp [/WEB-INF/views/layouts/header.jsp]
+-----------------------------------------------------------------
+<div style="width: 100%;
+            padding: 40px 0px;
+            background-color: #3097de;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;">
+    Header
+</div>
+-----------------------------------------------------------------
+
+
+footer.jsp [/WEB-INF/views/layouts/footer.jsp]
+-----------------------------------------------------------------
+<div style="width: 100%;
+            padding: 40px 0px;
+            background-color: #666666;
+            font-size: 30px;
+            font-weight: bold;
+            text-align: center;
+            color: #ffffff;">
+    Footer
+</div>
+-----------------------------------------------------------------
+
+
+index.jsp [/WEB-INF/views/index.jsp]
+-----------------------------------------------------------------
+<div style="width: 100%;
+            padding: 150px 0px;
+            background-color: #eeeeee;
+            font-size: 25px;
+            text-align: center;
+            color: #333333;">
+    Content: Index page
+</div>
+-----------------------------------------------------------------
+
+
+8) Класс сервлета MainServlet (название произвольно).
+8.1 - В метод "render" класса TilesContainer 1ым параметром мы передаем название необходимо шаблона, определнного в конфигурации Tiles tiles-scheme.xml. В данном случае будет отображен шаблон "index", т.е. <definition name="index" extends="homeLayout">
+
+MainServlet.java [com.kai.dev.tiles.MainServlet]
+-----------------------------------------------------------------
+package com.kai.dev.tiles;
+
+import java.io.IOException;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.apache.tiles.TilesContainer;
+import org.apache.tiles.access.TilesAccess;
+
+
+public class MainServlet extends HttpServlet {
+    
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException 
+    {    
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
+        TilesContainer container = TilesAccess.getContainer(context);
+        container.render("index", request, response);
+    }  
+}
+-----------------------------------------------------------------
