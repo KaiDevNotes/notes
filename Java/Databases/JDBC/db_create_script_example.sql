@@ -1,14 +1,14 @@
-create database db_sample_for_jdbc;
-use db_sample_for_jdbc;
+create database locations;
+use locations;
 
 
-CREATE TABLE IF NOT EXISTS `continents` (
+CREATE TABLE IF NOT EXISTS `continent` (
     `id` int(10) NOT NULL AUTO_INCREMENT,
     `name` varchar(512) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `locations` (
+CREATE TABLE IF NOT EXISTS `location` (
     `id` int(10) NOT NULL AUTO_INCREMENT,
     `name` varchar(512) DEFAULT NULL,
     `continent_id` int(10) DEFAULT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `locations` (
     KEY `continent_id` (`continent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
-CREATE TABLE IF NOT EXISTS `servers` (
+CREATE TABLE IF NOT EXISTS `server` (
     `id` int(10) NOT NULL AUTO_INCREMENT,
     `name` varchar(512) DEFAULT NULL,
     `location_id` int(10) DEFAULT NULL,
@@ -25,19 +25,19 @@ CREATE TABLE IF NOT EXISTS `servers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 
-ALTER TABLE `locations`
-  ADD CONSTRAINT `locations_ibfk_1` FOREIGN KEY (`continent_id`) REFERENCES `continents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `location`
+  ADD CONSTRAINT `location_ibfk_1` FOREIGN KEY (`continent_id`) REFERENCES `continent` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
-ALTER TABLE `servers`
-  ADD CONSTRAINT `servers_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `locations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE `server`
+  ADD CONSTRAINT `server_ibfk_1` FOREIGN KEY (`location_id`) REFERENCES `location` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 
-INSERT INTO `continents` (`id`, `name`) VALUES
+INSERT INTO `continent` (`id`, `name`) VALUES
 (1, 'America'),
 (2, 'Europe'),
 (3, 'Australia');
 
-INSERT INTO `locations` (`id`, `name`, `continent_id`) VALUES
+INSERT INTO `location` (`id`, `name`, `continent_id`) VALUES
 (1, 'USA, New York', 1),
 (2, 'Canada, Toronto', 1),
 (3, 'Genmany, Berlin', 2),
@@ -45,7 +45,7 @@ INSERT INTO `locations` (`id`, `name`, `continent_id`) VALUES
 (5, 'Australia, Sidney', 3),
 (6, 'Australia, Canberra', 3);
 
-INSERT INTO `servers` (`id`, `name`, `location_id`) VALUES
+INSERT INTO `server` (`id`, `name`, `location_id`) VALUES
 (1, 'Srv 1.1', 1),
 (2, 'Srv 1.2', 1),
 (3, 'Srv 1.3', 1),
