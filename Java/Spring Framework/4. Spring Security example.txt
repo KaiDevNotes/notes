@@ -1,0 +1,593 @@
+Рассмотрим интеграцию Spring Security с Web-проектом на небольшом примере.
+
+1) Для работы со Spring Security в pom.xml необходимо добавить "как минимум" следующие зависимости:
+---------------------------------------------------------
+<dependency>
+	<groupId>org.springframework</groupId>
+	<artifactId>spring-context</artifactId>
+	<version>4.0.2.RELEASE</version>
+</dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-config</artifactId>
+	<version>3.2.3.RELEASE</version>
+</dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-web</artifactId>
+	<version>3.2.3.RELEASE</version>
+</dependency>
+---------------------------------------------------------
+
+
+2) Далее /WEB-INF/web.xml ПЕРЕД servlet-мапингом добавляем путь к файлу контекста Spring Security, лисенеры и фильтр:
+
+<context-param>
+	<param-name>contextConfigLocation</param-name>
+	<param-value>/WEB-INF/spring/spring-security.xml</param-value>
+</context-param>
+	
+<listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+<listener>
+	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+</listener>
+	
+<filter>
+	<filter-name>springSecurityFilterChain</filter-name>
+	<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+</filter>
+<filter-mapping>
+	<filter-name>springSecurityFilterChain</filter-name>
+	<url-pattern>/*</url-pattern>
+</filter-mapping>
+
+
+В результате /WEB-INF/web.xml в данном проекте будет иметь вид:
+---------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+        
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/spring-security.xml</param-value>
+	</context-param>
+        
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+	</listener>
+        
+	<filter>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>springSecurityFilterChain</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>        
+    
+	<servlet>
+		<servlet-name>userServlet</servlet-name>
+		<servlet-class>com.kai.dev.springsecurity.servlets.UserServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>adminServlet</servlet-name>
+		<servlet-class>com.kai.dev.springsecurity.servlets.AdminServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>loginServlet</servlet-name>
+		<servlet-class>com.kai.dev.springsecurity.servlets.LoginServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>loginFailedServlet</servlet-name>
+		<servlet-class>com.kai.dev.springsecurity.servlets.LoginFailedServlet</servlet-class>
+	</servlet>
+        <servlet>
+		<servlet-name>deniedServlet</servlet-name>
+		<servlet-class>com.kai.dev.springsecurity.servlets.AccessDeniedServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<servlet-name>homeServlet</servlet-name>
+		<servlet-class>com.kai.dev.springsecurity.servlets.HomeServlet</servlet-class>
+	</servlet> 
+        
+	<servlet-mapping>
+		<servlet-name>userServlet</servlet-name>
+		<url-pattern>/user</url-pattern>
+	</servlet-mapping> 
+	<servlet-mapping>
+		<servlet-name>adminServlet</servlet-name>
+		<url-pattern>/admin</url-pattern>
+	</servlet-mapping>  
+	<servlet-mapping>
+		<servlet-name>loginServlet</servlet-name>
+		<url-pattern>/login</url-pattern>
+	</servlet-mapping> 
+	<servlet-mapping>
+		<servlet-name>loginFailedServlet</servlet-name>
+		<url-pattern>/login-failed</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>deniedServlet</servlet-name>
+		<url-pattern>/denied</url-pattern>
+	</servlet-mapping>          		
+	<servlet-mapping>
+		<servlet-name>homeServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>
+
+---------------------------------------------------------
+
+
+
+3) Файл контекста Spring Security /WEB-INF/spring/spring-security.xml имеет вид:
+(Файл контекста может быть на много короче, длинный вариант приведен для наглядности)
+---------------------------------------------------------
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+        
+	<http entry-point-ref="loginUrlAuthenticationEntryPoint" access-denied-page="/denied">	
+		<custom-filter position="FORM_LOGIN_FILTER" ref="customUsernamePasswordAuthenticationFilter" />		
+		<intercept-url pattern="/user**" access="ROLE_USER" />
+		<intercept-url pattern="/admin**" access="ROLE_ADMIN" />
+		<logout logout-url="/j_spring_security_logout" invalidate-session="true" logout-success-url="/" />	
+	</http>
+        
+	<beans:bean id="loginUrlAuthenticationEntryPoint"
+		class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+		<beans:property name="loginFormUrl" value="/login" />
+	</beans:bean>        
+        
+	<beans:bean id="customUsernamePasswordAuthenticationFilter" class="org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter">
+		<beans:property name="sessionAuthenticationStrategy" ref="sessionAuthenticationStrategy" />
+		<beans:property name="authenticationManager" ref="authenticationManager" />
+		<beans:property name="authenticationFailureHandler" ref="failureHandler" />
+		<beans:property name="authenticationSuccessHandler" ref="adminLoginSuccessHandler" />
+	</beans:bean>
+	
+	<authentication-manager alias="authenticationManager">
+		<authentication-provider user-service-ref="userDetailsService"></authentication-provider>
+	</authentication-manager>
+        
+	<beans:bean id="userDetailsService" class="com.kai.dev.springsecurity.service.UserDetailsServiceImpl" />
+        
+	<beans:bean id="adminLoginSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<beans:property name="defaultTargetUrl" value="/" />
+	</beans:bean>
+	
+	<beans:bean id="failureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<beans:property name="defaultFailureUrl" value="/login-failed" />
+	</beans:bean>
+        
+	<beans:bean id="sessionAuthenticationStrategy" class="org.springframework.security.web.authentication.session.ConcurrentSessionControlStrategy">
+		<beans:constructor-arg name="sessionRegistry" ref="sessionRegistry" />
+		<beans:property name="maximumSessions" value="1" />
+	</beans:bean>
+        
+	<beans:bean id="sessionRegistry" class="org.springframework.security.core.session.SessionRegistryImpl" />        
+        	       
+</beans:beans>
+---------------------------------------------------------
+
+3.1 - В теге "http" имеются следующие аттрибуты и теги:
+3.1.1 - "entry-point-ref" - задается ссылка на bean, в котором задается ссылка на страницу где необходимо ввести логин и пароль для аваторизации (см. 3.2)
+3.1.2 - "access-denied-page" - указывается страница на котору будет перенаправлен запрос от пользователя который не имеет прав на просмотр запрошенной страницы.
+3.1.3 - "custom-filter" - задается ссылка на bean, который описывает custom filter (см. 3.3)
+3.1.4 - "intercept-url" - задается паттерн url'a и название роли или ролей, кот. необходимо обладать чтобы иметь право на получение данной страницы
+3.1.5 - "logout" - задается url на который необходимо отправить пользователя, что выполнить logout (это стандартный url Spring Security - НЕ МЕНЯТЬ)
+
+3.2 - В остальный bean'ах настраиваются парамтры сессии и url необходимы для данного процесса страниц.
+
+
+
+4) Реализуем класс bean'а userDetailsService 
+[com.kai.dev.springsecurity.service.UserDetailsServiceImpl]
+----------------------------------------------
+package com.kai.dev.springsecurity.service;
+
+import com.kai.dev.springsecurity.user.AbstractUser;
+import com.kai.dev.springsecurity.user.Admin;
+import com.kai.dev.springsecurity.user.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
+
+public class UserDetailsServiceImpl implements UserDetailsService {
+    
+    public static final String USER = "user";
+    public static final String ADMIN = "admin";
+    public static final String ROLE_USER = "ROLE_USER";
+    public static final String ROLE_ADMIN = "ROLE_ADMIN";
+    
+    @Override
+    public UserDetails loadUserByUsername(String userName) 
+            throws UsernameNotFoundException 
+    {
+        AbstractUser user = null;
+        
+        switch (userName){
+            case USER:
+                user = new User(USER, USER, ROLE_USER);
+                break;
+            case ADMIN:
+                user = new Admin(ADMIN, ADMIN, ROLE_ADMIN);
+                break;
+            default:
+                throw new UsernameNotFoundException("User not found");
+        }          
+        return user;
+    }
+    
+}
+----------------------------------------------
+Полсе того как данный формы входа на странице авторизации "/login" будуотправлены на стандартный url Spring Security "/j_spring_security_check" будет вызван метод "loadUserByUsername" класса, кот. реализует интерфейс UserDetailsService. 
+Данный метод должен возвращать экремпляр класса, кот. реализует интерфейс UserDetails.
+И далее данные введенные пользователем в поля j_username и j_password (стандартные названия для Spring Security - не менять) на странице авторизации будут сравниваться со значениями свойств username и password экземляра реализющего интерфейс UserDetails.
+
+
+
+5) В данном проекте интерфейс UserDetails реализует 2 класса User и Admin
+
+[com.kai.dev.springsecurity.user.AbstractUser]
+----------------------------------------------
+package com.kai.dev.springsecurity.user;
+
+import java.util.Collection;
+import java.util.Collections;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+
+abstract public class AbstractUser implements UserDetails {
+    
+    private final String username;
+    private final String password;
+    private final String role;
+    
+    public AbstractUser(String username, String password, String role){
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public String getPassword() {
+        return password;
+    }
+    
+    @Override
+    public Collection<GrantedAuthority> getAuthorities(){
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority(role);
+        Collection<GrantedAuthority> grantedAuthorities = Collections.singleton(grantedAuthority);
+        return grantedAuthorities;
+    }
+    
+    @Override
+    public boolean isAccountNonExpired(){
+        return true;
+    }
+    
+    @Override
+    public boolean isAccountNonLocked(){
+        return true;
+    }
+    
+    @Override
+    public boolean isCredentialsNonExpired(){
+        return true;
+    }
+    
+    @Override
+    public boolean isEnabled(){
+        return true;
+    }        
+}
+----------------------------------------------
+
+[com.kai.dev.springsecurity.user.Admin]
+----------------------------------------------
+package com.kai.dev.springsecurity.user;
+
+
+public class Admin extends AbstractUser {
+    
+    public Admin(String username, String password, String role){
+        super(username, password, role);
+    }    
+}
+
+----------------------------------------------
+
+[com.kai.dev.springsecurity.user.User]
+----------------------------------------------
+package com.kai.dev.springsecurity.user;
+
+
+public class User extends AbstractUser {
+    
+    public User(String username, String password, String role){
+        super(username, password, role);
+    }    
+}
+----------------------------------------------
+
+
+
+
+6) Далее необходимо создать servlet'ы и jsp-представления, которые необходимы в процессе входа и аутентификации:
+
+[com.kai.dev.springsecurity.servlets.AbstractServlet] 
+----------------------------------------------
+package com.kai.dev.springsecurity.servlets;
+
+import java.io.IOException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+
+abstract public class AbstractServlet extends HttpServlet {
+    
+    public static final String VIEW_PREFIX = "/WEB-INF/views/";
+    public static final String VIEW_SUFFIX = ".jsp";
+    
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) 
+            throws ServletException, IOException 
+    {     
+        HttpSession session = request.getSession();
+        ServletContext context = session.getServletContext();
+        String viewName = getViewName();
+        RequestDispatcher dispatcher = context.getRequestDispatcher(viewName);
+        dispatcher.forward(request, response);
+    }  
+    
+    public abstract String getViewName();    
+}
+----------------------------------------------
+
+
+[com.kai.dev.springsecurity.servlets.HomeServlet] 
+----------------------------------------------
+package com.kai.dev.springsecurity.servlets;
+
+
+public class HomeServlet extends AbstractServlet {
+    
+    private static final String VIEW_NAME = "home";
+    
+    @Override
+    public String getViewName(){
+        String viewName = VIEW_PREFIX + VIEW_NAME + VIEW_SUFFIX;
+        return viewName;
+    }     
+}
+----------------------------------------------
+
+
+[com.kai.dev.springsecurity.servlets.LoginServlet] 
+----------------------------------------------
+package com.kai.dev.springsecurity.servlets;
+
+
+public class LoginServlet extends AbstractServlet {
+    
+    private static final String VIEW_NAME = "login";
+    
+    @Override
+    public String getViewName(){
+        String viewName = VIEW_PREFIX + VIEW_NAME + VIEW_SUFFIX;
+        return viewName;
+    }     
+}
+----------------------------------------------
+
+
+[com.kai.dev.springsecurity.servlets.UserServlet] 
+----------------------------------------------
+package com.kai.dev.springsecurity.servlets;
+
+
+public class UserServlet extends AbstractServlet {
+    
+    private static final String VIEW_NAME = "user-home";
+    
+    @Override
+    public String getViewName(){
+        String viewName = VIEW_PREFIX + VIEW_NAME + VIEW_SUFFIX;
+        return viewName;
+    }     
+}
+----------------------------------------------
+
+
+[com.kai.dev.springsecurity.servlets.AdminServlet] 
+----------------------------------------------
+package com.kai.dev.springsecurity.servlets;
+
+
+public class AdminServlet extends AbstractServlet {
+    
+    private static final String VIEW_NAME = "admin-home";
+    
+    @Override
+    public String getViewName(){
+        String viewName = VIEW_PREFIX + VIEW_NAME + VIEW_SUFFIX;
+        return viewName;
+    }     
+}
+----------------------------------------------
+
+
+[com.kai.dev.springsecurity.servlets.LoginFailedServlet] 
+----------------------------------------------
+package com.kai.dev.springsecurity.servlets;
+
+
+public class LoginFailedServlet extends AbstractServlet {
+    
+    private static final String VIEW_NAME = "login-failed";
+    
+    @Override
+    public String getViewName(){
+        String viewName = VIEW_PREFIX + VIEW_NAME + VIEW_SUFFIX;
+        return viewName;
+    }     
+}
+----------------------------------------------
+
+
+[com.kai.dev.springsecurity.servlets.AccessDeniedServlet] 
+----------------------------------------------
+package com.kai.dev.springsecurity.servlets;
+
+
+public class AccessDeniedServlet extends AbstractServlet {
+    
+    private static final String VIEW_NAME = "denied";
+    
+    @Override
+    public String getViewName(){
+        String viewName = VIEW_PREFIX + VIEW_NAME + VIEW_SUFFIX;
+        return viewName;
+    }     
+}
+----------------------------------------------
+
+
+JSP-представления
+
+[WEB-INF/views/home.jsp]
+----------------------------------------------
+<html>
+    <head>
+        <title>Spring Sec Example</title>
+    </head>    
+    <body>
+        <h1>Hello Guest !</h1>
+    </body>
+</html>
+----------------------------------------------
+
+
+[WEB-INF/views/login.jsp]
+----------------------------------------------
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:url var="loginUrl" value="/j_spring_security_check"></c:url>
+
+<html>
+    <head>
+        <title>Spring Sec Example</title>
+    </head>    
+    <body>
+        <h3>Login please</h3>
+        <form action="${loginUrl}" method="POST">
+            <p>
+                Username:&nbsp;
+                <input type="text" name="j_username"/> 
+            </p>
+            <p>
+                Password:&nbsp;
+                <input type="password" name="j_password"/>
+            </p>
+            <input type="submit" name="submit" value="Submit"/>    
+        </form>
+        
+    </body>
+</html>
+----------------------------------------------
+
+
+[WEB-INF/views/user-home.jsp]
+----------------------------------------------
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:url var="logoutUrl" value="/j_spring_security_logout"></c:url>
+
+<html>
+    <head>
+        <title>Spring Sec Example</title>
+    </head>    
+    <body>
+        <h1>Hello User !</h1>
+        <a href="${logoutUrl}">Logout</a>
+    </body>
+</html>
+----------------------------------------------
+
+
+[WEB-INF/views/admin-home.jsp]
+----------------------------------------------
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:url var="logoutUrl" value="/j_spring_security_logout"></c:url>
+
+<html>
+    <head>
+        <title>Spring Sec Example</title>
+    </head>    
+    <body>
+        <h1>Hello Admin !</h1>
+        <a href="${logoutUrl}">Logout</a>
+    </body>
+</html>
+----------------------------------------------
+
+
+[WEB-INF/views/login-failed.jsp]
+----------------------------------------------
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:url var="homeUrl" value="/"></c:url>
+
+<html>
+    <head>
+        <title>Spring Sec Example</title>
+    </head>    
+    <body>
+        <h3>Username or Password incorrect</h3>
+        <a href="${homeUrl}">Back to home page</a>
+    </body>
+</html>
+----------------------------------------------
+
+
+[WEB-INF/views/denied.jsp]
+----------------------------------------------
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:url var="homeUrl" value="/"></c:url>
+
+<html>
+    <head>
+        <title>Spring Sec Example</title>
+    </head>    
+    <body>
+        <h1>403 - Access Denied</h1>
+        <a href="${homeUrl}">Back to home page</a>
+    </body>
+</html>
+----------------------------------------------
+
