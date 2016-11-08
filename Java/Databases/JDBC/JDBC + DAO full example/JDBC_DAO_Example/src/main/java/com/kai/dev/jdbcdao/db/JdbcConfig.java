@@ -13,10 +13,10 @@ public enum JdbcConfig {
     private static final String USER = "user";
     private static final String PASSWORD = "password";
     
-    private String driver;
-    private String dbUrl;    
-    private String user;
-    private String password;
+    private final String driver;
+    private final String dbUrl;    
+    private final String user;
+    private final String password;
     
     JdbcConfig(){
         ResourceBundle config = ResourceBundle.getBundle(CONFIGURATION_FILE_NAME);
@@ -30,32 +30,15 @@ public enum JdbcConfig {
         return driver;
     }
 
-    public void setDriver(String driver) {
-        this.driver = driver;
-    }
-
     public String getDbUrl() {
         return dbUrl;
-    }
-
-    public void setDbUrl(String dbUrl) {
-        this.dbUrl = dbUrl;
     }
 
     public String getUser() {
         return user;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
-
     public String getPassword() {
         return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-        
+    }        
 }
