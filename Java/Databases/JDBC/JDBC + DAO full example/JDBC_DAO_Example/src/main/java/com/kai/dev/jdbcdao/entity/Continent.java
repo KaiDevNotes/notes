@@ -10,7 +10,7 @@ public class Continent implements Identifiable {
     public static final String FIELD_ID = "id";
     public static final String FIELD_NAME = "name";
     
-    private int id;
+    private Integer id;
     private String name;
     private List<Location> locations;
     
@@ -19,12 +19,12 @@ public class Continent implements Identifiable {
     }
 
     @Override
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

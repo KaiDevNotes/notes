@@ -13,13 +13,13 @@ public class LocationBuilder implements EntityBuilder {
         
         Location location = new Location();
         
-        int id = locationResultSet.getInt(Location.FIELD_ID);
+        Integer id = (Integer) locationResultSet.getObject(Location.FIELD_ID);
         location.setId(id);
         
         String name = locationResultSet.getString(Location.FIELD_NAME);
         location.setName(name);
         
-        int continentId = locationResultSet.getInt(Location.FIELD_CONTINENT_ID);
+        Integer continentId = (Integer) locationResultSet.getObject(Location.FIELD_CONTINENT_ID);
         location.setContinentId(continentId);
         
         return location;

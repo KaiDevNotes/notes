@@ -13,13 +13,13 @@ public class ServerBuilder implements EntityBuilder {
         
         Server server = new Server();
         
-        int id = serverResultSet.getInt(Server.FIELD_ID);
+        Integer id = (Integer) serverResultSet.getObject(Server.FIELD_ID);
         server.setId(id);
         
         String name = serverResultSet.getString(Server.FIELD_NAME);
         server.setName(name);
         
-        int locationId = serverResultSet.getInt(Server.FIELD_LOCATION_ID);
+        Integer locationId = (Integer) serverResultSet.getObject(Server.FIELD_LOCATION_ID);
         server.setLocationId(locationId);
         
         return server;

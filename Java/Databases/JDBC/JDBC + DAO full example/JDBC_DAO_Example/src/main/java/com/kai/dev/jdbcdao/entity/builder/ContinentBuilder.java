@@ -13,7 +13,7 @@ public class ContinentBuilder implements EntityBuilder {
         
         Continent continent = new Continent();
         
-        int id = continentResultSet.getInt(Continent.FIELD_ID);
+        Integer id = (Integer) continentResultSet.getObject(Continent.FIELD_ID);
         continent.setId(id);
         
         String name = continentResultSet.getString(Continent.FIELD_NAME);
