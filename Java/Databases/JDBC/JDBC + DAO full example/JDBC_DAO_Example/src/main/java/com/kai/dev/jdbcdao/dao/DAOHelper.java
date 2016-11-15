@@ -147,20 +147,20 @@ public class DAOHelper <T extends Identifiable> {
                     }
                     else {
                         fieldValue = String.valueOf(result);
-                
-                        if (!fieldValue.equalsIgnoreCase("null") && 
-                            !fieldValue.equalsIgnoreCase("0"))
-                        {
-                            fieldValue = "'" + fieldValue + "'";
-                        }
-                        else {
-                            fieldValue = "NULL";
-                        }
                     }                    
                 }
                 catch (IllegalAccessException | InvocationTargetException | ClassCastException e){
                     throw new IllegalStateException(e.getMessage());
                 } 
+                
+                if (!fieldValue.equalsIgnoreCase("null") && 
+                    !fieldValue.equalsIgnoreCase("0"))
+                {
+                    fieldValue = "'" + fieldValue + "'";
+                }
+                else {
+                    fieldValue = "NULL";
+                }
                 
                 if (resultType == ResultTypeEnum.PARAMS_AND_VALUES){
                     queryParams.add(fieldName + "=" + fieldValue);
