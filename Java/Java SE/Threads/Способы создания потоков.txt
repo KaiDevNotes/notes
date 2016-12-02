@@ -1,38 +1,44 @@
-1) Реализовать интерфейс Runnable
+﻿1 - Реализовать интерфейс Runnable
+
+1.1 - Создаем класса, кот. реализует интерфейс Runnable. В теле метода run указываем, что необходимо сделать.
+Т.е. создаем "задание", кот. должно быть выполнено в отдельном потоке.
+
+1.2 - Создаем экземпляр класса Thread (поток) и передаем ему через конструктор экземпляр класса, 
+кот. реализует интерфейс Runnable. Т.е. передаем наше задание.
+
+1.3 - Запускаем поток на выполнение вызовом метода start() экземпляра потока.
+В свою очередь метод старт запускает метод run() из нашего экземпляра "задания".
+
+1.4 - Метод join() вызывается для того, чтобы основной поток приложения дождался окончания 
+потока выполнения нашего "задания".
+
 ---------------
 
 package main;
 
 
-public class Main {    
-    
-    public static void main(String[] args) throws InterruptedException { 
-        // Создаем поток и он стартует сам   
-        NewThread newThread = new NewThread("TEST");
-        // Ожидаем окончания выполнения данного потока
-        newThread.t.join();
-        // ----
+public class Main {
+
+    public static void main(String[] args) throws InterruptedException 
+    {
+        Runnable simpleJob = new SimpleJob();
+        Thread thread = new Thread(simpleJob);
+        thread.start();
+        thread.join();
+        
         System.out.println();
         System.out.println("Finish");
-        
     }    
-    
 }
 
-class NewThread implements Runnable {
-    
-    String name = null;
-    Thread t = null;
-    
-    public NewThread(String name){
-        this.name = name;
-        t = new Thread(this);
-        t.start();
-    }
-    
-    public void run(){
+
+class SimpleJob implements Runnable {
+
+    @Override
+    public void run()
+    {
         for (int i = 0; i < 3; i++){
-            System.out.println("Thread: "+name+" ---> Action: "+i);
+            System.out.println("Action: " + i);
             try {
                 Thread.sleep(2000);
             }
@@ -40,55 +46,52 @@ class NewThread implements Runnable {
                 System.err.println(e);
             }
         }
-    }
+    }    
 }
 
 
 ВЫВОД:
 
-Thread: TEST ---> Action: 0
-Thread: TEST ---> Action: 1
-Thread: TEST ---> Action: 2
+Action: 0
+Action: 1
+Action: 2
 
 Finish
 
 -------------------------------------------------------------------------------------
 
 
-2) Расширить класс Thread
+2 - Расширить класс Thread
+
+2.1 - Т.е. то, что необходимо сделать (код "задания") мы указываем непосредственно в
+теле переопределяемого метода run().
+ 
 ----------------------
 
 package main;
 
 
-public class Main {     
-    
-    public static void main(String[] args) throws InterruptedException { 
-        // Создаем поток     
-        Thread t = new NewThread("TEST");
-        // Стартуем его
-        t.start();
-        // Ожидаем окончания выполнения данного потока
-        t.join();
-        // ----
+public class Main {
+
+    public static void main(String[] args) throws InterruptedException 
+    {
+        Thread thread = new SimpleThread();
+        thread.start();
+        thread.join();
+        
         System.out.println();
         System.out.println("Finish");
-        
     }    
-    
 }
 
-class NewThread extends Thread {
-    
-    String name = null;
-    
-    public NewThread(String name){
-        this.name = name;
-    }
-    
-    public void run(){
+
+class SimpleThread extends Thread {
+
+    @Override
+    public void run()
+    {
         for (int i = 0; i < 3; i++){
-            System.out.println("Thread: "+name+" ---> Action: "+i);
+            System.out.println("Action: " + i);
             try {
                 Thread.sleep(2000);
             }
@@ -96,22 +99,25 @@ class NewThread extends Thread {
                 System.err.println(e);
             }
         }
-    }
+    }    
 }
+
 
 
 ВЫВОД (анналогичен):
 
-Thread: TEST ---> Action: 0
-Thread: TEST ---> Action: 1
-Thread: TEST ---> Action: 2
+Action: 0
+Action: 1
+Action: 2
 
 Finish
 
 -------------------------------------------------------------------------------------
 
 
-3) Также можно создать объект потока, реализующий интерфейс Callable (поток возвращающий результат своего выполнения) и выполнить его с помощью объекта ИСПОЛНИТЕЛЯ, реализующего интерфейс Executor.
+3 - Также можно создать объект потока, реализующий интерфейс Callable 
+(поток возвращающий результат своего выполнения) и выполнить его с помощью 
+объекта ИСПОЛНИТЕЛЯ, реализующего интерфейс Executor.
 
 
 
