@@ -1,0 +1,196 @@
+﻿Интернационализация Java-приложения можно организовать след. образом:
+
+
+1 - Создаем файлы, кот. будут содержать необх. нам сообщения на необх. языках.
+
+1.1 - Данные файлы необходимо рассположить в ..\src\main\resources
+
+1.2 - Название файла должно иметь формат: <BUNDLE_BASE_NAME>_<LOCALE>.properties
+Например: 
+- Для сообщений на английском языке файл будет иметь название: i18n_en.properties
+- Для сообщений на русском языке файл будет иметь название: i18n_ru.properties
+где i18n - произвольное название, кот. мы будем исп. в качестве <BUNDLE_BASE_NAME> 
+
+1.3 - Файлы должны содержать набор сообщение для интернационализации, 
+кот. записываются в формате: 
+<имя_параметра_сообщения>=<сообщение_на_определенном_языке>:
+
+Например:
+
+[i18n_en.properties]:
+
+button.label.login=Login
+button.label.logout=Logout
+error.incorrectPaymentData=Incorrect payment data
+error.notEnoughMoney=Payment amount exceeds available amount
+
+[i18n_ru.properties]:
+
+button.label.login=Войти
+button.label.logout=Выйти
+error.incorrectPaymentData=Введены некорректные платежные данные
+error.notEnoughMoney=Сумма операции превышает баланс счета
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+2 - В пакете *.*.web.internationalization или *.*.internationalization создаем:
+
+2.1 - TextPropertiesEnum - перечисление, кот. хранит названия параметров сообщений, кот.
+будут использоваться непосредственно в java-коде (не в JSP)
+------------------------
+public enum TextPropertiesEnum {
+
+    INCORRECT_PAYMENT_DATA_ERROR("error.incorrectPaymentData"),
+    INCORRECT_AMOUNT_ERROR("error.notEnoughMoney");
+    
+    private final String name;
+
+    TextPropertiesEnum(String name){
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
+------------------------
+
+2.2 - InternationalizationHelper - метод getTextByTextProperty, кот. позволяет получать 
+текст сообщения в соотв. с локацией (Locale) и переданным экземпляром TextPropertiesEnum.
+------------------------
+public class InternationalizationHelper {
+    
+    public static final Locale DEFAULT_LOCALE = new Locale("en");
+    public static final String BUNDLE_BASE_NAME = "i18n";
+    
+    private final Locale locale;
+    
+    public InternationalizationHelper(Locale locale){
+        this.locale = locale;
+    }    
+    
+    public String getTextByTextProperty(TextPropertiesEnum textProperty)
+    {
+        ResourceBundle resourceBundle = ResourceBundle.getBundle(BUNDLE_BASE_NAME, locale);        
+        String text = resourceBundle.getString(textProperty.getName()); 
+        return text;
+    }    
+}
+------------------------
+
+2.3 - InternationalizationFilter - фильтр, кот. необходим для:
+
+2.3.1 - перехватывает все запросы и управляет содержимым сессионной переменной, 
+кот. хранит экземпляр Locale, кот. выбрана в данный момент. 
+Данный экземпляр Locale используется далее в коде сервлета и команд для получения
+локализованных сообщений.
+
+2.3.2 - если в запросе передается параметр "locale" (член перечисления RequestParameter.LOCALE),
+то фильтр присваивает сессионной переменной новый экземпляр Locale, 
+кот. создан на основе параметра запросы "locale".
+------------------------
+public class InternationalizationFilter implements Filter {
+            
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {}    
+    
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
+                         throws IOException, ServletException 
+    {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String localeRequestParameter = httpRequest.getParameter(RequestParameter.LOCALE.getParameter());
+        HttpSession session = httpRequest.getSession(); 
+        
+        session.setAttribute(Attribute.BASE_NAME.getName(), 
+                InternationalizationHelper.BUNDLE_BASE_NAME);
+        
+        if (localeRequestParameter != null)
+        {
+            Locale newLocale = new Locale(localeRequestParameter);
+            session.setAttribute(Attribute.LOCALE.getName(), newLocale);
+        }   
+        else {
+            Object localeSessionAttribute = session.getAttribute(Attribute.LOCALE.getName());
+            if (localeSessionAttribute == null){
+                session.setAttribute(Attribute.LOCALE.getName(), 
+                        InternationalizationHelper.DEFAULT_LOCALE);
+            }
+        }    
+		chain.doFilter(request, response);    
+    }       
+    
+    @Override
+    public void destroy(){}        
+}
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+3 - Добавляем фильтр в WEB-INF/web.xml для фильтрации всех запросов:
+------------------------
+<filter>
+		<filter-name>InternationalizationFilter</filter-name>
+		<filter-class>*.*.web.internationalization.InternationalizationFilter</filter-class>
+</filter>
+<filter-mapping>
+		<filter-name>InternationalizationFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+</filter-mapping>
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+4 - Получаем локализованные сообщения в java-коде (не в JSP):
+------------------------
+Locale locale = (Locale) session.getAttribute(Attribute.LOCALE.getName());
+InternationalizationHelper i18nHelper = new InternationalizationHelper(locale);
+String errorMessage = i18nHelper.getTextByTextProperty(TextPropertiesEnum.INCORRECT_PAYMENT_DATA_ERROR);
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+5 - Получаем локализованные сообщения в JSP:
+
+5.1 - В JSP необходимо объявить taglib для jsp/jstl/fmt:
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+5.2 - Необходимо установить fmt Locale и Bundle, достав их из соотв. сессионных переменных:
+<fmt:setLocale value="${locale}"/>
+<fmt:setBundle basename="${baseName}"/>
+
+5.3 - Получаем локлиз. сообщения используя тег fmt:message и указывая в аттрибуте key имя параметра сообщения:
+<fmt:message key="button.label.login"/>
+
+
+
+--------------------------------------------------------------------------------------------
+
+
+6 - Создаем, например, select на UI для управления языком:
+------------------------
+<form>
+	<div id="lang-select-wrap">
+		<select name="locale" onchange="this.form.submit();">
+			<option value="en" ${locale == "en" ? "selected" : ""}><fmt:message key="input.option.english"/></option>
+			<option value="ru" ${locale == "ru" ? "selected" : ""}><fmt:message key="input.option.russian"/></option>
+		</select>
+	</div>
+</form>
+------------------------
+
+6.1 - В результате изменения языка в select box'e, т.е. по событию изменения значения select box'a
+будет выполнен GET-запрос на ту же страницу, на кот. был выбран другой язык.
+
+6.2 - Данный GET-запрос будет перехвачен InternationalizationFilter'ом и сессионной переменной будет писвоена ссылка
+на экземпляр Locale, кот. создан на основе значения, кот. было передано в GET-параметре "locale".
+
