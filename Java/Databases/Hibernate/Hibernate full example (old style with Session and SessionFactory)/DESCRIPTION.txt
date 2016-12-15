@@ -1,0 +1,5 @@
+В примере используется MySQL и устаревший подход к использованию Hibernate c применением
+экземпляров Session и SessionFactory. На данный момент рациональнее использовать 
+JPA EntityManager.
+
+Необходимо создать БД hibernate_sample_db
