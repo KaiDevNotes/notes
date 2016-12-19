@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="LOCATIONS")
-public class Location {
+public class Location implements Identifiable {
     
     private Integer id;	
     private String name;
@@ -36,9 +36,11 @@ public class Location {
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     @Column(name="ID")
+    @Override
     public Integer getId() {
         return id;
     }
+    @Override
     public void setId(Integer i){
         id = i;		
     }

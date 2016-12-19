@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name="SERVERS")
-public class Server {
+public class Server implements Identifiable {
     
     private Integer id;	
     private String name;
@@ -31,9 +31,11 @@ public class Server {
     @GeneratedValue(generator="increment")
     @GenericGenerator(name="increment", strategy = "increment")
     @Column(name="ID")
+    @Override
     public Integer getId() {
         return id;
     }
+    @Override
     public void setId(Integer i){
         id = i;		
     }

@@ -1,8 +1,5 @@
 package DAO;
 
-import DAO.Impl.ServerDAOImpl;
-import DAO.Impl.LocationDAOImpl;
-import DAO.Impl.ContinentDAOImpl;
 
 public class Factory {
 	  
@@ -20,21 +17,21 @@ public class Factory {
 
     public ServerDAO getServerDAO(){
         if (serverDAO == null){
-          serverDAO = new ServerDAOImpl();
+          serverDAO = new ServerDAO();
         }
         return serverDAO;
     }
 
     public LocationDAO getLocationDAO(){
         if (locationDAO == null){
-          locationDAO = new LocationDAOImpl();
+          locationDAO = new LocationDAO();
         }
         return locationDAO;
     }
 
     public ContinentDAO getContinentDAO(){
         if (continentDAO == null){
-          continentDAO = new ContinentDAOImpl();
+          continentDAO = new ContinentDAO();
         }
         return continentDAO;
     }

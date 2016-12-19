@@ -7,15 +7,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 
 @Entity
 @Table(name="CONTINENTS")
-public class Continent {
+public class Continent implements Identifiable {
     
     private Integer id;	
     private String name;
@@ -30,12 +30,13 @@ public class Continent {
     }
     
     @Id
-    @GeneratedValue(generator="increment")
-    @GenericGenerator(name="increment", strategy = "increment")
     @Column(name="ID")
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Override
     public Integer getId() {
         return id;
     }
+    @Override
     public void setId(Integer i){
         id = i;		
     }

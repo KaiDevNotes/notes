@@ -9,72 +9,73 @@ import entity.Server;
 
 
 public class Main { 
-    public static void main(String[] args) throws SQLException {
-        
+    
+    public static void main(String[] args) throws SQLException 
+    {        
         // СОЗДАЕМ ОБЪЕКТЫ-СУЩНОСТИ И СОХРАНИЯМ ИХ В БД
         
-        Continent continent1 = new Continent();
-        continent1.setName("North America");
-        
-        Continent continent2 = new Continent();
-        continent2.setName("Europe");
-        
-        Continent continent3 = new Continent();
-        continent3.setName("Australia");
-        
-        Factory.getInstance().getContinentDAO().addContinent(continent1);
-        Factory.getInstance().getContinentDAO().addContinent(continent2);
-        Factory.getInstance().getContinentDAO().addContinent(continent3);
-        
-        Location location1 = new Location();
-        location1.setName("USA, New York");
-        location1.setContinent(continent1);
-        
-        Location location2 = new Location();
-        location2.setName("Germany, Berlin");        
-        location2.setContinent(continent2);
-        
-        Location location3 = new Location();
-        location3.setName("Australia, Canberra");
-        location3.setContinent(continent3);
-        
-        Factory.getInstance().getLocationDAO().addLocation(location1);
-        Factory.getInstance().getLocationDAO().addLocation(location2);
-        Factory.getInstance().getLocationDAO().addLocation(location3);
-        
-        Server server11 = new Server();
-        server11.setName("Server #1.1");
-        server11.setLocation(location1);
-        
-        Server server12 = new Server();
-        server12.setName("Server #1.2");
-        server12.setLocation(location1);
-        
-        Server server21 = new Server();
-        server21.setName("Server #2.1");
-        server21.setLocation(location2);
-        
-        Server server22 = new Server();
-        server22.setName("Server #2.2");
-        server22.setLocation(location2);
-        
-        Server server31 = new Server();
-        server31.setName("Server #3.1");
-        server31.setLocation(location3);
-        
-        Server server32 = new Server();
-        server32.setName("Server #3.2");
-        server32.setLocation(location3);
-        
-        Factory.getInstance().getServerDAO().addServer(server11);
-        Factory.getInstance().getServerDAO().addServer(server12);
-        Factory.getInstance().getServerDAO().addServer(server21);
-        Factory.getInstance().getServerDAO().addServer(server22);
-        Factory.getInstance().getServerDAO().addServer(server31);
-        Factory.getInstance().getServerDAO().addServer(server32);        
-  
+//        Continent continent1 = new Continent();
+//        continent1.setName("North America");
+//        
+//        Continent continent2 = new Continent();
+//        continent2.setName("Europe");
+//        
+//        Continent continent3 = new Continent();
+//        continent3.setName("Australia");
+//        
+//        Factory.getInstance().getContinentDAO().save(continent1);
+//        Factory.getInstance().getContinentDAO().save(continent2);
+//        Factory.getInstance().getContinentDAO().save(continent3);
+//        
+//        Location location1 = new Location();
+//        location1.setName("USA, New York");
+//        location1.setContinent(continent1);
+//        
+//        Location location2 = new Location();
+//        location2.setName("Germany, Berlin");        
+//        location2.setContinent(continent2);
+//        
+//        Location location3 = new Location();
+//        location3.setName("Australia, Canberra");
+//        location3.setContinent(continent3);
+//        
+//        Factory.getInstance().getLocationDAO().save(location1);
+//        Factory.getInstance().getLocationDAO().save(location2);
+//        Factory.getInstance().getLocationDAO().save(location3);
+//        
+//        Server server11 = new Server();
+//        server11.setName("Server #1.1");
+//        server11.setLocation(location1);
+//        
+//        Server server12 = new Server();
+//        server12.setName("Server #1.2");
+//        server12.setLocation(location1);
+//        
+//        Server server21 = new Server();
+//        server21.setName("Server #2.1");
+//        server21.setLocation(location2);
+//        
+//        Server server22 = new Server();
+//        server22.setName("Server #2.2");
+//        server22.setLocation(location2);
+//        
+//        Server server31 = new Server();
+//        server31.setName("Server #3.1");
+//        server31.setLocation(location3);
+//        
+//        Server server32 = new Server();
+//        server32.setName("Server #3.2");
+//        server32.setLocation(location3);
+//        
+//        Factory.getInstance().getServerDAO().save(server11);
+//        Factory.getInstance().getServerDAO().save(server12);
+//        Factory.getInstance().getServerDAO().save(server21);
+//        Factory.getInstance().getServerDAO().save(server22);
+//        Factory.getInstance().getServerDAO().save(server31);
+//        Factory.getInstance().getServerDAO().save(server32);        
         
    
+        
         
         // ПОЛУЧАЕМ КОНТИНЕНТ (ПО ID) И СВЯЗАННЫЕ С НИМ ЛОКАЦИИ
         
@@ -86,6 +87,7 @@ public class Main {
 //            System.out.println("    Location: "+location.getName());
 //        }
 //        System.out.println("---------------------------");
+        
         
         
         
