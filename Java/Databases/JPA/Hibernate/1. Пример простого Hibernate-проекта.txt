@@ -1,4 +1,4 @@
-
+﻿
 ОПИСАНИЕ:
 
 В данном примере будет создана сущность КОНТИНЕНТ, содержащая ID и название.
@@ -59,7 +59,7 @@ hibernate.cfg.xml
         <!-- Print all generated SQL to the console -->
         <property name="show_sql">true</property>
         <property name="format_sql">true</property>
-        <!--  -->
+        <!-- hbm2ddl.auto = update позволяет автоматически создавать таблицы в БД для сущностей, если таблицы еще не созданы -->
         <property name="hbm2ddl.auto">update</property>
         <property name="hibernate.connection.autocommit">false</property>
         <!-- Enable Hibernate's automatic session context management -->
