@@ -24,12 +24,10 @@ public class Location implements Identifiable {
     private Continent continent;
     private List<Server> servers = new ArrayList<Server>();
     
-    public Location(){
-        name = null;
-    }
+    public Location(){}
     
-    public Location(Location location){
-        name = location.getName();
+    public Location(String name){
+        this.name = name;
     }
     
     @Id
@@ -41,16 +39,16 @@ public class Location implements Identifiable {
         return id;
     }
     @Override
-    public void setId(Integer i){
-        id = i;		
+    public void setId(Integer id){
+        this.id = id;		
     }
     
     @Column(name="NAME")
     public String getName(){
         return name;
     }
-    public void setName(String n){
-        name = n;
+    public void setName(String name){
+        this.name = name;
     }
     
     //--------------------------------    
@@ -60,8 +58,8 @@ public class Location implements Identifiable {
     public Continent getContinent(){
         return continent;
     }    
-    public void setContinent(Continent c){
-        continent = c;
+    public void setContinent(Continent continent){
+        this.continent = continent;
     }
     
     //---------------------------------------
@@ -75,8 +73,8 @@ public class Location implements Identifiable {
     public List<Server> getServers(){
         return servers;
     }    
-    public void setServers(List<Server> s){
-        servers = s;
+    public void setServers(List<Server> servers){
+        this.servers = servers;
     }
     
 }

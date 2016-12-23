@@ -19,12 +19,10 @@ public class Server implements Identifiable {
     private String name;
     private Location location;
     
-    public Server(){
-        name = null;
-    }
+    public Server(){}
     
-    public Server(Server server){
-        name = server.getName();
+    public Server(String name){
+        this.name = name;
     }
     
     @Id
@@ -36,16 +34,16 @@ public class Server implements Identifiable {
         return id;
     }
     @Override
-    public void setId(Integer i){
-        id = i;		
+    public void setId(Integer id){
+        this.id = id;		
     }
     
     @Column(name="NAME")
     public String getName(){
         return name;
     }
-    public void setName(String n){
-        name = n;
+    public void setName(String name){
+        this.name = name;
     }
     
     //--------------------------------    
@@ -55,8 +53,8 @@ public class Server implements Identifiable {
     public Location getLocation(){
         return location;
     }    
-    public void setLocation(Location l){
-        location = l;
+    public void setLocation(Location location){
+        this.location = location;
     }
     
 }
