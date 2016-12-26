@@ -1,0 +1,38 @@
+﻿- Тестовое приложение сконфигурировано через @Аннотации в kai.dev.springdata.config.AppConfig
+
+
+- В контексте определены: DataSource, JpaEntityManagerFactory, JpaTransactionManager. 
+
+
+- Также все DAO сущностей определны как компоненты в контексте данного приложения 
+по средствам использования аннотиции @Component в классах DAO и аннотации @ComponentScan("kai.dev.springdata") 
+к классе AppConfig.
+
+
+- Интерфейс JpaRepository предоставляет нам базовые CRUD операции (см. методы в java docs).
+
+
+- Расширение интерфейса JpaRepository для конкретной сущности внедряется в свойство объекта класса DAO
+по средствам использования аннотации @Resource
+
+
+- Для формирования запроов в БД с использование JpaRepository можно использовать 2 подхода:
+
+1) Сигнатура метода должна быть сформировано определнным образом, кот. позволит Spring Data преобразовать 
+его в запрос. Имена таких методов должны начитаться с find..
+
+Например: 
+Server findByNameAndRam(String name, Integer ram); 
+
+Т.е. данный метод должен вернуть сущность Server из БД, значения полей String name и Integer ram соответствуют
+аргументам переданным в метод.
+
+2) Используем произвольное имя метода в сочетании с аннотацией @Query, кот. содержит необходимый запрос на JPQL
+
+Например:
+@Query("SELECT c FROM Continent c JOIN FETCH c.locations WHERE c.id = :id")
+Continent findByIdWithLocations(@Param("id") Integer id);
+
+Т.е. метод вернет ссущность Continent и инициализирует связанную с ним коллекцию объектов типа Location
+(КОНТИНЕНТ и связанные с ним ЛОКАЦИИ).
+
