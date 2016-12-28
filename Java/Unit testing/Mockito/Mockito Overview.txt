@@ -15,6 +15,9 @@ Mockito - это framework для создания ОБЪЕКТОВ-ЗАГЛУШ
 фиктивн реализации для дальнейшей передачи их тестируемым unit'ам Bar и BarVoid
 мы используем Mockito framework.
 
+Хорошая презентация:
+http://www.slideshare.net/nunafig/mockito-12079903?next_slideshow=1
+
 
 ----------------------------------------------------------
 
