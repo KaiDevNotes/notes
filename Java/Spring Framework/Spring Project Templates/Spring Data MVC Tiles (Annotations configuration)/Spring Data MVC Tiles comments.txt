@@ -1,0 +1,49 @@
+﻿РАЗВЕРТЫВАНИЕ И ТЕСТИРОВАНИЕ:
+
+- перед запуском необходимо создать БД spring_data_mvc_tiles_template используя скрипт 
+из src\main\resources\spring_data_mvc_tiles_template.sql
+
+
+
+ПРОБЛЕМЫ:
+
+- при deploy'e на Tomcat может возникнуть PermGen OutOfMemoryException --> 
+для устранения проблемы необходимо добвить -XX:MaxPermSize=128M в VM Options.
+В NetBeans: Right Click по серверу -> Properties -> Platform -> VM Options
+
+
+
+ПРИМЕНЕНИЕ:
+
+- создаем сущности в kai.dev.project.entity
+
+- создаем для сущностей DAO в kai.dev.project.dao
+
+- создаем классы логики (сервисы) в kai.dev.project.logic
+
+- создаем контроллеры в kai.dev.project.web.controller
+
+- создаем новые шаблоны, view (jsp) в "/WEB-INF/views" и регистрируем их "/WEB-INF/tiles/tiles-scheme.xml"
+
+
+
+ОПИСАНИЕ:
+
+- Проект конфигурируется с помощью аннотаций в классе SpringWebAppConfig
+
+- Аннотация @ComponentScan позволяет нам указать название корневого пакета, в кот. 
+Spring будет искать классы, помеченные аннотациями (@Component и тд) и регистрировать 
+их как компоненты в контексте spring-приложения. 
+
+- Мы заставляем класс SpringWebAppConfig расширять WebMvcConfigurerAdapter и переопределяем 
+метод addResourceHandlers, чтобы иметь доступ к статическим ресурсам: JS, CSS, IMG
+
+- Мы не используем web.xml, вместо этого мы используем класс Initializer, кот. реализует интерфейс 
+WebApplicationInitializer, объявляет мапинг к сервлету-диспетчеру и регистрирует в контексте, 
+определенную в классе SpringWebAppConfig, конфиругацию и перечисленные в ней компоненты приложения.
+
+- Данные подключения к DB и конфиругация Hibernate хранится в src\main\resources\application.properties.
+Для получения доступа к параметрам данного *.properties файла мы используем аннотацию @PropertySource.
+
+- Также в аннотации @EnableJpaRepositories указываем пакет, к кот. хранятся файлы интерфейсов, кот.
+расширяют интерфейс JpaRepository

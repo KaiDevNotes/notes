@@ -1,0 +1,134 @@
+* {
+    padding: 0;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+.clear {
+    clear: both;
+}
+#content-wrap {
+    width: 100%;
+    min-height: 100%;
+    padding: 90px 0 55px 0;
+    box-sizing: border-box;
+    position: relative;
+    background-color: #f2f2f2;
+    z-index: 1;
+}
+#header {
+    width: 100%;
+    height: 90px;
+    padding: 30px 20px 0 20px;
+    box-sizing: border-box;
+    background-color: #3097de;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+#footer {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #666666;
+    font-size: 15px;
+    color: #ffffff;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+}
+#logo {
+    display: block;    
+    font-size: 30px;
+    font-weight: bold;
+    font-family: Consolas, sans-serif;
+    text-align: center;
+    text-decoration: none;
+    font-style: italic;
+    color: #ffffff;
+    text-shadow: 2px 2px 2px #333333;
+    line-height: 1;
+    float: left;
+}
+.btn {
+    display: inline-block;    
+    padding: 8px 15px;
+    text-decoration: none;
+    text-align: center;
+    font-size: 14px;
+    color: #ffffff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.btn.center {
+    margin: 0 auto;
+    background-color: #0073c7;
+}
+#common-content {
+    padding: 50px;
+    text-align: center;
+    color: #444444;
+    font-family: Consolas, sans-serif;
+}
+#login-form {
+    display: block;
+    width: 250px;
+    margin: 20px auto;
+}
+.input-wrap {
+    width: 100%;
+    height: 40px;
+    border: 2px solid #3097de;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    position: relative;
+    margin-bottom: 10px;
+    border-radius: 3px;
+}
+.input-wrap input {
+    display: block;
+    width: 90%;
+    height: 100%;
+    font-size: 14px;
+    text-align: center;
+    color: #333333;  
+    background: none;
+    outline: none;
+    border: none;
+    margin: 0 auto;
+}
+#login-form-btn {
+    width: 100%;
+    background-color: #0073c7;
+}
+.error-msg {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    font-size: 14px;
+    border-radius: 3px;
+    background-color: #f2dede;
+    border: 1px solid #eed3d7;
+    color: #b94a48;
+}
+#preloader {
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 30px 0;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    font-size: 30px;
+    line-height: 1;
+    color: #ffffff;
+    font-family: Consolas, sans-serif;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
