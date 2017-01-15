@@ -1,7 +1,7 @@
-http://www.pskills.org/onlinetest.jsp
+п»їhttp://www.pskills.org/onlinetest.jsp
 
 http://www.indiabix.com/online-test/java-programming-test/
 
-Алгоритмические задачи:
+РђР»РіРѕСЂРёС‚РјРёС‡РµСЃРєРёРµ Р·Р°РґР°С‡Рё:
 https://codility.com/demo/take-sample-test/
 

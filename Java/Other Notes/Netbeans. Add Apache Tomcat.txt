@@ -1,4 +1,4 @@
-Если после добавления в NetBeans Apache Tomcat не стартует, то необходимо в файле catalina.bat убрать двойные кавычки в следующих строках:
+п»їР•СЃР»Рё РїРѕСЃР»Рµ РґРѕР±Р°РІР»РµРЅРёСЏ РІ NetBeans Apache Tomcat РЅРµ СЃС‚Р°СЂС‚СѓРµС‚, С‚Рѕ РЅРµРѕР±С…РѕРґРёРјРѕ РІ С„Р°Р№Р»Рµ catalina.bat СѓР±СЂР°С‚СЊ РґРІРѕР№РЅС‹Рµ РєР°РІС‹С‡РєРё РІ СЃР»РµРґСѓСЋС‰РёС… СЃС‚СЂРѕРєР°С…:
 
 :noJuliConfig
 set "JAVA_OPTS=%JAVA_OPTS% %LOGGING_CONFIG%"
@@ -7,7 +7,7 @@ set "JAVA_OPTS=%JAVA_OPTS% %LOGGING_CONFIG%"
 set "JAVA_OPTS=%JAVA_OPTS% %LOGGING_MANAGER%"
 
 
-Должно получиться вот так:
+Р”РѕР»Р¶РЅРѕ РїРѕР»СѓС‡РёС‚СЊСЃСЏ РІРѕС‚ С‚Р°Рє:
 
 :noJuliConfig
 set JAVA_OPTS=%JAVA_OPTS% %LOGGING_CONFIG%
