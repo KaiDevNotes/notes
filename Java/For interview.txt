@@ -1,0 +1,99 @@
+﻿JAVA CORE:
+-----------
+
+Head first. Java
+
+Области памяти: стэк и куча. Понятия: локальная переменная и переменная экземпляра.
+p. 266-269
+
+Процесс создания, использования и уничтожения объектов.
+p. 270-295
+
+Форматирование строк, чисел, дат.
+p. 323-336
+
+Обработка исключений.
+р. 349-367
+
+Сериализация.
+р. 461-491
+
+Многопоточность.
+р. 519-547, p. 546 - описание взаимной блоктровки (Dead lock)
+
+Равенство объектов. Правила для equals() и hashCode()
+p. 590-593
+
+
+
+Сериализация. Интерфейс Externalizable. 
+Java 8. Полное руководство. р. 762 
+
+
+
+Процесс загрузки классов. Иерархия ClassLoader'ов. Создание собственного ClassLoader'а.
+http://dmitriymx.ru/blog/classloader-dynamic-load-classes
+
+
+Collections Framework.
+..\Java\Java SE\Collections Framework.txt
+https://habrahabr.ru/post/162017/
+https://habrahabr.ru/post/128269/
+https://habrahabr.ru/post/127864/
+https://habrahabr.ru/post/128017/
+
+
+Lambda-выражения. Список предопределенных ф-ых интерфейсов.
+Java 8. Полное руководство. р. 465 
+
+
+Процесс Garbage Collection.
+http://ggenikus.github.io/blog/2014/05/04/gc/
+https://habrahabr.ru/post/112676/
+
+
+Работа с XML.
+Java. Методы программирования. p. 395-448
+
+
+SOLID, GRASP
+..\Java\Code Design\*
+
+
+Многопоточность.
+..\Java\Java SE\Threads\*
+
+
+
+
+
+FRAMEWORKS:
+-----------
+
+Spring Framework.
+..\Books\Java Spring in action.pdf p.29-68
+..\Java\Spring Framework\*
+
+
+JPA, Hibernate.
+..\Java\Databases\JPA\Hibernate
+
+Уровни кэширования в Hibernate.
+https://habrahabr.ru/post/135176/
+
+Транзакции. ACID.
+https://ru.wikipedia.org/wiki/ACID
+
+
+
+
+SQL.
+---------------
+Java. Методы программирования. p. 793-812
+
+Использование индексов в MySQL.
+https://ruhighload.com/post/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0+%D1%81+%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D0%BC%D0%B8+%D0%B2+MySQL
+
+ 
+
+
