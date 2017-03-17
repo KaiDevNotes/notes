@@ -56,7 +56,9 @@ https://habrahabr.ru/post/112676/
 Java. Методы программирования. p. 395-448
 
 
-SOLID, GRASP
+CODE DESIGN: SOLID, GRASP, GoF patterns ...
+
+https://jsehelper.blogspot.com.by/2016/01/design-patterns.html
 ..\Java\Code Design\*
 
 
@@ -76,6 +78,10 @@ Spring Framework.
 
 
 JPA, Hibernate.
+
+https://jsehelper.blogspot.com.by/2016/01/object-relational-mapping-orm-hibernate.html
+https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernate.html
+
 ..\Java\Databases\JPA\Hibernate
 
 Уровни кэширования в Hibernate.
@@ -89,6 +95,9 @@ https://ru.wikipedia.org/wiki/ACID
 
 SQL.
 ---------------
+
+..\Java\Databases\JDBC\SQL-query practice.txt
+
 Java. Методы программирования. p. 793-812
 
 Использование индексов в MySQL.
