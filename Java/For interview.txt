@@ -84,12 +84,11 @@ https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernat
 
 ..\Java\Databases\JPA\Hibernate
 
-Уровни кэширования в Hibernate.
-https://habrahabr.ru/post/135176/
-
 Транзакции. ACID.
 https://ru.wikipedia.org/wiki/ACID
 
+Способы создания таблиц БД для хранения иерархии объектов.
+https://www.ibm.com/developerworks/ru/library/j-hibernate/
 
 
 
