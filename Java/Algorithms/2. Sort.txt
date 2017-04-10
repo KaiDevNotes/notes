@@ -1,0 +1,104 @@
+﻿Виды сортировки МАССИВОВ:
+-------------------------
+
+
+
+1. ПУЗЫРЬКОВАЯ сортировка
+
+- Суть: 2.1 Bubble sort.gif
+
+- Сложность: О(N^2) (N в квадрате или квадратичная сложность)
+
+- Реализация в Java:
+
+
+public void bubbleSort(long[] arr)
+{
+	int out, in;
+	int n = arr.length;
+	for (out = n - 1; out > 1; out--)
+	{
+		for (in=0; in<out; in++)
+		{
+			if (arr[in] > arr[in+1]) // swap
+			{
+				long temp = arr[in];
+				arr[in] = arr[in + 1];
+				arr[in + 1] = temp;
+			}
+		}
+	}
+}
+
+
+--------------------------------------------------------------------------------------
+
+
+
+2. Сортировка МЕТОДОМ ВЫБОРА
+
+- Сложность: О(N^2) (N в квадрате или квадратичная сложность)
+
+- Реализация в Java:
+
+
+public void selectionSort(long[] arr)
+{
+	int out, in, min;
+	int n = arr.length;
+	for (out = 0; out < n - 1; out++) 
+	{
+		min = out; 
+		for (in = out + 1; in < n; in++)
+		{
+			if(arr[in] < arr[min])
+			{
+				min = in;
+			}                 
+		}
+		// swap
+		long temp = arr[out];
+		arr[out] = arr[min];
+		arr[min] = temp; 
+	}
+}
+
+
+--------------------------------------------------------------------------------------
+
+
+
+3. Сортировка МЕТОДОМ ВСТАВКИ
+
+- Сложность: О(N^2) (N в квадрате или квадратичная сложность)
+
+- Реализация в Java:
+
+
+public void insertionSort(long[] arr)
+{
+	int in, out;
+	int n = arr.length;
+	for (out = 1; out < n; out++)
+	{
+		long temp = arr[out];
+		in = out;
+		while(in > 0 && arr[in - 1] >= temp)
+		{
+			arr[in] = arr[in - 1];
+			--in;
+		}
+		arr[in] = temp;
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
