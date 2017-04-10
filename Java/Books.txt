@@ -2,6 +2,7 @@
 2) Java 8. Полное руководство. Г. Шилдт. 9 издание 2015 год 
 3) Java. Методы программирования. И. Блинов. 2013 год
 4) Java. Эффективное программирование. Дж. Блох. 2-е издание 2014 год
-5) Head First. Design Patterns. Э. Фримен.
-6) Refactoring to patterns. Joshua Kerievsky. 2006
-7) Java Spring в действии. К. Уоллс. 3 издание. 2013 год
+5) Head First. OOAD.
+6) Head First. Design Patterns. Э. Фримен.
+7) Refactoring to patterns. Joshua Kerievsky. 2006
+8) Java Spring в действии. К. Уоллс. 3 издание. 2013 год
