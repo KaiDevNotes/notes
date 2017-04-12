@@ -56,6 +56,7 @@ public boolean doLinearSearch(long searchKey, long[] arr)
 				 
 - Реализация в Java:
 
+На основе цикла:
 
 public int doBinarySearch(long searchKey, long[] arrOrdered)
 {
@@ -85,6 +86,37 @@ public int doBinarySearch(long searchKey, long[] arrOrdered)
 				upperBound = curIn - 1;
 			}
 		}
+	}
+}
+
+
+На основе рекурсии:
+
+public static int doRecBinarySearch(long searchKey, long[] arrOrdered, 
+                                        int lowerBound, int upperBound)
+{
+	int n = arrOrdered.length;
+	int curIn;
+	curIn = (lowerBound + upperBound )/2;
+	if(arrOrdered[curIn] == searchKey)
+	{
+		return curIn; // Если найден: возвращаем позицию элемента
+	}            
+	else if (lowerBound > upperBound)
+	{
+		return n; // Если НЕ найден: возвращаем размер массива
+	}
+	else 
+	{
+		if(arrOrdered[curIn] < searchKey)
+		{                    
+			lowerBound = curIn + 1;
+		} 
+		else
+		{
+			upperBound = curIn - 1;
+		}                
+		return doRecBinarySearch(searchKey, arrOrdered, lowerBound, upperBound);
 	}
 }
 
