@@ -120,7 +120,7 @@ public void insertionSort(long[] arr)
 
 5. Сортировка ШЕЛЛА
 
-- Суть: р. 300-303 + 2.5 Sell sort.gif
+- Суть: р. 300-303 + 2.5 Shell sort.gif
 
 - Сложность: O(N x (log(N))^2)
 
