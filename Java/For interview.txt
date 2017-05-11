@@ -73,6 +73,11 @@ FRAMEWORKS:
 -----------
 
 Spring Framework.
+
+https://jsehelper.blogspot.com.by/2016/02/spring-framework-1.html
+https://jsehelper.blogspot.com.by/2016/03/spring-framework-2.html
+https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html
+
 ..\Books\Java Spring in action.pdf p.29-68
 ..\Java\Spring Framework\*
 
