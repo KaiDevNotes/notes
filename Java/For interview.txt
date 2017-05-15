@@ -82,6 +82,7 @@ https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html
 ..\Java\Spring Framework\*
 
 
+
 JPA, Hibernate.
 
 https://jsehelper.blogspot.com.by/2016/01/object-relational-mapping-orm-hibernate.html
@@ -89,11 +90,16 @@ https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernat
 
 ..\Java\Databases\JPA\Hibernate
 
+Hibernate official documentation: 
+http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html
+
 Транзакции. ACID.
 https://ru.wikipedia.org/wiki/ACID
 
 Способы создания таблиц БД для хранения иерархии объектов.
+http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#entity-inheritance
 https://www.ibm.com/developerworks/ru/library/j-hibernate/
+http://samsonych.com/lib/hibernate/inheritance.html
 
 
 
