@@ -89,4 +89,31 @@ $(document).ready(function(){
         $('.selDownArrow, .selTop').hide();
     }	
 		
-}); 
+});
+
+
+//
+// Use this function to update value select box.
+// You should provide 'id' of necessary select box and value to set
+// updateSelectValue("#month", "05");
+//
+function updateSelectValue(selectId, newValue)
+{
+    var selectObj = $("" + selectId);
+    var options = $(selectObj).find("option");
+    var optionsValues = [];
+    
+    for (var i = 0; i < options.length; i++){
+        optionsValues.push($(options[i]).html());
+    }
+    
+    var index = optionsValues.indexOf(newValue);
+    
+    if (index == -1){
+        return;
+    }
+    
+    $(selectObj).siblings('.selTop').children('.selectedOptText').text(newValue); 
+    options.attr("selected", false);
+    options.eq(index).attr("selected", true);
+}
