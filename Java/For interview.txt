@@ -1,89 +1,148 @@
-﻿JAVA CORE:
+﻿BOOKS:
+-------
+
+[B1]: Head first. Java
+[B2]: Data Structures and Algorithms. R. Lefore
+[B3]: Java 8. Полное руководство.
+[B4]: Java. Методы программирования.
+[B5]: Spring in action
+
+----------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+JAVA CORE:
 -----------
 
-Head first. Java
 
-Области памяти: стэк и куча. Понятия: локальная переменная и переменная экземпляра.
-p. 266-269
-
-Процесс создания, использования и уничтожения объектов.
-p. 270-295
-
-Форматирование строк, чисел, дат.
-p. 323-336
-
-Обработка исключений.
-р. 349-367
-
-Сериализация.
-р. 461-491
-
-Многопоточность.
-р. 519-547, p. 546 - описание взаимной блоктровки (Dead lock)
-
-Равенство объектов. Правила для equals() и hashCode()
-p. 590-593
+https://jsehelper.blogspot.com.by/2016/01/java-core-1.html
+https://jsehelper.blogspot.com.by/2016/01/java-core-2.html
+https://jsehelper.blogspot.com.by/2016/01/java-core-3.html
+https://jsehelper.blogspot.com.by/2016/12/java-core-4.html
 
 
+[Области памяти: стэк и куча. Понятия: локальная переменная и переменная экземпляра.]
+[B1]: p. 266-269
 
-Сериализация. Интерфейс Externalizable. 
+
+[Процесс создания, использования и уничтожения объектов.]
+[B1]: p. 270-295
+
+
+[Форматирование строк, чисел, дат.]
+[B1]: p. 323-336
+
+
+[Обработка исключений.]
+[B1]: р. 349-367
+
+
+[Равенство объектов. Правила для equals() и hashCode()]
+[B1]: p. 590-593
+
+
+[Сериализация. Интерфейс Externalizable.]
+[B1]: р. 461-491
 Java 8. Полное руководство. р. 762 
 
 
-
-Процесс загрузки классов. Иерархия ClassLoader'ов. Создание собственного ClassLoader'а.
+[Процесс загрузки классов. Иерархия ClassLoader'ов. Создание собственного ClassLoader'а.]
 http://dmitriymx.ru/blog/classloader-dynamic-load-classes
 
 
-Collections Framework.
-..\Java\Java SE\Collections Framework.txt
+[Collections Framework.]
 https://habrahabr.ru/post/162017/
 https://habrahabr.ru/post/128269/
 https://habrahabr.ru/post/127864/
 https://habrahabr.ru/post/128017/
+[NOTES]\Java\Java SE\Collections Framework.txt
 
 
-Lambda-выражения. Список предопределенных ф-ых интерфейсов.
-Java 8. Полное руководство. р. 465 
+[Lambda-выражения. Список предопределенных ф-ых интерфейсов.]
+[B3]: р. 465 
 
 
-Процесс Garbage Collection.
+[Процесс Garbage Collection.]
 http://ggenikus.github.io/blog/2014/05/04/gc/
 https://habrahabr.ru/post/112676/
 
 
-Работа с XML.
-Java. Методы программирования. p. 395-448
+[Работа с XML.]
+[B4]: p. 395-448
+
+
+[Многопоточность.]
+[B1]: р. 519-547, p. 546 - описание взаимной блоктровки (Dead lock)
+https://jsehelper.blogspot.com.by/2016/01/multithreading-1.html
+https://jsehelper.blogspot.com.by/2016/01/multithreading-2.html
+[NOTES]\Java\Java SE\Threads\*
+
+
+----------------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 CODE DESIGN: SOLID, GRASP, GoF patterns ...
+----------------------------------------------
+
 
 https://jsehelper.blogspot.com.by/2016/01/design-patterns.html
-..\Java\Code Design\*
+[NOTES]\Java\Code Design\*
 
 
-Многопоточность.
-..\Java\Java SE\Threads\*
-
-
+----------------------------------------------------------------------------------------------
 
 
 
-FRAMEWORKS:
------------
 
-Spring Framework.
+
+
+
+DATA STRUCTURES AND ALGORITHMS
+---------------------------------
+[B2]: Глава 15 р. 666-677
+[NOTES]\Java\Data Structures and Algorithms
+
+
+----------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+SPRING FRAMEWORK
+-------------------
+
 
 https://jsehelper.blogspot.com.by/2016/02/spring-framework-1.html
 https://jsehelper.blogspot.com.by/2016/03/spring-framework-2.html
 https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html
 
-..\Books\Java Spring in action.pdf p.29-68
-..\Java\Spring Framework\*
+[B5]: p.29-68
+[NOTES]\Java\Spring Framework\*
+
+
+----------------------------------------------------------------------------------------------
 
 
 
-JPA, Hibernate.
+
+
+
+
+JPA, HIBERNATE
+----------------
+
 
 https://jsehelper.blogspot.com.by/2016/01/object-relational-mapping-orm-hibernate.html
 https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernate.html
@@ -93,33 +152,41 @@ https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernat
 Hibernate official documentation: 
 http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html
 
-Транзакции. ACID.
+
+[Транзакции. ACID.]
 https://ru.wikipedia.org/wiki/ACID
 
-Способы создания таблиц БД для хранения иерархии объектов.
+
+[Способы создания таблиц БД для хранения иерархии объектов.]
 http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#entity-inheritance
 https://www.ibm.com/developerworks/ru/library/j-hibernate/
 http://samsonych.com/lib/hibernate/inheritance.html
 
 
+----------------------------------------------------------------------------------------------
 
-SQL.
----------------
+
+
+
+
+
+
+SQL
+------
+
 
 ..\Java\Databases\JDBC\SQL-query practice.txt
 
-Java. Методы программирования. p. 793-812
+[B4]: p. 793-812
 
-Использование индексов в MySQL.
+
+[Использование индексов в MySQL.]
 https://ruhighload.com/post/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0+%D1%81+%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D0%BC%D0%B8+%D0%B2+MySQL
 
 
+----------------------------------------------------------------------------------------------
 
 
-Data Structures and Algorithms
----------------------------------
-Data Structures and Algorithms. R. Lefore: Глава 15 р. 666-677
-..\Java\Data Structures and Algorithms
  
 
 
