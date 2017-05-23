@@ -93,11 +93,10 @@ $(document).ready(function(){
 
 
 //
-// Use this function to update value select box.
-// You should provide 'id' of necessary select box and value to set
-// updateSelectValue("#month", "05");
+// Use this function to set value of necessary select box.
+// Function call example: setSelectValue("#month", "05");
 //
-function updateSelectValue(selectId, newValue)
+function setSelectValue(selectId, newValue)
 {
     var selectObj = $("" + selectId);
     var options = $(selectObj).find("option");
