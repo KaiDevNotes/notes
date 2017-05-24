@@ -80,6 +80,7 @@ https://habrahabr.ru/post/112676/
 https://jsehelper.blogspot.com.by/2016/01/multithreading-1.html
 https://jsehelper.blogspot.com.by/2016/01/multithreading-2.html
 [NOTES]\Java\Java SE\Threads\*
+https://habrahabr.ru/post/108016/
 
 
 ----------------------------------------------------------------------------------------------
