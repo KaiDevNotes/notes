@@ -84,6 +84,7 @@ https://jsehelper.blogspot.com.by/2016/01/multithreading-2.html
 https://habrahabr.ru/post/108016/
 
 [java.util.concurrent]
+https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy [!]
 https://tproger.ru/translations/10-java-multithread-practices/
 https://tproger.ru/translations/java8-concurrency-tutorial-1/
 https://tproger.ru/translations/java8-concurrency-tutorial-2/
