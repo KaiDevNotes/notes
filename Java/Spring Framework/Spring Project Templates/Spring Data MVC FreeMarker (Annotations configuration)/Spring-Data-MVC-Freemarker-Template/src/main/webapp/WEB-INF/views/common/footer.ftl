@@ -1,0 +1,1 @@
+<div id="footer">Project Name &copy; 2017</div>
