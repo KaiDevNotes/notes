@@ -35,6 +35,9 @@ https://jsehelper.blogspot.com.by/2016/12/java-core-4.html
 
 [Форматирование строк, чисел, дат.]
 [B1]: p. 323-336
+Описание использования:
+- метода String.format()
+- типа java.util.Calendar
 
 
 [Обработка исключений.]
