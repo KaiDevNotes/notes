@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0" />
+        <title>AngularJS App</title>        
+        <script type="text/javascript" src="https://code.angularjs.org/1.4.7/angular.min.js"></script>
+        <script type="text/javascript" src="https://code.angularjs.org/1.4.7/angular-route.min.js"></script>
+        <script type="text/javascript" src="app.js"></script>        
+    </head>
+
+    <body>   
+        <a href="#/">To <u>main</u> page</a>
+        <br/>
+        <a href="#/second/89">To <u>second</u> page with URI parameter</a>
+        <br/>
+        <a href="#/sum/5/14">Calculate: 5 + 14</a>
+        <br/>
+        <a href="#/mult/5/14">Calculate: 5 * 14</a>        
+        
+        <div ng-view></div>
+    </body>
+</html>
