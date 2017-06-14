@@ -1,8 +1,8 @@
 ﻿
-Две отличный стастьи о НАВЫКАХ ЭЛЕГАНТНОГО ПРОГРАММИРОВАНИЯ:
+Две отличные стастьи о НАВЫКАХ ЭЛЕГАНТНОГО ПРОГРАММИРОВАНИЯ:
 
-http://experience.openquality.ru/elegant-coding-habits-1/
-http://experience.openquality.ru/elegant-coding-habits-2/
+[NOTES]\Java\Code Design\Elegant coding habits. Part 1.pdf
+[NOTES]\Java\Code Design\Elegant coding habits. Part 2.pdf
 
 ----------------------------------------------------------------------------------------
 
