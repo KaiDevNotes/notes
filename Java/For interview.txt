@@ -83,12 +83,12 @@ https://habrahabr.ru/post/112676/
 [B1]: р. 519-547, p. 546 - описание взаимной блоктровки (Dead lock)
 https://jsehelper.blogspot.com.by/2016/01/multithreading-1.html
 https://jsehelper.blogspot.com.by/2016/01/multithreading-2.html
-[NOTES]\Java\Java SE\Threads\*
+[NOTES]\Java\Java SE\Multithreading\*
 https://habrahabr.ru/post/108016/
 
 [java.util.concurrent]
 https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy [!]
-https://tproger.ru/translations/10-java-multithread-practices/
+[NOTES]\Java\Java SE\Multithreading\Multithreading. 10 advices.pdf (https://tproger.ru/translations/10-java-multithread-practices/)
 https://tproger.ru/translations/java8-concurrency-tutorial-1/
 https://tproger.ru/translations/java8-concurrency-tutorial-2/
 https://tproger.ru/translations/java8-concurrency-tutorial-3/
