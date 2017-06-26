@@ -155,13 +155,11 @@ https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html
 JPA, HIBERNATE
 ----------------
 
-https://jsehelper.blogspot.com.by/2016/03/java-persistence-api-jpa-1.html
-https://jsehelper.blogspot.com.by/2016/04/java-persistence-api-jpa-2.html
+[NOTES]\Java\Databases\JPA\JPA Interview Questions. Part 1.pdf (https://jsehelper.blogspot.com.by/2016/03/java-persistence-api-jpa-1.html)
+[NOTES]\Java\Databases\JPA\JPA Interview Questions. Part 2.pdf (https://jsehelper.blogspot.com.by/2016/04/java-persistence-api-jpa-2.html)
 
 https://jsehelper.blogspot.com.by/2016/01/object-relational-mapping-orm-hibernate.html
 https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernate.html
-
-..\Java\Databases\JPA\Hibernate
 
 Hibernate official documentation: 
 http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html
