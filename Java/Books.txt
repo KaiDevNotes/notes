@@ -4,6 +4,7 @@
 4) Java. Эффективное программирование. Дж. Блох. 2-е издание 2014 год
 5) Head First. OOAD.
 6) Head First. Design Patterns. Э. Фримен.
-7) Refactoring to patterns. Joshua Kerievsky. 2006
-8) Java Spring в действии. К. Уоллс. 3 издание. 2013 год
-9) Data Structures and Algorithms. R. Lefore 2 издание. 2013 год
+7) Refactoring. Martin Fowler. 2003
+8) Refactoring to patterns. Joshua Kerievsky. 2006
+9) Spring в действии. К. Уоллс. 3 издание. 2013 год
+10) Data Structures and Algorithms. R. Lefore 2 издание. 2013 год
