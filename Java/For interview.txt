@@ -19,10 +19,10 @@ JAVA CORE:
 -----------
 
 
-https://jsehelper.blogspot.com.by/2016/01/java-core-1.html
-https://jsehelper.blogspot.com.by/2016/01/java-core-2.html
-https://jsehelper.blogspot.com.by/2016/01/java-core-3.html
-https://jsehelper.blogspot.com.by/2016/12/java-core-4.html
+https://jsehelper.blogspot.com.by/2016/01/java-core-1.html [NOTES]\Java\Java SE\JSE FAQ\JSE Interview Questions. Part 1.pdf
+https://jsehelper.blogspot.com.by/2016/01/java-core-2.html [NOTES]\Java\Java SE\JSE FAQ\JSE Interview Questions. Part 2.pdf
+https://jsehelper.blogspot.com.by/2016/01/java-core-3.html [NOTES]\Java\Java SE\JSE FAQ\JSE Interview Questions. Part 3.pdf
+https://jsehelper.blogspot.com.by/2016/12/java-core-4.html [NOTES]\Java\Java SE\JSE FAQ\JSE Interview Questions. Part 4.pdf
 
 
 [Области памяти: стэк и куча. Понятия: локальная переменная и переменная экземпляра.]
@@ -88,7 +88,7 @@ https://habrahabr.ru/post/108016/
 
 [java.util.concurrent]
 https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy [!]
-[NOTES]\Java\Java SE\Multithreading\Multithreading. 10 advices.pdf (https://tproger.ru/translations/10-java-multithread-practices/)
+https://tproger.ru/translations/10-java-multithread-practices/ [NOTES]\Java\Java SE\Multithreading\Multithreading. 10 advices.pdf
 https://tproger.ru/translations/java8-concurrency-tutorial-1/
 https://tproger.ru/translations/java8-concurrency-tutorial-2/
 https://tproger.ru/translations/java8-concurrency-tutorial-3/
@@ -155,8 +155,8 @@ https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html
 JPA, HIBERNATE
 ----------------
 
-[NOTES]\Java\Databases\JPA\JPA Interview Questions. Part 1.pdf (https://jsehelper.blogspot.com.by/2016/03/java-persistence-api-jpa-1.html)
-[NOTES]\Java\Databases\JPA\JPA Interview Questions. Part 2.pdf (https://jsehelper.blogspot.com.by/2016/04/java-persistence-api-jpa-2.html)
+https://jsehelper.blogspot.com.by/2016/03/java-persistence-api-jpa-1.html [NOTES]\Java\Databases\JPA\JPA FAQ\JPA Interview Questions. Part 1.pdf 
+https://jsehelper.blogspot.com.by/2016/04/java-persistence-api-jpa-2.html [NOTES]\Java\Databases\JPA\JPA FAQ\JPA Interview Questions. Part 2.pdf 
 
 https://jsehelper.blogspot.com.by/2016/01/object-relational-mapping-orm-hibernate.html
 https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernate.html
