@@ -58,15 +58,6 @@ https://habrahabr.ru/post/103830/  [NOTES]\Java\Java SE\Class loading\Class load
 https://habrahabr.ru/post/104229/  [NOTES]\Java\Java SE\Class loading\Class loading. Custom ClassLoader example.pdf
 
 
-
-[Collections Framework.]
-https://habrahabr.ru/post/162017/
-https://habrahabr.ru/post/128269/
-https://habrahabr.ru/post/127864/
-https://habrahabr.ru/post/128017/
-[NOTES]\Java\Java SE\Collections Framework.txt
-
-
 [Lambda-выражения. Список предопределенных ф-ых интерфейсов.]
 [B3]: р. 465 
 
@@ -90,7 +81,7 @@ https://habrahabr.ru/post/108016/
 
 [java.util.concurrent]
 https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy [!]
-https://tproger.ru/translations/10-java-multithread-practices/ [NOTES]\Java\Java SE\Multithreading\Multithreading. 10 advices.pdf
+https://tproger.ru/translations/10-java-multithread-practices/  [NOTES]\Java\Java SE\Multithreading\Multithreading. 10 advices.pdf
 https://tproger.ru/translations/java8-concurrency-tutorial-1/
 https://tproger.ru/translations/java8-concurrency-tutorial-2/
 https://tproger.ru/translations/java8-concurrency-tutorial-3/
@@ -126,6 +117,14 @@ DATA STRUCTURES AND ALGORITHMS
 [NOTES]\Java\Data Structures and Algorithms
 
 
+[Collections Framework.]
+https://habrahabr.ru/post/162017/  [NOTES]\Java\Java SE\Collections Framework\FAQ.pdf
+https://habrahabr.ru/post/128269/  [NOTES]\Java\Java SE\Collections Framework\ArrayList.pdf
+https://habrahabr.ru/post/127864/  [NOTES]\Java\Java SE\Collections Framework\LinkedList.pdf
+https://habrahabr.ru/post/128017/  [NOTES]\Java\Java SE\Collections Framework\HashMap.pdf
+[NOTES]\Java\Java SE\Collections Framework\Collections Framework.txt
+
+
 ----------------------------------------------------------------------------------------------
 
 
@@ -157,8 +156,8 @@ https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html
 JPA, HIBERNATE
 ----------------
 
-https://jsehelper.blogspot.com.by/2016/03/java-persistence-api-jpa-1.html [NOTES]\Java\Databases\JPA\JPA FAQ\JPA Interview Questions. Part 1.pdf 
-https://jsehelper.blogspot.com.by/2016/04/java-persistence-api-jpa-2.html [NOTES]\Java\Databases\JPA\JPA FAQ\JPA Interview Questions. Part 2.pdf 
+https://jsehelper.blogspot.com.by/2016/03/java-persistence-api-jpa-1.html  [NOTES]\Java\Databases\JPA\JPA FAQ\JPA Interview Questions. Part 1.pdf 
+https://jsehelper.blogspot.com.by/2016/04/java-persistence-api-jpa-2.html  [NOTES]\Java\Databases\JPA\JPA FAQ\JPA Interview Questions. Part 2.pdf 
 
 https://jsehelper.blogspot.com.by/2016/01/object-relational-mapping-orm-hibernate.html
 https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernate.html
