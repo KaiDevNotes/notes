@@ -50,11 +50,13 @@ https://jsehelper.blogspot.com.by/2016/12/java-core-4.html [NOTES]\Java\Java SE\
 
 [Сериализация. Интерфейс Externalizable.]
 [B1]: р. 461-491
-Java 8. Полное руководство. р. 762 
+[B3]: р. 762 
 
 
 [Процесс загрузки классов. Иерархия ClassLoader'ов. Создание собственного ClassLoader'а.]
-http://dmitriymx.ru/blog/classloader-dynamic-load-classes
+https://habrahabr.ru/post/103830/  [NOTES]\Java\Java SE\Class loading\Class loading. Theory.pdf
+https://habrahabr.ru/post/104229/  [NOTES]\Java\Java SE\Class loading\Class loading. Custom ClassLoader example.pdf
+
 
 
 [Collections Framework.]
