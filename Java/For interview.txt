@@ -64,7 +64,7 @@ https://habrahabr.ru/post/104229/  [NOTES]\Java\Java SE\Class loading\Class load
 
 [Процесс Garbage Collection.]
 http://ggenikus.github.io/blog/2014/05/04/gc/
-https://habrahabr.ru/post/112676/
+https://habrahabr.ru/post/112676/  [NOTES]\Java\Java SE\Garbage Collection. Visualization.pdf
 
 
 [Работа с XML.]
