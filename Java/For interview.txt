@@ -63,7 +63,6 @@ https://habrahabr.ru/post/104229/  [NOTES]\Java\Java SE\Class loading\Class load
 
 
 [Процесс Garbage Collection.]
-http://ggenikus.github.io/blog/2014/05/04/gc/
 https://habrahabr.ru/post/112676/  [NOTES]\Java\Java SE\Garbage Collection. Visualization.pdf
 
 
@@ -74,15 +73,15 @@ https://habrahabr.ru/post/112676/  [NOTES]\Java\Java SE\Garbage Collection. Visu
 
 [Многопоточность.]
 [B1]: р. 519-547, p. 546 - описание взаимной блоктровки (Dead lock)
-https://jsehelper.blogspot.com.by/2016/01/multithreading-1.html
-https://jsehelper.blogspot.com.by/2016/01/multithreading-2.html
+https://jsehelper.blogspot.com.by/2016/01/multithreading-1.html  [NOTES]\Java\Java SE\Multithreading\FAQ\FAQ. Part 1.pdf
+https://jsehelper.blogspot.com.by/2016/01/multithreading-2.html  [NOTES]\Java\Java SE\Multithreading\FAQ\FAQ. Part 2.pdf
 [NOTES]\Java\Java SE\Multithreading\*
 https://habrahabr.ru/post/108016/
 
 [java.util.concurrent]
-https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy [!]
+https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy [!]  [NOTES]\Java\Java SE\Multithreading\Multithreading. Code design vs. Low level features.pdf
 https://tproger.ru/translations/10-java-multithread-practices/  [NOTES]\Java\Java SE\Multithreading\Multithreading. 10 advices.pdf
-https://tproger.ru/translations/java8-concurrency-tutorial-1/
+https://tproger.ru/translations/java8-concurrency-tutorial-1/  [NOTES]\Java\Java SE\Multithreading\Concurrency API\Concurrency API. Part 1.pdf
 https://tproger.ru/translations/java8-concurrency-tutorial-2/
 https://tproger.ru/translations/java8-concurrency-tutorial-3/
 
