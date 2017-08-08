@@ -136,9 +136,9 @@ SPRING FRAMEWORK
 -------------------
 
 
-https://jsehelper.blogspot.com.by/2016/02/spring-framework-1.html
-https://jsehelper.blogspot.com.by/2016/03/spring-framework-2.html
-https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html
+https://jsehelper.blogspot.com.by/2016/02/spring-framework-1.html  [NOTES]\Java\Spring Framework\FAQ\FAQ. Part 1.pdf
+https://jsehelper.blogspot.com.by/2016/03/spring-framework-2.html  [NOTES]\Java\Spring Framework\FAQ\FAQ. Part 2.pdf
+https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html  [NOTES]\Java\Spring Framework\FAQ\FAQ. Part 3.pdf
 
 [B5]: p.29-68
 [NOTES]\Java\Spring Framework\*
