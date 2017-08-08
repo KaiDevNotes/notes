@@ -82,8 +82,8 @@ https://habrahabr.ru/post/108016/
 https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy [!]  [NOTES]\Java\Java SE\Multithreading\Multithreading. Code design vs. Low level features.pdf
 https://tproger.ru/translations/10-java-multithread-practices/  [NOTES]\Java\Java SE\Multithreading\Multithreading. 10 advices.pdf
 https://tproger.ru/translations/java8-concurrency-tutorial-1/  [NOTES]\Java\Java SE\Multithreading\Concurrency API\Concurrency API. Part 1.pdf
-https://tproger.ru/translations/java8-concurrency-tutorial-2/
-https://tproger.ru/translations/java8-concurrency-tutorial-3/
+https://tproger.ru/translations/java8-concurrency-tutorial-2/  [NOTES]\Java\Java SE\Multithreading\Concurrency API\Concurrency API. Part 2.pdf
+https://tproger.ru/translations/java8-concurrency-tutorial-3/  [NOTES]\Java\Java SE\Multithreading\Concurrency API\Concurrency API. Part 3.pdf
 
 
 ----------------------------------------------------------------------------------------------
