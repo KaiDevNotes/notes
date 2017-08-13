@@ -98,7 +98,7 @@ CODE DESIGN: SOLID, GRASP, GoF patterns ...
 ----------------------------------------------
 
 
-https://jsehelper.blogspot.com.by/2016/01/design-patterns.html
+https://jsehelper.blogspot.com.by/2016/01/design-patterns.html  [NOTES]\Java\Code Design\FAQ.pdf
 [NOTES]\Java\Code Design\*
 
 
