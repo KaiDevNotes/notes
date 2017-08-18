@@ -6,6 +6,7 @@
 [B3]: Java 8. Полное руководство.
 [B4]: Java. Методы программирования.
 [B5]: Spring in action
+[B6]: Refactoring. Martin Fowler
 
 ----------------------------------------------------------------------------------------------
 
@@ -100,6 +101,9 @@ CODE DESIGN: SOLID, GRASP, GoF patterns ...
 
 https://jsehelper.blogspot.com.by/2016/01/design-patterns.html  [NOTES]\Java\Code Design\FAQ.pdf
 [NOTES]\Java\Code Design\*
+
+[Каталог рефакторингов]
+[B6]: p. 9-10
 
 
 ----------------------------------------------------------------------------------------------
