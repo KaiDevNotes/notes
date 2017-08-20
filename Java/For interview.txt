@@ -1,4 +1,6 @@
-﻿BOOKS:
+﻿
+
+BOOKS:
 -------
 
 [B1]: Head first. Java
@@ -61,6 +63,10 @@ https://habrahabr.ru/post/104229/  [NOTES]\Java\Java SE\Class loading\Class load
 
 [Lambda-выражения. Список предопределенных ф-ых интерфейсов.]
 [B3]: р. 465 
+
+
+[Java 8. Новые возможности]
+http://winterbe.com/posts/2014/03/16/java-8-tutorial/  [NOTES]\Java\Java SE\Java 8. Highlights.pdf
 
 
 [Процесс Garbage Collection.]
