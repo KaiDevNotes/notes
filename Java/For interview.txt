@@ -67,6 +67,8 @@ https://habrahabr.ru/post/104229/  [NOTES]\Java\Java SE\Class loading\Class load
 [Java 8. Новые возможности]
 http://winterbe.com/posts/2014/03/16/java-8-tutorial/  [NOTES]\Java\Java SE\Java 8. Highlights.pdf
 http://winterbe.com/posts/2014/07/31/java8-stream-tutorial-examples/  [NOTES]\Java\Java SE\Java 8. Streams.pdf
+https://habrahabr.ru/post/337350/  [NOTES]\Java\Java SE\Java 8. Streams. Best Practice.pdf
+
 
 
 [Процесс Garbage Collection.]
