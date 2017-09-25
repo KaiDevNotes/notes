@@ -1,0 +1,2 @@
+https://jazzteam.org/ru/technical-articles/restful-services-manual/
+https://jazzteam.org/ru/technical-articles/setup-and-setting-swagger/
