@@ -1,0 +1,63 @@
+﻿
+1) We should add Jackson 2 dependencies into pom.xml file 
+to be able to convers request/response from/to JSON format.
+
+<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-core</artifactId>
+		<version>2.6.3</version>
+</dependency>
+<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.6.3</version>
+</dependency> 
+
+
+
+2) We should create Views class in which we can create static class which represent content in JSON format.
+In this example we can see next:
+
+public class Views 
+{
+    public static class Users {}
+}
+
+
+3) Next we can use Views.Users.class with @JsonView annotation to mark field which should be included in result JSON.
+See: 
+root.dto.UsersDTO
+root.model.User
+
+
+4) If we want to skip several fields form serialization we should use @JsonIgnore annotation.
+See: 
+root.model.User
+
+
+5) Finally to send response in JSON format we should use @ResponseBody annotation near return value of controller's method.
+See:
+Method getAll() of root.controller.UserController
+
+
+6) As a result of this example we should get next response in JSON format:
+
+{
+	"count" : 3,
+	"users" : [{
+			"id" : 1,
+			"firstName" : "first-name-1",
+			"lastName" : "last-name-1"
+		}, {
+			"id" : 2,
+			"firstName" : "first-name-2",
+			"lastName" : "last-name-2"
+		}, {
+			"id" : 3,
+			"firstName" : "first-name-3",
+			"lastName" : "last-name-3"
+		}
+	]
+}
+
+
