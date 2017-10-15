@@ -1,0 +1,70 @@
+﻿
+
+To use embedded HyperSQL database we should add next dependency 
+into pom.xml:
+
+<dependency>
+		<groupId>org.hsqldb</groupId>
+		<artifactId>hsqldb</artifactId>
+		<version>2.3.3</version>
+</dependency>
+
+
+-----------------------------------------------------------------
+
+
+Also we should use right hibernate dialect for HyperSQL database:
+org.hibernate.dialect.HSQLDialect
+
+See hibernate.properties file for more details
+
+
+-----------------------------------------------------------------
+
+
+Spring configuration was separated between 2 configuration classes:
+- DbConfig.java
+- JpaConfig.java
+
+
+-----------------------------------------------------------------
+
+
+"dataSource" bean was declared in DbConfig and is used for 
+"entityManagerFactory" bean declaration in JpaConfig
+
+
+-----------------------------------------------------------------
+
+
+To create tables in embedded database during application start up 
+we should create sql scripts under directory ..\src\main\resources
+and use this scripts via addScript() method of EmbeddedDatabaseBuilder
+
+See "dataSource" bean declaration in DbConfig.java
+
+In this example database creation and data insertion was separated 
+between 2 sql scripts:
+
+- create-db.sql
+- data-to-insert.sql
+
+But we can store all sql script in one .sql-file
+
+
+-----------------------------------------------------------------
+
+
+HyperSQL commands and queries syntax is pretty similar to MySQL syntax,
+but it has several differences.
+
+See next article to get more details:
+http://www.hsqldb.org/doc/guide/ch09.html
+
+
+-----------------------------------------------------------------
+
+
+Also I have faced with UTF-8 encoding.
+I have not found way to apply UTF-8 encoding to tables.
+
