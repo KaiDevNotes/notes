@@ -1,0 +1,157 @@
+﻿
+
+This example of building "fat" JAR with embedded Tomcat and Spring MVC web application, 
+which is deployed on this embedded Tomcat is based on the next articles:
+
+http://www.nurkiewicz.com/2012/11/standalone-web-application-with.html --- \articles\JAR with web application and embedded Tomcat.pdf
+http://www.nurkiewicz.com/2012/11/forcing-tomcat-to-log-through.html --- \articles\Setup logging for embedded Tomcat.pdf
+
+
+--------------------------------------------------------------------------------------------
+
+
+To build such "fat" JAR we need to use "tomcat7-maven-plugin" which is described in mentioned articles.
+In the example "spring-mvc-embedded-tomcat" this plug-in has next configuration:
+
+
+<plugin>
+	<groupId>org.apache.tomcat.maven</groupId>
+	<artifactId>tomcat7-maven-plugin</artifactId>
+	<version>2.0</version>
+	<executions>
+		<execution>
+			<id>tomcat-run</id>
+			<goals>
+				<goal>exec-war-only</goal>
+			</goals>
+			<phase>package</phase>
+			<configuration>
+				<path>/app</path>
+				<enableNaming>false</enableNaming>
+				<finalName>${project.name}-standalone.jar</finalName>
+				<charset>utf-8</charset>
+			</configuration>
+		</execution>
+	</executions>
+</plugin>
+
+
+WHERE:
+
+<configuration>
+	...
+	<path>/app</path>
+	...
+</configuration>
+
+Is needed to set application root (context path). 
+It means that as a result of application build will be created next WAR file: app.war
+And after deployment on Tomcat this application will be accessed, for example, on localhost and port 8080, by GET call to 
+http://localhost:8080/app
+
+------------------
+
+<configuration>
+	...
+	<finalName>${project.name}-standalone.jar</finalName>
+	...
+</configuration>
+
+Using "finalName" tag we can set name of resulting "fat" JAR file.
+For example, for this case "${project.name}-standalone.jar" and if the name of this project is "spring-mvc-embedded-tomcat":
+
+<project>
+	...
+	<name>spring-mvc-embedded-tomcat</name>
+	...
+</project> 
+
+In this case the name of the resulting "fat" JAR will be "spring-mvc-embedded-tomcat-standalone.jar"
+and this JAR will be placed in "target" directory after project build. 
+
+So next this "fat" JAR can be used anywhere where we have JRE installed by next CMD command:
+
+java -jar [path-to-jar]\spring-mvc-embedded-tomcat-standalone.jar
+
+
+--------------------------------------------------------------------------------------------
+
+
+Also this JAR can be started with several keys to set, for example, another port, logger and so on.
+To see full list of commands we need to use "-help" key:
+
+java -jar [path-to-jar]\spring-mvc-embedded-tomcat-standalone.jar -help
+
+And as a result we will see next output:
+
+-------
+usage: java -jar [path to your exec war jar]
+ -ajpPort <ajpPort>                     ajp port to use
+ -clientAuth                            enable client authentication for
+                                        https
+ -D <arg>                               key=value
+ -extractDirectory <extractDirectory>   path to extract war content,
+                                        default value: .extract
+ -h,--help                              help
+ -httpPort <httpPort>                   http port to use
+ -httpProtocol <httpProtocol>           http protocol to use: HTTP/1.1 or
+                                        org.apache.coyote.http11.Http11Nio
+                                        Protocol
+ -httpsPort <httpsPort>                 https port to use
+ -keyAlias <keyAlias>                   alias from keystore for ssl
+ -loggerName <loggerName>               logger to use: slf4j to use slf4j
+                                        bridge on top of jul
+ -obfuscate <password>                  obfuscate the password and exit
+ -resetExtract                          clean previous extract directory
+ -serverXmlPath <serverXmlPath>         server.xml to use, optional
+ -uriEncoding <uriEncoding>             connector uriEncoding default
+                                        ISO-8859-1
+ -X,--debug                             debug
+-------
+ 
+ 
+And according to this information we can, for example, run Tomcat on another port (different to 8080).
+So using next key "-httpPort" we can run Tomcat, for example, on 7171 port using next CMD command:
+
+java -jar [path-to-jar]\spring-mvc-embedded-tomcat-standalone.jar -httpPort 7171
+
+
+--------------------------------------------------------------------------------------------
+
+
+We can add this plug-in "tomcat7-maven-plugin" to any maven web project, for example, like it done 
+in this "spring-mvc-embedded-tomcat" project.
+
+So we can develop web application, for example, in NetBeans IDE and run this application on standalone Tomacat
+(not embedded) which is connected with NetBeans IDE.
+
+But in this case we should keep in mind that it would be good if we used the same "context path" of developed
+application for standalone Tomcat and embedded Tomcat. 
+It means that we should use the same "context path", for example, "/app" in \src\main\webapp\META-INF\context.xml 
+For standalone Tomcat.
+
+<Context path="/app"/>
+
+And in plug-in "tomcat7-maven-plugin" configuration. For embedded Tomcat.
+
+<configuration>
+	...
+	<path>/app</path>
+	...
+</configuration>
+
+
+--------------------------------------------------------------------------------------------
+
+
+Actually there are many another ways to build "far" JAR/WAR with embedded Tomcat: 
+
+- use Spring Boot
+
+- use Spark
+
+- use another maven plug-in "org.codehaus.mojo" --> "appassembler-maven-plugin" like discribed in the next articles:
+
+http://zetcode.com/web/embeddedtomcat/
+https://devcenter.heroku.com/articles/create-a-java-web-application-using-embedded-tomcat
+
