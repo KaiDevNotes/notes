@@ -73,6 +73,7 @@ https://habrahabr.ru/post/337350/  [NOTES]\Java\Java SE\Java 8. Streams. Best Pr
 
 [Процесс Garbage Collection.]
 https://habrahabr.ru/post/112676/  [NOTES]\Java\Java SE\Garbage Collection. Visualization.pdf
+http://javaconceptoftheday.com/types-of-references-in-java-strong-soft-weak-and-phantom/  [NOTES]\Java\Java SE\Garbage Collection. Types Of References.pdf
 
 
 [Работа с XML.]
