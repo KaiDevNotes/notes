@@ -1,0 +1,5 @@
+
+Template template was created as a composition of two projects:
+..\Spring MVC + Embedded Tomcat
+..\Spring Data + Embedded HSQLDB
+
