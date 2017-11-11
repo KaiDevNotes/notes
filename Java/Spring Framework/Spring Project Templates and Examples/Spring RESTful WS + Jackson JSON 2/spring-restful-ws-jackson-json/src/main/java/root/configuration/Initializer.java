@@ -7,16 +7,17 @@ import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.servlet.DispatcherServlet;
 
-
-public class Initializer implements WebApplicationInitializer {
-
+public class Initializer implements WebApplicationInitializer 
+{
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException
     {         
-        AnnotationConfigWebApplicationContext appContext = new AnnotationConfigWebApplicationContext();
+        AnnotationConfigWebApplicationContext appContext = 
+                new AnnotationConfigWebApplicationContext();
         appContext.register(SpringWebAppConfig.class);         
         appContext.setServletContext(servletContext);          
-        Dynamic servlet = servletContext.addServlet("dispatcher", new DispatcherServlet(appContext));
+        Dynamic servlet = servletContext.addServlet("dispatcher", 
+                new DispatcherServlet(appContext));
         servlet.addMapping("/");
         servlet.setLoadOnStartup(1);         
     }  

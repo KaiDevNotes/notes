@@ -1,0 +1,85 @@
+﻿
+
+1) We should add Jackson 2 dependencies into pom.xml file 
+to be able to convers request/response from/to JSON format.
+
+<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-core</artifactId>
+		<version>2.6.3</version>
+</dependency>
+<dependency>
+		<groupId>com.fasterxml.jackson.core</groupId>
+		<artifactId>jackson-databind</artifactId>
+		<version>2.6.3</version>
+</dependency> 
+
+
+------------------------------
+
+
+2) We should keep in mind that Spring will load Jackson2JsonMessageConverter 
+into its application context automatically. 
+
+
+-------------------------------
+
+
+3) We should keep in mind that: @RestController = @Controller + @ResponseBody
+And it means that we don't need to use @ResponseBody annotation near return value 
+of controller's method:
+
+public @ResponseBody UsersDTO getAll(){...}
+
+it can be skipped when we use @RestController annotation
+
+public UsersDTO getAll(){...}
+
+
+-------------------------------
+
+
+4) In this example we use DTO approach to send JSON in response, 
+but we also can use another approach which is based on using of @JsonView annotation
+
+
+-------------------------------
+
+
+5) As a result of this example we should get next response in JSON format when:
+
+...we try to make call to http://localhost:8080/app/api/users/ 
+
+{
+	"count" : 3,
+	"users" : [{
+			"id" : 1,
+			"firstName" : "first-name-1",
+			"lastName" : "last-name-1",
+			"login" : "login-1",
+			"password" : "password-1"
+		}, {
+			"id" : 2,
+			"firstName" : "first-name-2",
+			"lastName" : "last-name-2",
+			"login" : "login-2",
+			"password" : "password-2"
+		}, {
+			"id" : 3,
+			"firstName" : "first-name-3",
+			"lastName" : "last-name-3",
+			"login" : "login-3",
+			"password" : "password-3"
+		}
+	]
+}
+
+...we try to make call to http://localhost:8080/app/api/users/10
+
+{
+	"id" : 10,
+	"firstName" : "first-name-10",
+	"lastName" : "last-name-10"
+}
+
+

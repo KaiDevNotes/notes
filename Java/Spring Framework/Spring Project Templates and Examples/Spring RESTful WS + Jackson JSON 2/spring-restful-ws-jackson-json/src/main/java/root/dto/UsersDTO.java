@@ -1,18 +1,14 @@
 package root.dto;
 
-import com.fasterxml.jackson.annotation.JsonView;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import root.model.User;
 
-
 public class UsersDTO 
 {    
-    @JsonView(Views.Users.class)
     private int count;
     
-    @JsonView(Views.Users.class)
     private final List<User> users;
     
     public UsersDTO()
@@ -27,6 +23,16 @@ public class UsersDTO
         count = users.size();
     }
     
+    public int getCount()
+    {
+        return count;
+    }
+    
+    public List<User> getUsers()
+    {
+        return Collections.unmodifiableList(users);
+    }
+    
     public void add(User user)
     {
         users.add(user);
@@ -37,10 +43,5 @@ public class UsersDTO
     {
         this.users.addAll(users);
         count = count + users.size();
-    }
-    
-    public List<User> getUsers()
-    {
-        return Collections.unmodifiableList(users);
     }
 }

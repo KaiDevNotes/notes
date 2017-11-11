@@ -1,29 +1,14 @@
 package root.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonView;
-import root.dto.Views;
-
-
 public class User 
 {
-    @JsonView(Views.Users.class)
-    private Integer id;
-    
-    @JsonView(Views.Users.class)
-    private String firstName;
-    
-    @JsonView(Views.Users.class)
-    private String lastName;
-    
-    @JsonIgnore
-    private String login;
-    
-    @JsonIgnore
-    private String password;
-    
+    private Integer id;    
+    private String firstName;    
+    private String lastName; 
+    private String login;  
+    private String password;    
 
-    public User() {}
+    public User(){}
 
     public User(Integer id, String firstName, 
                 String lastName, String login, String password) 
