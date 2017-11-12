@@ -83,3 +83,14 @@ but we also can use another approach which is based on using of @JsonView annota
 }
 
 
+-------------------------------
+
+
+6) Also keep in mind that in this example we can convert into JSON instance 
+of any class (not only instance of class with ..DTO at the end). It means 
+that if we have controller's method with return type, for example, "User" 
+then object of this type will be converted into JSON format and send as response.
+
+
+
+
