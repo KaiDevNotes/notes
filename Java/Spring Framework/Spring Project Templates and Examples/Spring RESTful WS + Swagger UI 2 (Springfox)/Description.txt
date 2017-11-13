@@ -1,0 +1,27 @@
+
+
+This example/template is based on:
+
+- "Spring RESTful WS + Jackson JSON 2" example
+
+and 
+
+- "Spring RESTful WS + Swagger UI 2 (Springfox)" article
+
+
+------------------------------------------------------
+
+
+In this example Swagger UI page is available on:
+
+http://localhost:8080/app/swagger-ui.html
+
+
+------------------------------------------------------
+
+
+See Spring RESTful WS + Swagger UI 2 (Springfox) article 
+in order to get more details.
+
+
+
