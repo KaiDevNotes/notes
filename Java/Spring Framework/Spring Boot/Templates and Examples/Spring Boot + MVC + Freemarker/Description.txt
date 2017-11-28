@@ -1,0 +1,82 @@
+﻿
+
+This example/template is based on information provided by Spring Boot Reference documentation.
+
+See: [NOTES]\Java\Spring Framework\Spring Boot\spring-boot-reference.pdf
+
+Source: https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
+
+
+-----------------------------------------------------------------------------------
+
+
+To be able to create Spring MVC + Freemarker application we need next Maven dependencies:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-freemarker</artifactId>
+</dependency>
+
+
+-----------------------------------------------------------------------------------
+
+
+Also to be able to see changes which were made without re-build and re-run of the
+application we need to add next dependency:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<optional>true</optional>
+</dependency>
+
+
+-----------------------------------------------------------------------------------
+
+
+Configuration Spring Boot + Freemarker is a little bit different from configuration 
+Spring MVC + Freemarker 
+(from ...\Spring Project Templates and Examples\Spring MVC + FreeMarker (small app for tests))
+
+The difference is that in case of Spring boot we don't need to configure "FreeMarkerConfigurer" 
+and "FreeMarkerViewResolver"
+
+But we should add path to directory which contains freemarker templates (*.ftl) to
+[app-root]\src\main\resources\application.properties
+
+In this example we use [app-root]\src\main\resources\views directory to store *.ftl files.
+So we need to add next property to application.properties:
+
+spring.freemarker.template-loader-path=classpath:/views/
+
+See: "Template Engines" sub-section, p. 85 for more details 
+
+
+-----------------------------------------------------------------------------------
+
+
+Also in this example we use static content such as Bootstrap and jQuery CSS and 
+Javascript libraries.
+
+So to be able to use it in freemarker templates we need to override .addResourceHandlers() 
+method of WebMvcConfigurer in order to be able to get static content files from: 
+[app-root]\src\main\resources\static\fonts\
+[app-root]\src\main\resources\static\js\
+[app-root]\src\main\resources\static\styles\
+
+See: [app-root]\src\main\java\root\configuration\SpringMvcWebAppConfig.java
+
+Also we can use another approach to get static content using webjars.
+
+For more information about 2 approaches see:
+"Static Content" sub-section, p. 83-84
+
+
+ 
+
+
