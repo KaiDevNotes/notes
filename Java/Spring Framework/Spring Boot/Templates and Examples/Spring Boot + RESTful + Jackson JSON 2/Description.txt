@@ -1,0 +1,101 @@
+﻿
+
+This example/template is based on information provided by Spring Boot Reference documentation.
+
+See: [NOTES]\Java\Spring Framework\Spring Boot\spring-boot-reference.pdf
+
+Source: https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
+
+
+-----------------------------------------------------------------------------------
+
+
+To be able to create Spring Boot RESTful WS using Jackson JSON 2 we need only one Maven dependency:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+Also we don't need to add Jackson JSON 2 dependency because all "Jackson JSON 2" libraries 
+is added automatically as transitive dependencies of "spring-boot-starter-web"
+
+
+-----------------------------------------------------------------------------------
+
+
+Also to be able to see changes which were made without re-build and re-run of the
+application we need to add next dependency:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<optional>true</optional>
+</dependency>
+
+
+-----------------------------------------------------------------------------------
+
+
+We should keep in mind that: @RestController = @Controller + @ResponseBody
+And it means that we don't need to use @ResponseBody annotation near return value 
+of controller's method:
+
+public @ResponseBody UsersDTO getAll(){...}
+
+it can be skipped when we use @RestController annotation
+
+public UsersDTO getAll(){...}
+
+
+-----------------------------------------------------------------------------------
+
+
+In this example we use DTO approach to send JSON in response, 
+but we also can use another approach which is based on using of @JsonView annotation
+
+
+-----------------------------------------------------------------------------------
+
+
+As a result of this example we should get next response in JSON format when:
+
+...we try to make GET call to http://localhost:8080/users 
+
+{
+	"count" : 10,
+	"users" : [{
+			"id" : 1,
+			"firstName" : "first-name-1",
+			"lastName" : "last-name-1"
+		}, {
+			"id" : 2,
+			"firstName" : "first-name-2",
+			"lastName" : "last-name-2"
+		}, {
+			"id" : 3,
+			"firstName" : "first-name-3",
+			"lastName" : "last-name-3"
+		}
+		...
+	]
+}
+
+...we try to make GET call to http://localhost:8080/users/10
+
+{
+	"id" : 10,
+	"firstName" : "first-name-10",
+	"lastName" : "last-name-10"
+}
+
+
+-----------------------------------------------------------------------------------
+
+
+Also we should keep in mind that in this example we can convert into JSON instance 
+of any class (not only instance of class with ..DTO at the end). It means 
+that if we have controller's method with return type, for example, "User" 
+then object of this type will be converted into JSON format and send as response.
+
+
