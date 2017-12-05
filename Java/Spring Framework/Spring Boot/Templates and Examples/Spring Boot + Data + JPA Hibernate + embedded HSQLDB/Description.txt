@@ -1,0 +1,85 @@
+﻿
+
+This example/template is based on: 
+
+
+- on information provided by Spring Boot Reference documentation.
+
+See: [NOTES]\Java\Spring Framework\Spring Boot\spring-boot-reference.pdf
+29. Working with SQL Databases -- p. 100
+79. Database Initialization -- p. 265
+	
+Source: https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
+
+
+- and on "Spring Boot + RESTful + Jackson JSON 2"
+
+
+-----------------------------------------------------------------------------------
+
+
+To be able to create Spring Boot Data JPA Hibernate project we need next Maven dependencies:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+
+Hibernate is used by default as JPA implementation.
+
+
+-----------------------------------------------------------------------------------
+
+
+To be able to use Embedded HSQLDB we need next Maven dependency:
+
+<dependency>
+	<groupId>org.hsqldb</groupId>
+	<artifactId>hsqldb</artifactId>
+	<scope>runtime</scope>
+</dependency>
+
+
+-----------------------------------------------------------------------------------
+
+
+Also to be able to see changes which were made without re-build and re-run of the
+application we need to add next dependency:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<optional>true</optional>
+</dependency>
+
+
+-----------------------------------------------------------------------------------
+
+
+To create and initialize embedded DB we need to create 2 files:
+
+..\src\main\resources\schema.sql
+..\src\main\resources\data.sql
+
+Spring Boot will use this files to create and initialize embedded DB during 
+start of application.
+
+
+-----------------------------------------------------------------------------------
+
+
+Also we should add next property to ..\src\main\resources\application.properties
+
+spring.jpa.hibernate.ddl-auto=none
+
+in order to switch off Hibernate's DDL schema generation feature.
+
+If we don't do it then hibernate will create empty schema based on @Entity classes.
+
+
