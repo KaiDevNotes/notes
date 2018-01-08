@@ -1,0 +1,79 @@
+﻿
+
+This example/template is based on: 
+
+
+- on information provided by Spring Boot Reference documentation.
+
+See: [NOTES]\Java\Spring Framework\Spring Boot\spring-boot-reference.pdf
+29. Working with SQL Databases -- p. 100
+	
+Source: https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
+
+
+- and on "Spring Boot + RESTful + Jackson JSON 2"
+
+
+-----------------------------------------------------------------------------------
+
+
+To be able to create Spring Boot Data JPA Hibernate project we need next Maven dependencies:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+
+
+Hibernate is used by default as JPA implementation.
+
+
+-----------------------------------------------------------------------------------
+
+
+To be able to use standalone MySQL we need to include Maven dependency for MySQL Connector:
+
+<dependency>
+	<groupId>mysql</groupId>
+	<artifactId>mysql-connector-java</artifactId>
+</dependency>
+
+
+-----------------------------------------------------------------------------------
+
+
+Also to be able to see changes which were made without re-build and re-run of the
+application we need to add next dependency:
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-devtools</artifactId>
+	<optional>true</optional>
+</dependency>
+
+
+-----------------------------------------------------------------------------------
+
+
+To use standalone MySQL server as datasource for this application need to provide next 
+confuguration in ..\src\main\resources\application.properties:
+
+
+spring.datasource.url=jdbc:mysql://localhost/spring_boot_mysql
+spring.datasource.username=root
+spring.datasource.password=admin
+spring.datasource.driver-class-name=com.mysql.jdbc.Driver
+
+
+-----------------------------------------------------------------------------------
+
+
+Before starting of this application we need to create and initialize necessary DB on
+standalone MySQL server using script from ..\src\main\resources\db-script.sql
+
+
