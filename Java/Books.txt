@@ -10,4 +10,5 @@
 10) Data Structures and Algorithms. R. Lefore 2 издание. 2013 год
 11) Создание микросервисов. С. Ньюмен. 2015
 12) DDD. Предметно-ориентированное проектирование. Э.Эванс
+13) Clean Code. Robert Martin. 2013
 
