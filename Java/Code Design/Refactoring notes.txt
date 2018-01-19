@@ -1,7 +1,8 @@
 ﻿Books:
 
-[B1]: Refactoring. Martin Fowler. 2003
-[B2]: Refactoring to patterns. Joshua Kerievsky. 2006
+[B1]: Clean Code. Robert Martin. 2013
+[B2]: Refactoring. Martin Fowler. 2003
+[B3]: Refactoring to patterns. Joshua Kerievsky. 2006
 
 
 --------------------------------------------------------------------------
