@@ -12,4 +12,5 @@
 12) DDD. Предметно-ориентированное проектирование. Э.Эванс
 13) Clean Code. Robert Martin. 2013
 14) Test-Driven Development. Kent Beck. 2003
+15) Patterns of Enterprise Application Architecture. Martin Fowler. 2016
 
