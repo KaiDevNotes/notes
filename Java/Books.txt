@@ -9,7 +9,7 @@
 9) Spring в действии. К. Уоллс. 3 издание. 2013 год
 10) Data Structures and Algorithms. R. Lefore 2 издание. 2013 год
 11) Создание микросервисов. С. Ньюмен. 2015
-12) DDD. Предметно-ориентированное проектирование. Э.Эванс
+12) Domain-Driven Design. Eric Evans. 2011
 13) Clean Code. Robert Martin. 2013
 14) Test-Driven Development. Kent Beck. 2003
 15) Patterns of Enterprise Application Architecture. Martin Fowler. 2016
