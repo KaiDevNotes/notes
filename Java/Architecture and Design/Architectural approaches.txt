@@ -55,6 +55,7 @@ http://tidyjava.com/package-feature-demanded/
 
 http://tidyjava.com/clean-architecture-screaming/
 https://habrahabr.ru/company/mobileup/blog/335382/
+[T] https://herbertograca.com/2017/09/28/clean-architecture-standing-on-the-shoulders-of-giants/
 
 
 
@@ -65,8 +66,8 @@ https://habrahabr.ru/company/mobileup/blog/335382/
 
 Examples and explanations:
 
-[Translate it] DDD, Hexagonal, Onion, Clean, CQRS, … How I put it all together
-https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
+DDD, Hexagonal, Onion, Clean, CQRS, … How I put it all together
+[T] https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
 
 
 
