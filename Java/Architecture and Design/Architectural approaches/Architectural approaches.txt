@@ -1,4 +1,4 @@
-
+﻿
 
 Books and sources:
 
@@ -54,9 +54,11 @@ http://tidyjava.com/package-feature-demanded/
 [+] Clean Architecture
 
 http://tidyjava.com/clean-architecture-screaming/
-https://habrahabr.ru/company/mobileup/blog/335382/
-[T] https://herbertograca.com/2017/09/28/clean-architecture-standing-on-the-shoulders-of-giants/
 
+https://habrahabr.ru/company/mobileup/blog/335382/
+
+https://herbertograca.com/2017/09/28/clean-architecture-standing-on-the-shoulders-of-giants/
+Перевод: Clean Architecture. Standing on the shoulders of giants.pdf
 
 
 
@@ -66,7 +68,7 @@ https://habrahabr.ru/company/mobileup/blog/335382/
 
 Examples and explanations:
 
-DDD, Hexagonal, Onion, Clean, CQRS, � How I put it all together
+DDD, Hexagonal, Onion, Clean, CQRS, … How I put it all together
 [T] https://herbertograca.com/2017/11/16/explicit-architecture-01-ddd-hexagonal-onion-clean-cqrs-how-i-put-it-all-together/
 
 
