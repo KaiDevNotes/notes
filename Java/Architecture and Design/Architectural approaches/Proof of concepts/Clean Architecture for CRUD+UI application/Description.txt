@@ -1,0 +1,50 @@
+
+
+This proof of concept is based on CRUD application which should provide next possibilities:
+- Create new user
+- Update existing user
+- Delete existing user
+
+
+This application is based on next tools/frameworks:
+- Spring Boot
+- JPA/Hibernate
+- FreeMarker
+
+
+The Application Core layers of Clean Architecture are reflected by next packages:
+
+* Entities layer -> "root.domain" package: contains the only domain objects. 
+In this case we have only one value-object "User".
+
+* Use Cases layer -> "root.application" package: contains Bounaries (ports), 
+Interactors, Request/Response models.  
+
+Input ports: DeleteUserUseCase, SaveUserUseCase
+Request Model: UserForm
+Interactors (Use Cases): DeleteUserUseCaseImpl, SaveUserUseCaseImpl
+Output ports: UsersPresenter
+Response Model: Message
+
+
+
+As we can see this two Application Core layers are absolutely isolated from tools/frameworks 
+and communicates with outer layer via Ports (Boudaries/Interfaces). 
+
+
+
+Also we can see that DEPENDENCIES GO TOWARDS CENTER. 
+It means that classes in inner layer don't know about classes in outer layers.
+
+For example:
+
+"User" from "root.domain" don't know about classes from 
+"root.application", "root.infrastructure" and "root.presentation"
+
+or 
+
+Classes from "root.application" know only about classes form "root.domain"
+and don't know about classes from "root.infrastructure" and "root.presentation"
+
+and so on.
+
