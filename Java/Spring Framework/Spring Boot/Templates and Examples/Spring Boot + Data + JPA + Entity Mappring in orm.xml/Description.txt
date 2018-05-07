@@ -1,0 +1,18 @@
+﻿
+
+From time to time it is needed to separate ORM mapping metadata and classes of Domain Objects.
+For example, when we implement hexagonal, onions or clean architecture.
+
+
+In such case we can move ORM mapping metadata from classes of Domain Objects to orm.xml file
+
+
+In Spring Boot application with "spring-boot-starter-data-jpa" starter we need to create orm.xml file
+in [project root]\src\main\resources\META-INF\ folder. And this mapping file will be used by Spring Boot 
+automatically.
+
+
+Also it is important to note that we don't have to describe all properties of domain object in 
+"/entity/attributes" tag if property name is equal to appropriate column name.
+But it is necessary to describe property which represents "id" and properties which are used in relationships
+ONE-TO-MANY, MANY-TO-ONE, MANY-TO-MANY and so on.
