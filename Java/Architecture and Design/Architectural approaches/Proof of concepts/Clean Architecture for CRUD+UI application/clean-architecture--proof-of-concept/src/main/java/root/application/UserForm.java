@@ -75,7 +75,7 @@ public class UserForm
         return isBlank(login) || isBlank(password) || isBlank(email);
     }
     
-    public User toDomainObject()
+    public User convertToDomainObject()
     {
         Integer normalizedId = NEW_FORM_ID.equals(id) ? null : id;
         return new User(normalizedId, login, password, email);

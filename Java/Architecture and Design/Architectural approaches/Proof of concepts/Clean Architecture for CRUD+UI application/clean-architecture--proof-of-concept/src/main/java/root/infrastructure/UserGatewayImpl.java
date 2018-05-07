@@ -1,8 +1,8 @@
 package root.infrastructure;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 import javax.annotation.Resource;
+
 import root.domain.User;
 import root.application.UserGateway;
 
@@ -14,22 +14,19 @@ public class UserGatewayImpl implements UserGateway
     @Override
     public void save(User user)
     {
-        userRepository.save(new UserRow(user));
+        userRepository.save(user);
     }
     
     @Override
     public User findById(Integer id)
     {
-        return userRepository.findOne(id).toDomainObject();
+        return userRepository.findOne(id);
     }
     
     @Override
     public Collection<User> findAll()
     {
-        return userRepository.findAll()
-            .stream()
-            .map(userRow -> userRow.toDomainObject())
-            .collect(Collectors.toList());
+        return userRepository.findAll();
     }
     
     @Override

@@ -24,7 +24,7 @@ public class UserController
     @Autowired
     private UserGateway userGateway;
     
-    @RequestMapping(value="/users", method=RequestMethod.GET)
+    @RequestMapping(value={"/", "/users"}, method=RequestMethod.GET)
     public String showUsers(Model model)
     {
         model.addAttribute("users", userGateway.findAll());

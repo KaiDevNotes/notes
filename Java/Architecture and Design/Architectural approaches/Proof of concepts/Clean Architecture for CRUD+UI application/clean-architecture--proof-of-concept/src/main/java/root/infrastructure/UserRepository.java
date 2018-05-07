@@ -2,6 +2,8 @@ package root.infrastructure;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UserRepository extends JpaRepository<UserRow, Integer> 
+import root.domain.User;
+
+public interface UserRepository extends JpaRepository<User, Integer> 
 {    
 }

@@ -1,7 +1,5 @@
 package root.application;
 
-import root.domain.User;
-
 public class SaveUserUseCaseImpl implements SaveUserUseCase
 {
     private static final String ERROR_MESSAGE = 
@@ -26,14 +24,8 @@ public class SaveUserUseCaseImpl implements SaveUserUseCase
         }
         else 
         {
-            saveUser(form);
+            userGateway.save(form.convertToDomainObject());
             presenter.showUsersView(Message.newSuccessMessage(SUCCESS_MESSAGE));
         }
-    }
-    
-    private void saveUser(UserForm form)
-    {
-        User user = form.toDomainObject();
-        userGateway.save(user);
     }
 }

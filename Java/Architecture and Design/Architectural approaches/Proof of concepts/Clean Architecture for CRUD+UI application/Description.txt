@@ -48,3 +48,11 @@ and don't know about classes from "root.infrastructure" and "root.presentation"
 
 and so on.
 
+
+
+NOTE: orm.xml is used for storing ORM mapping metadata, to move ORM Metadata (annotations) 
+from Domain Objects to this xml file.
+For more details see "Spring Boot + Data + JPA + Entity Mappring in orm.xml" example. 
+
+
+
