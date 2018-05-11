@@ -14,5 +14,5 @@ automatically.
 
 Also it is important to note that we don't have to describe all properties of domain object in 
 "/entity/attributes" tag if property name is equal to appropriate column name.
-But it is necessary to describe property which represents "id" and properties which are used in relationships
+But it is necessary to describe property which represents "id", has Date or Enum type, properties which are used in relationships
 ONE-TO-MANY, MANY-TO-ONE, MANY-TO-MANY and so on.
