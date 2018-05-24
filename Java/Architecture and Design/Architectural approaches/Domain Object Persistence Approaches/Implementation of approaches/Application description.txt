@@ -1,0 +1,40 @@
+
+
+Different approaches to persist domain objects will be illustrated 
+based on sample application which is called SUPPORT TICKET SYSTEM.
+
+
+------
+
+
+SUPPORT TICKET SYSTEM is an application which allows CUSTOMER to contact 
+support team and ask for help.
+
+It means that CUSTOMER can create a new ticket and describe his problem.
+Next CUSTOMER and SUPPORT_ENGINEER can communicate via messages,
+which will be attached to the ticket, in order to solve CUSTOMER's problem.
+
+When problem is solved ticket can be marked as RESOLVED by 
+CUSTOMER or SUPPORT_ENGINEER.
+
+
+------
+
+
+Domain consists of next Domain Objects: Ticket, Message, User.
+And based on this Domain Objects we will explore different 
+Domain Object Persistence approaches in order to understand pluses and minuses
+of each approach.
+
+
+------
+
+
+SUPPORT TICKET SYSTEM application has architecture which is mix of architectures 
+such as Hexagonal, Onion and Clear. And the main point is that dependencies should 
+go inward.
+
+
+SUPPORT TICKET SYSTEM is an Spring Boot application with embedded HSQLDB.
+So just run and enjoy :)
+

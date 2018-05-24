@@ -1,0 +1,21 @@
+
+
+In INHERITANCE APPROACH our Domain Objects: Ticket, Message, User
+from DOMAIN layer are abstract classes without state. And state for 
+this classes is provided by classes from INFRASTRUCTURE layer which exstend
+classes from DOMAIN layer:
+
+* class TicketDbEntry extends Ticket
+* class MessageDbEntry extends Message
+* class UserDbEntry extends User
+
+
+Classes *DbEntry from INFRASTRUCTURE layer have JPA annotation and 
+other stuff which is need to persist state of Domain Objects it into DB.
+
+
+INHERITANCE APPROACH allows classes from DOMAIN layer be free from 
+persistence details. And as a result Domain Objects don't know anything 
+about classes from outer layers (it means that we still follow to DIP 
+principle -> dependencies go inward)
+
