@@ -31,6 +31,6 @@ accessible (exposed) via public getters and setters.
 [+] Better encapsulation of Domain Object state in comparison with MAPPING APPROACH;
 [+] No boilerplate code in comparison with MAPPING APPROACH;
 
-[-] Domain Objects are JPA Entities under the food, so we can face with ORM-related 
+[-] Domain Objects are JPA Entities under the hood, so we can face with ORM-related 
 problems again like in ALL-IN-ONE-MODEL APPROACH;
 

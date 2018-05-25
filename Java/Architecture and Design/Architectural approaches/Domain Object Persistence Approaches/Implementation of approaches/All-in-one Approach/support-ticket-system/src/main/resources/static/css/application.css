@@ -1,0 +1,44 @@
+
+.clear {
+    clear: both;
+}
+
+.hide {
+    display: none;
+}
+
+#app-wrapper {
+    width: 993px;
+    margin: 0 auto;
+    padding: 50px 0; 
+    position: relative;
+}
+
+.party-wrapper {
+    width: 495px;
+    padding: 0 30px;
+    box-sizing: border-box;
+}
+
+#customer {    
+    float: left;
+    border-right: 3px solid #eeeeee;
+}
+#support-engineer {
+    float: right;
+}
+
+.new-message-form-wrapper {
+    padding: 10px;
+}
+
+.customer-message {
+    color: #a94442;
+    background-color: #f2dede;
+}
+
+.supprot-message {
+    color: #3c763d;
+    background-color: #dff0d8;
+    text-align: right;
+}

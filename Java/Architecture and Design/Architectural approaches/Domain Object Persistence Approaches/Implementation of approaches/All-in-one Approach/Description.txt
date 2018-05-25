@@ -1,0 +1,15 @@
+
+
+[+] No boilerplate code and less number of Classes in comparison with 
+MAPPING and INHERITANCE approaches; 
+
+[+] Straightforward implementation;
+
+
+[-] Classes of Domain Objects should implement Serializable, contain JPA 
+annotations and additional fields for one-to-many or many-to-one relationships. 
+So Domain Objects are coupled with persistence mechanism and dependent on it.
+
+[-] Problems related to ORM mechanisms are spread throughout the application 
+e.g. we might get a lazy-init exception in our web controller.
+
