@@ -1,21 +1,36 @@
 
 
 In INHERITANCE APPROACH our Domain Objects: Ticket, Message, User
-from DOMAIN layer are abstract classes without state. And state for 
-this classes is provided by classes from INFRASTRUCTURE layer which exstend
-classes from DOMAIN layer:
+from DOMAIN layer are abstract classes without state but with abstract 
+methods to access their state and methods which contain Domain Logic. 
+And state for this Domain Objects is defined in classes from 
+INFRASTRUCTURE layer which extend classes from DOMAIN layer:
 
 * class TicketDbEntry extends Ticket
 * class MessageDbEntry extends Message
 * class UserDbEntry extends User
 
 
-Classes *DbEntry from INFRASTRUCTURE layer have JPA annotation and 
-other stuff which is need to persist state of Domain Objects it into DB.
+Classes *DbEntry from INFRASTRUCTURE layer have JPA annotations and 
+other stuff which is needed to persist state of Domain Objects in DB.
 
 
 INHERITANCE APPROACH allows classes from DOMAIN layer be free from 
 persistence details. And as a result Domain Objects don't know anything 
 about classes from outer layers (it means that we still follow to DIP 
 principle -> dependencies go inward)
+
+
+With INHERITANCE APPROACH we can better encapsulate the state of 
+Domain Objects and make decision about what fields should be 
+accessible (exposed) via public getters and setters. 
+
+------------
+
+
+[+] Better encapsulation of Domain Object state in comparison with MAPPING APPROACH;
+[+] No boilerplate code in comparison with MAPPING APPROACH;
+
+[-] Domain Objects are JPA Entities under the food, so we can face with ORM-related 
+problems again like in ALL-IN-ONE-MODEL APPROACH;
 

@@ -1,0 +1,41 @@
+
+
+In MAPPING APPROACH we have an additional class for each class of our Domain Objects.
+
+Ticket --> TicketDbEntry
+Message --> MessageDbEntry
+User --> UserDbEntry
+
+This additional classes (*DbEntry) are placed on INFRASTRUCTURE layer and contain 
+JPA annotations and other stuff which is needed to persist state of Domain Objects 
+in DB.
+
+It means that we have separeted models for Domain and Persistence.
+
+So Domain Objects (Ticket, Message, User) from DOMAIN layer are free from 
+persistence details. And as a result Domain Objects don't know anything 
+about classes from outer layers (it means that we still follow to DIP 
+principle -> dependencies go inward)
+
+
+With MAPPING APPROACH we have a little PROBLEM with encapsulation.
+The PROBLEM is that we should have getter for each field in class of Domain Object 
+in order to be able to map fields from Domain Object to *DbEntry object.
+
+Also it looks like we can use some "magic" automapper which is base on reflection
+to solve the PROBLEM, but I have not found such automapper yet.
+
+
+Also to better encapsulate state of Domain Objects we should define Builder inside
+of each Domain Object class and define setters only for fields which can be changed 
+during Domain Object lifecycle.
+
+------------
+
+
+[+] Domain Objects and his DB Entries are completelly separated and connected only 
+via Mappers;
+
+[-] A lot of boilerplate code such as Builder for each class of Domain Object, 
+and Mapper for each pair of Domain Object class and his DB Entry class;
+
