@@ -9,16 +9,16 @@ import root.domain.Ticket;
 
 @Component
 public class TicketAndDbEntryMapper
-    implements DomainObjectAndDbEntityMapper<Ticket, TicketDbEntry> 
+    implements DomainObjectAndDbEntryMapper<Ticket, TicketDbEntry> 
 {
     @Autowired 
     private MessageAndDbEntryMapper messageAndDbEntryMapper;
     
     @Autowired 
-    private UserAndDbEntityMapper userAndDbEntityMapper;
+    private UserAndDbEntryMapper userAndDbEntryMapper;
     
     @Override
-    public TicketDbEntry mapToDbEntity(Ticket ticket)
+    public TicketDbEntry mapToDbEntry(Ticket ticket)
     {
         TicketDbEntry ticketDbEntry = new TicketDbEntry();
         if (ticket.getId() != null)
@@ -33,7 +33,7 @@ public class TicketAndDbEntryMapper
         ticketDbEntry.setResolutionDate(ticket.getResolutionDate());
         ticketDbEntry.setStatus(ticket.getStatus());
         ticketDbEntry.setSubmitter(
-            userAndDbEntityMapper.mapToDbEntity(ticket.getSubmitter()));
+            userAndDbEntryMapper.mapToDbEntry(ticket.getSubmitter()));
         return ticketDbEntry;
     }
     
@@ -42,10 +42,10 @@ public class TicketAndDbEntryMapper
     {
         return new Ticket.Builder(
                 ticketDbEntry.getIssueDescription(), 
-                userAndDbEntityMapper.mapToDomainObject(ticketDbEntry.getSubmitter()))
+                userAndDbEntryMapper.mapToDomainObject(ticketDbEntry.getSubmitter()))
             .id(ticketDbEntry.getId().toString())
             .messages(ticketDbEntry.getMessages().stream()
-                .map(messageDbEntity -> messageAndDbEntryMapper.mapToDomainObject(messageDbEntity))
+                .map(messageDbEntry -> messageAndDbEntryMapper.mapToDomainObject(messageDbEntry))
                 .collect(Collectors.toList()))
             .creationDate(ticketDbEntry.getCreationDate())
             .resolutionDate(ticketDbEntry.getResolutionDate())
@@ -54,10 +54,10 @@ public class TicketAndDbEntryMapper
     }
     
     private MessageDbEntry createMessageDbEntry(
-            Message message, TicketDbEntry ticketDbEntity)
+            Message message, TicketDbEntry ticketDbEntry)
     {
-        MessageDbEntry messageDbEntry = messageAndDbEntryMapper.mapToDbEntity(message);
-        messageDbEntry.setTicket(ticketDbEntity);
+        MessageDbEntry messageDbEntry = messageAndDbEntryMapper.mapToDbEntry(message);
+        messageDbEntry.setTicket(ticketDbEntry);
         return messageDbEntry;
     }
 }

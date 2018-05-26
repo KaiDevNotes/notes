@@ -11,7 +11,7 @@ public abstract class AbstractGateway<D, E>
     @Transactional
     public void save(D domainObject)
     {
-        getRepository().saveAndFlush(getMapper().mapToDbEntity(domainObject));
+        getRepository().saveAndFlush(getMapper().mapToDbEntry(domainObject));
     }
     
     public D findById(String domainObjectId)
@@ -36,5 +36,5 @@ public abstract class AbstractGateway<D, E>
     
     protected abstract JpaRepository<E, UUID> getRepository();
     
-    protected abstract DomainObjectAndDbEntityMapper<D, E> getMapper();
+    protected abstract DomainObjectAndDbEntryMapper<D, E> getMapper();
 }

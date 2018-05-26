@@ -17,7 +17,7 @@ public class UserGatewayImpl
     private UserRepository userRepository;
     
     @Autowired
-    private UserAndDbEntityMapper mapper;
+    private UserAndDbEntryMapper mapper;
     
     @Override
     protected JpaRepository getRepository()
@@ -26,7 +26,7 @@ public class UserGatewayImpl
     }
     
     @Override
-    protected DomainObjectAndDbEntityMapper getMapper()
+    protected DomainObjectAndDbEntryMapper getMapper()
     {
         return mapper;
     }

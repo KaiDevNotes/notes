@@ -26,7 +26,7 @@ public class TicketGatewayImpl
     }
     
     @Override
-    protected DomainObjectAndDbEntityMapper getMapper()
+    protected DomainObjectAndDbEntryMapper getMapper()
     {
         return mapper;
     }

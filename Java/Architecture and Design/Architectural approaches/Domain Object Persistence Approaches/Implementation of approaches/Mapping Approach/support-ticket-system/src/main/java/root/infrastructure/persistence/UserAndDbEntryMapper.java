@@ -5,11 +5,11 @@ import org.springframework.stereotype.Component;
 import root.domain.User;
 
 @Component
-public class UserAndDbEntityMapper 
-    implements DomainObjectAndDbEntityMapper<User, UserDbEntry>
+public class UserAndDbEntryMapper 
+    implements DomainObjectAndDbEntryMapper<User, UserDbEntry>
 {
     @Override
-    public UserDbEntry mapToDbEntity(User user)
+    public UserDbEntry mapToDbEntry(User user)
     {
         UserDbEntry userDbEntry = new UserDbEntry();
         if (user.getId() != null)

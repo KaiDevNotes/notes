@@ -1,6 +1,6 @@
 
 
-Different approaches to persist domain objects will be illustrated 
+Different approaches to persist Domain Objects will be illustrated 
 based on sample application which is called SUPPORT TICKET SYSTEM.
 
 
@@ -25,6 +25,9 @@ Domain consists of next Domain Objects: Ticket, Message, User.
 And based on this Domain Objects we will explore different 
 Domain Object Persistence approaches in order to understand pluses and minuses
 of each approach.
+
+In this application Ticket Domain Object has ONE-TO-MANY relationship with
+Messages Domain Objects, and MANY-TO-ONE relationship with User Domain Object.
 
 
 ------

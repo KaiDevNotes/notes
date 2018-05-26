@@ -6,10 +6,10 @@ import root.domain.Message;
 
 @Component
 public class MessageAndDbEntryMapper
-    implements DomainObjectAndDbEntityMapper<Message, MessageDbEntry> 
+    implements DomainObjectAndDbEntryMapper<Message, MessageDbEntry> 
 {
     @Override
-    public MessageDbEntry mapToDbEntity(Message message)
+    public MessageDbEntry mapToDbEntry(Message message)
     {
         MessageDbEntry messageDbEntry = new MessageDbEntry();
         if (message.getId() != null)
