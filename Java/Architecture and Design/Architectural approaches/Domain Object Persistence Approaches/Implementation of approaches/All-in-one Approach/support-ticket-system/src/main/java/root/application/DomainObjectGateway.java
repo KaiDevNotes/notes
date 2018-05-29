@@ -5,7 +5,7 @@ import java.util.UUID;
 
 public interface DomainObjectGateway<D> 
 {
-    void save(D domainObject);
+    D save(D domainObject);
     D findById(UUID domainObjectId);
     List<D> findAll();
     void delete(UUID domainObjectId);

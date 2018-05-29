@@ -19,7 +19,11 @@ public class TicketAndDbEntryMapper
     
     @Override
     public TicketDbEntry mapToDbEntry(Ticket ticket)
-    {
+    {      
+        if (ticket == null)
+        {
+            return null;
+        }
         TicketDbEntry ticketDbEntry = new TicketDbEntry();
         if (ticket.getId() != null)
         {
@@ -39,7 +43,11 @@ public class TicketAndDbEntryMapper
     
     @Override
     public Ticket mapToDomainObject(TicketDbEntry ticketDbEntry)
-    {
+    {              
+        if (ticketDbEntry == null)
+        {
+            return null;
+        }
         return new Ticket.Builder(
                 ticketDbEntry.getIssueDescription(), 
                 userAndDbEntryMapper.mapToDomainObject(ticketDbEntry.getSubmitter()))

@@ -6,24 +6,23 @@ import java.util.stream.Collectors;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class AbstractGateway<D, E> 
+public abstract class AbstractDomainObjectGateway<D, E> 
 {
     @Transactional
-    public void save(D domainObject)
+    public D save(D domainObject)
     {
-        getRepository().saveAndFlush(getMapper().mapToDbEntry(domainObject));
+        return (D) getRepository().saveAndFlush((E) domainObject);
     }
     
     public D findById(String domainObjectId)
     {
-        E dbEntry = getRepository().findOne(UUID.fromString(domainObjectId));
-        return getMapper().mapToDomainObject(dbEntry);
+        return (D) getRepository().findOne(UUID.fromString(domainObjectId));
     }
     
     public List<D> findAll()
     {
         return getRepository().findAll().stream()
-            .map(dbEntry -> getMapper().mapToDomainObject(dbEntry))
+            .map(domainObjectDbEntry -> (D) domainObjectDbEntry)
             .collect(Collectors.toList());
     }
     
@@ -35,6 +34,4 @@ public abstract class AbstractGateway<D, E>
     }
     
     protected abstract JpaRepository<E, UUID> getRepository();
-    
-    protected abstract DomainObjectAndDbEntryMapper<D, E> getMapper();
 }

@@ -8,7 +8,7 @@ import root.application.UserGateway;
 import root.domain.User;
 
 @Component
-public class UserGatewayImpl extends AbstractGateway<User> implements UserGateway
+public class UserGatewayImpl extends AbstractDomainObjectGateway<User> implements UserGateway
 {
     @Resource
     private UserRepository userRepository;

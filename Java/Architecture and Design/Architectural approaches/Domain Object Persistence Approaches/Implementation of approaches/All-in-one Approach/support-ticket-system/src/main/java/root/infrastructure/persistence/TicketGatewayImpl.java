@@ -8,7 +8,7 @@ import root.application.TicketGateway;
 import root.domain.Ticket;
 
 @Component
-public class TicketGatewayImpl extends AbstractGateway<Ticket> implements TicketGateway
+public class TicketGatewayImpl extends AbstractDomainObjectGateway<Ticket> implements TicketGateway
 {
     @Resource
     private TicketRepository ticketRepository;

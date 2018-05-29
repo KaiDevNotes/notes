@@ -10,7 +10,7 @@ import root.domain.User;
 
 @Component
 public class UserGatewayImpl 
-    extends AbstractGateway<User, UserDbEntry> 
+    extends AbstractDomainObjectGateway<User, UserDbEntry> 
     implements UserGateway
 {
     @Resource

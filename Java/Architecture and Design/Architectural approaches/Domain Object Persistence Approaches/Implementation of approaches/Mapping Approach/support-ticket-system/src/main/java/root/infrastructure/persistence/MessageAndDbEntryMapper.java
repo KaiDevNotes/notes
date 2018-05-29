@@ -11,6 +11,10 @@ public class MessageAndDbEntryMapper
     @Override
     public MessageDbEntry mapToDbEntry(Message message)
     {
+        if (message == null)
+        {
+            return null;
+        }
         MessageDbEntry messageDbEntry = new MessageDbEntry();
         if (message.getId() != null)
         {
@@ -24,7 +28,11 @@ public class MessageAndDbEntryMapper
     
     @Override
     public Message mapToDomainObject(MessageDbEntry messageDbEntry)
-    {
+    {        
+        if (messageDbEntry == null)
+        {
+            return null;
+        }
         return new Message.Builder(
                 messageDbEntry.getMessageText(), messageDbEntry.getParty())
             .id(messageDbEntry.getId().toString())

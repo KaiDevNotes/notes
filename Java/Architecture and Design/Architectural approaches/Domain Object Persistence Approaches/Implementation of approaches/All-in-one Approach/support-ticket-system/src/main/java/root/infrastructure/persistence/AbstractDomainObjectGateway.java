@@ -5,12 +5,12 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class AbstractGateway<D> 
+public abstract class AbstractDomainObjectGateway<D> 
 {
     @Transactional
-    public void save(D domainObject)
+    public D save(D domainObject)
     {
-        getRepository().saveAndFlush(domainObject);
+        return getRepository().saveAndFlush(domainObject);
     }
     
     public D findById(UUID id)

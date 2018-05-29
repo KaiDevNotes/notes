@@ -10,7 +10,11 @@ public class UserAndDbEntryMapper
 {
     @Override
     public UserDbEntry mapToDbEntry(User user)
-    {
+    {   
+        if (user == null)
+        {
+            return null;
+        }
         UserDbEntry userDbEntry = new UserDbEntry();
         if (user.getId() != null)
         {
@@ -24,7 +28,11 @@ public class UserAndDbEntryMapper
     
     @Override
     public User mapToDomainObject(UserDbEntry userDbEntry)
-    {
+    {   
+        if (userDbEntry == null)
+        {
+            return null;
+        }
         return new User.Builder(
                 userDbEntry.getLogin(), userDbEntry.getPassword(), userDbEntry.getRole())
             .id(userDbEntry.getId().toString())
