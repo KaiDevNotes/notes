@@ -1,0 +1,119 @@
+﻿
+
+
+This is a Spring Boot + Spring Security example.
+
+In this example we can see next functionality:
+
+1 - Login
+2 - Opening different view based on ROLE of logged in user
+3 - Autologin after registration
+4 - Logout
+
+
+
+----------------------------------------------------------
+
+
+
+Project configuration:
+
+
+1) To switch ON spring security we need to add "spring security starter" in POM:
+        
+<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+
+
+
+2) Next we need to configure spring security. 
+See \src\main\java\root\SecurityConfiguration.java
+
+In this exmaple all users can access next pages "/", "/login", "/registration".
+Also we need to permit next URL pattern "/static/**" in order to access Static Content (CSS, JS, IMG etc.) 
+
+We can see that only users with ADMIN role can access URLs which match pattern "/admin/**".
+And only users with USER role can access URLs which match pattern "/user/**".
+
+If user, for ex., with ADMIN role tries to access page under "/user/**" he will be 
+redirected to "/403" URL which specified in security configuration as
+.exceptionHandling().accessDeniedPage("/403")
+
+
+
+3) It is necessary to mention that CSRF protection is switched ON by default so we need to add CSRF token for each POST call.
+
+3.1 - In HTML form we should add something like this:
+<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+See login form in \src\main\resources\views\login.ftl for more details.
+
+3.2 - For AJAX POST call we should add CSRF token to request headers. See "Ajax and JSON Requests" part of next article
+https://docs.spring.io/spring-security/site/docs/current/reference/html/csrf.html
+
+
+
+----------------------------------------------------------
+
+
+
+[1] Login
+
+
+1) First of all we should implement UserDetailsService. See \src\main\java\root\infrastructure\security\UserDetailsServiceImpl.java
+
+2) login form should contain input with name="username", input with name="password" and hidden input with CSRF token.
+
+3) Also this form should have POST mehtod and be sent to "/login" URL.
+
+See login form in \src\main\resources\views\login.ftl for more details.
+
+
+
+----------------------------------------------------------
+
+
+
+[2] Opening different view based on ROLE of logged in user
+
+
+To open different view based on ROLE of logged in user we should implement AuthenticationSuccessHandler 
+interface, provide necessary logic in .onAuthenticationSuccess() and register this handler in security 
+configuration via .formLogin().successHandler(...)
+
+In this case we redirect user with USER role to "/user/details" page.
+And user with ADMIN role to "/admin/details" page.
+
+See \src\main\java\root\infrastructure\security\AuthenticationSuccessHandlerImpl.java for more details.
+
+
+
+----------------------------------------------------------
+
+
+
+[3] Autologin after registration
+
+
+For autologin we can use .login() method of HttpServletRequest.
+
+See .login() of \src\main\java\root\infrastructure\security\SecurityServiceImpl.java
+for more details.
+
+
+
+----------------------------------------------------------
+
+
+
+[4] Logout
+
+
+To logout we should make POST call to "/logout" URL with CSRF token.
+See login form in \src\main\resources\views\details.ftl for more details.
+
+
+
+
+
