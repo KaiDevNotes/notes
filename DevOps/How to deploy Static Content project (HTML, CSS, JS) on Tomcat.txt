@@ -1,0 +1,51 @@
+﻿
+
+To deploy Static Content project (HTML, CSS, JS) on Tomcat we need to:
+
+
+
+
+1) Add necessary <Context> tag into <Host> tag in ..\conf\server.xml file.
+It is necessary to note that SC project can be placed in ..\webapps\ directory or 
+in any other directory on file system.
+
+
+
+1.1 - Example: SC project is placed in ..\webapps\ directory
+
+<Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">			
+	<Context path="/sc" docBase="sc-app"></Context>
+</Host>
+
+In this case all files of SC project should be placed in ..\webapps\sc-app directory.
+And of course this project should contain index.html file.
+
+
+
+1.2 - Example: SC project is placed in directory on file system
+
+<Host name="localhost"  appBase="webapps" unpackWARs="true" autoDeploy="true">			
+	<Context path="/sc" docBase="D:/sc-app"></Context>
+</Host>
+
+In this case all files of SC project should be placed in D:\sc-app directory.
+And of course this project should contain index.html file.
+
+
+As a result of this configurations our SC project will be available on http://localhost:8080/sc
+as was specified in "path" attribute of <Context> tag.
+
+
+
+
+
+2) If we want to run our SC project on ROOT context: http://localhost:8080/ we should follow the steps 
+described in next article:
+
+http://www.baeldung.com/tomcat-root-application
+
+
+
+
+
+
