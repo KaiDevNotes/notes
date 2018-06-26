@@ -2,9 +2,8 @@ package root.domain;
 
 import java.util.Objects;
 
-public abstract class User 
+public abstract class User implements DomainObject 
 {
-    public abstract String getDomainId();
     public abstract String getLogin();
     public abstract String getPassword();
     public abstract Role getRole();
@@ -18,7 +17,7 @@ public abstract class User
     public int hashCode() 
     {
         int hash = 7;
-        hash = 73 * hash + Objects.hashCode(getDomainId());
+        hash = 73 * hash + Objects.hashCode(getId().toString());
         return hash;
     }
 
@@ -38,7 +37,7 @@ public abstract class User
             return false;
         }
         final User other = (User) obj;
-        if (!Objects.equals(getDomainId(), other.getDomainId())) 
+        if (!Objects.equals(getId().toString(), other.getId().toString())) 
         {
             return false;
         }

@@ -147,6 +147,15 @@ and so on.
 ------
 
 
+
+Also it is important to note that with such architecture our Application core stays 
+independent from frameworks and tools.
+
+
+
+------
+
+
  
 SUPPORT TICKET SYSTEM is an Spring Boot application with embedded HSQLDB.
 So just run and enjoy :)

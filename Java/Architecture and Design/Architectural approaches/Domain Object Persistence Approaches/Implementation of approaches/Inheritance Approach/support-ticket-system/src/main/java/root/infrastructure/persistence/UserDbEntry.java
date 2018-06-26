@@ -36,9 +36,9 @@ public class UserDbEntry extends User implements Serializable
     private User.Role role;
 
     @Override
-    public String getDomainId() 
+    public UUID getId() 
     {
-        return id.toString();
+        return id;
     }
 
     @Override

@@ -59,6 +59,12 @@ public class MessageDbEntry extends Message implements Serializable
     }
     
     @Override
+    public UUID getId()
+    {
+        return id;
+    }
+    
+    @Override
     public String getMessageText()
     {
         return messageText;

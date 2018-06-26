@@ -72,11 +72,11 @@ public class TicketDbEntry extends Ticket implements Serializable
         this.status = Ticket.Status.NEW;
         this.submitter = (UserDbEntry) submitter;
     }
-
+    
     @Override
-    public String getDomainId() 
+    public UUID getId()
     {
-        return id.toString();
+        return id;
     }
 
     @Override

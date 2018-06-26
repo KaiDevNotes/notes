@@ -3,9 +3,8 @@ package root.domain;
 import java.util.Date;
 import java.util.List;
 
-public abstract class Ticket 
+public abstract class Ticket implements DomainObject 
 {
-    public abstract String getDomainId();
     public abstract String getIssueDescription();
     public abstract List<Message> getMessages();
     public abstract Date getCreationDate();

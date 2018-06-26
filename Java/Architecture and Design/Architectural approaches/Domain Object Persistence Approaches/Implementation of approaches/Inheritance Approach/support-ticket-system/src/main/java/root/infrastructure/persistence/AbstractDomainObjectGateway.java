@@ -14,9 +14,9 @@ public abstract class AbstractDomainObjectGateway<D, E>
         return (D) getRepository().saveAndFlush((E) domainObject);
     }
     
-    public D findById(String domainObjectId)
+    public D findById(UUID domainObjectId)
     {
-        return (D) getRepository().findOne(UUID.fromString(domainObjectId));
+        return (D) getRepository().findOne(domainObjectId);
     }
     
     public List<D> findAll()
@@ -27,9 +27,9 @@ public abstract class AbstractDomainObjectGateway<D, E>
     }
     
     @Transactional
-    public void delete(String domainObjectId)
+    public void delete(UUID domainObjectId)
     {
-        getRepository().delete(UUID.fromString(domainObjectId));
+        getRepository().delete(domainObjectId);
         getRepository().flush();
     }
     

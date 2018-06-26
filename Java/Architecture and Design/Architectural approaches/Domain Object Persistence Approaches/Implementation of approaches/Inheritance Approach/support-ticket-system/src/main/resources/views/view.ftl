@@ -26,12 +26,9 @@
                     <span class="glyphicon glyphicon-user"></span>
                     &nbsp;
                     Customer
+                    <button type="button" class="btn btn-success btn-lg pull-right" onclick="toggleNewTicketForm();">New Ticket</button>
                 </h2>
                 
-                <br/>
-                <button type="button" class="btn btn-success btn-lg" onclick="toggleNewTicketForm();">New Ticket</button>
-                
-                <br/>
                 <br/>
                 <div class="panel panel-success hide" id="new-ticket-form">
                     <div class="panel-heading">
@@ -43,7 +40,7 @@
                             <textarea name="issueDescription" class="form-control" rows="5"></textarea> 
                             <br/>
                             <button type="submit" class="btn btn-default">Create ticket</button> 
-                            <input type="hidden" name="submitterId" value="${customer.domainId}"/>
+                            <input type="hidden" name="submitterId" value="${customer.id}"/>
                         </form>
                     </div>                    
                 </div>
@@ -58,20 +55,20 @@
                         <#elseIf ticket.status.name() == 'RESOLVED'>
                         <span class="label label-success">Resolved</span>
                         </#if>
-                        <b>Ticket</b> ${ticket.domainId} 
+                        <b>Ticket</b> ${ticket.id} 
                     </div>
                     <div class="panel-body">
                         <p><strong>${ticket.issueDescription}</strong></p>
                         <#if ticket.status.name() != 'RESOLVED'>
                         <button type="submit" class="btn btn-default" onclick="toggleNewMessageForm(this);">Add message</button>  
-                        <button type="submit" class="btn btn-success" onclick="markAsResolved('${ticket.domainId}');">Mark as resolved</button>                        
+                        <button type="submit" class="btn btn-success" onclick="markAsResolved('${ticket.id}');">Mark as resolved</button>                        
                         <form action="/ticket/message" method="POST" role="form" class="new-message-form hide">
                             <br/>
                             <textarea name="messageText" class="form-control" rows="2"></textarea> 
                             <br/>
                             <button type="submit" class="btn btn-default">Send</button>
-                            <input type="hidden" name="ticketId" value="${ticket.domainId}"/>
-                            <input type="hidden" name="senderId" value="${customer.domainId}"/>
+                            <input type="hidden" name="ticketId" value="${ticket.id}"/>
+                            <input type="hidden" name="senderId" value="${customer.id}"/>
                         </form>  
                         </#if>
                     </div>
@@ -111,20 +108,20 @@
                         <#elseIf ticket.status.name() == 'RESOLVED'>
                         <span class="label label-success">Resolved</span>
                         </#if>
-                        <b>Ticket</b> ${ticket.domainId} 
+                        <b>Ticket</b> ${ticket.id} 
                     </div>
                     <div class="panel-body">
                         <p><strong>${ticket.issueDescription}</strong></p>
                         <#if ticket.status.name() != 'RESOLVED'>
                         <button type="submit" class="btn btn-default" onclick="toggleNewMessageForm(this);">Add message</button>  
-                        <button type="submit" class="btn btn-success" onclick="markAsResolved('${ticket.domainId}');">Mark as resolved</button>                        
+                        <button type="submit" class="btn btn-success" onclick="markAsResolved('${ticket.id}');">Mark as resolved</button>                        
                         <form action="/ticket/message" method="POST" role="form" class="new-message-form hide">
                             <br/>
                             <textarea name="messageText" class="form-control" rows="2"></textarea> 
                             <br/>
                             <button type="submit" class="btn btn-default">Send</button>
-                            <input type="hidden" name="ticketId" value="${ticket.domainId}"/>
-                            <input type="hidden" name="senderId" value="${supportEngineer.domainId}"/>
+                            <input type="hidden" name="ticketId" value="${ticket.id}"/>
+                            <input type="hidden" name="senderId" value="${supportEngineer.id}"/>
                         </form> 
                         </#if>
                     </div>
