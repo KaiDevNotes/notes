@@ -1,0 +1,155 @@
+
+
+
+This Clean Architecture Implementation is illustrated based on 
+sample application which is called SUPPORT TICKET SYSTEM.
+
+
+
+------
+
+
+
+SUPPORT TICKET SYSTEM is an application which allows CUSTOMER to contact 
+support team and ask for help.
+
+It means that CUSTOMER can create a new ticket and describe his problem.
+Next CUSTOMER and SUPPORT_ENGINEER can communicate via messages,
+which will be attached to the ticket, in order to solve CUSTOMER's problem.
+
+When problem is solved ticket can be marked as RESOLVED by 
+CUSTOMER or SUPPORT_ENGINEER.
+
+
+
+------
+
+
+
+Actually SUPPORT TICKET SYSTEM application has architecture which is mix 
+of architectures such as Hexagonal, Onion and Clean. And the main point 
+is that DEPENDENCIES SHOULD GO INWARD.
+
+
+
+------
+
+
+
+The Application Core layers of Clean Architecture are reflected by next packages:
+
+
+* Entities layer -> "root.domain" package.
+This package contains Domain Objects (Ticket, Message, User) which extend abstract DomainObject.
+
+
+* Use Cases layer -> "root.application" package.
+This package contains:
+
+- Bounaries:
+Use Case Input port: UseCase interface
+Use Case Output port: UseCaseResponse interface
+
+- Interactors (Use Cases), which are implementations of Use Case Input port (UseCase interface): 
+CreateTicketUseCase, AddMessageUseCase, MarkTicketAsResolvedUseCase
+
+- Entity Gateways (or Domain Object Gateways), which are interfaces which extend 
+DomainObjectGateway interface: UserGateway, TicketGateway
+
+
+
+------
+
+
+
+External layer(s), which contain Driving and Driven Adapters, consists of next packages:
+
+
+* "root.infrastructure.persistence" package.
+This pacakge contains Driven Adapters which implement ports which were defined on 
+Use Cases layer (in "root.application" package). This Driven Adapters are:
+
+- TicketGatewayImpl which implements TicketGateway interface (port)
+- UserGatewayImpl which implements UserGateway interface (port)
+
+This Driven Adapters are injected into Interactors (Use Cases) via ApplicationConfiguration
+and are used to retrieve Domain Objects from HSQL DB.
+Also it is necessary to mention that there was implemented 
+"Mapping" Domain Object Persistence Approach.
+
+
+* "root.presentation" package.
+This pacakge contains: 
+
+- Driving Adapter (TicketSystemUIController), which cointain and use implementations of 
+Use Case Input port (UseCase interface)
+
+- Presenters, which are implementations of Use Case Output port (UseCaseResponse interface):
+CreateTicketResponse, AddMessageResponse, MarkTicketAsResolvedResponse
+
+
+
+------
+
+
+
+It is necessary to mention that there was implemented some kind of "Command Bus".
+It means that in this project we have:
+
+
+* Commands, which are implementations of UseCaseRequest interface:
+CreateTicketRequest, AddMessageRequest, MarkTicketAsResolvedRequest
+
+
+* Command Handlers, which are implementations of UseCase interface:
+CreateTicketUseCase, AddMessageUseCase, MarkTicketAsResolvedUseCase
+
+
+* Command Bus (UseCaseExecutor), which is configured in (via) ApplicationConfiguration 
+in order to find appropriate Command Handler for each Command
+
+
+All this components (Commands, Command Handlers, Command Bus) are defined on 
+Use Cases (Application) layer.
+
+
+Moreover Command Handlers are decorated in order to validate incomming requests.
+It means that implementations of UseCase interface are decorated by classes which
+extend UseCaseRequestValidator.
+
+And we can implement another decorators in order to implement logging, transactions, 
+scheduling of commands execution and so on. (See CQRS.pdf for more details)  
+
+
+
+
+------
+
+
+
+It is important to note that DEPENDENCIES GO TOWARDS CENTER. 
+It means that classes in inner layer don't know about classes in outer layers.
+
+For example:
+
+* Classes from "root.domain" don't know about classes from 
+"root.application", "root.infrastructure" and "root.presentation"
+
+or 
+
+* Classes from "root.application" know only about classes form "root.domain"
+and don't know about classes from "root.infrastructure" and "root.presentation"
+
+and so on.
+
+
+
+------
+
+
+ 
+SUPPORT TICKET SYSTEM is an Spring Boot application with embedded HSQLDB.
+So just run and enjoy :)
+
+
+

@@ -34,7 +34,7 @@ Messages Domain Objects, and MANY-TO-ONE relationship with User Domain Object.
 
 
 SUPPORT TICKET SYSTEM application has architecture which is mix of architectures 
-such as Hexagonal, Onion and Clear. And the main point is that dependencies should 
+such as Hexagonal, Onion and Clean. And the main point is that dependencies should 
 go inward.
 
 
