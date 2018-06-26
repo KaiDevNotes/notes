@@ -1,26 +1,30 @@
 package root.application;
 
+import java.util.UUID;
 import root.domain.Ticket;
 
-public class MarkTicketAsResolvedUseCase 
+public class MarkTicketAsResolvedUseCase implements UseCase<MarkTicketAsResolvedRequest>  
 {    
-    private final MarkTicketAsResolvedRequestTransformer requestTransformer;
     private final TicketGateway ticketGateway;
 
-    public MarkTicketAsResolvedUseCase(
-        MarkTicketAsResolvedRequestTransformer requestTransformer, 
-        TicketGateway ticketGateway) 
+    public MarkTicketAsResolvedUseCase(TicketGateway ticketGateway) 
     {
-        this.requestTransformer = requestTransformer;
         this.ticketGateway = ticketGateway;
     }
     
-    public void execute(MarkTicketAsResolvedRequest request)
+    @Override
+    public void execute(MarkTicketAsResolvedRequest request, UseCaseResponse response)
     {
-        requestTransformer.transform(request);
+        Ticket ticket = ticketGateway.findById(UUID.fromString(request.getTicketId()));
+        if (ticket == null)
+        {
+            response.markAsFailed("Incorrect Ticket ID");
+            return;
+        }
         
-        Ticket ticket = request.getTicket();
         ticket.markAsResolved();
         ticketGateway.save(ticket);
+        
+        response.markAsSuccessful(ticket);
     }
 }

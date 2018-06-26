@@ -21,7 +21,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="message")
 @Access(AccessType.FIELD)
-public class Message implements Serializable 
+public class Message implements DomainObject, Serializable 
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -55,6 +55,7 @@ public class Message implements Serializable
         this.ticket = ticket;
     }
 
+    @Override
     public UUID getId() {
         return id;
     }

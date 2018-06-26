@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name="user")
 @Access(AccessType.FIELD)
-public class User implements Serializable
+public class User implements DomainObject, Serializable 
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -45,6 +45,7 @@ public class User implements Serializable
         this.role = role;
     }
 
+    @Override
     public UUID getId() 
     {
         return id;

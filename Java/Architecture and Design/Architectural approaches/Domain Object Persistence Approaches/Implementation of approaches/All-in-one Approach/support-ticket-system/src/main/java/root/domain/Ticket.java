@@ -1,5 +1,6 @@
 package root.domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -25,7 +26,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name="ticket")
 @Access(AccessType.FIELD)
-public class Ticket 
+public class Ticket implements DomainObject, Serializable  
 {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -67,6 +68,7 @@ public class Ticket
         this.submitter = submitter;
     }
 
+    @Override
     public UUID getId() 
     {
         return id;

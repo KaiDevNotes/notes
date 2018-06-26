@@ -1,25 +1,33 @@
 package root.application;
 
+import java.util.UUID;
 import root.domain.Ticket;
+import root.domain.User;
 
-public class CreateTicketUseCase 
+public class CreateTicketUseCase implements UseCase<CreateTicketRequest>
 {
-    private final CreateTicketRequestTransformer requestTransformer;
+    private final UserGateway userGateway;
     private final TicketGateway ticketGateway;
 
-    public CreateTicketUseCase(
-        CreateTicketRequestTransformer requestTransformer, 
-        TicketGateway ticketGateway) 
+    public CreateTicketUseCase(UserGateway userGateway, TicketGateway ticketGateway) 
     {
-        this.requestTransformer = requestTransformer;
+        this.userGateway = userGateway;
         this.ticketGateway = ticketGateway;
     }
     
-    public void execute(CreateTicketRequest request)
+    @Override
+    public void execute(CreateTicketRequest request, UseCaseResponse response)
     {
-        requestTransformer.transform(request);
+        User submitter = userGateway.findById(UUID.fromString(request.getSubmitterId()));
+        if (submitter == null)
+        {
+            response.markAsFailed("Incorrect Submitter ID");
+            return;
+        }
         
-        ticketGateway.save(
-            new Ticket(request.getIssueDescription(), request.getSubmitter()));
+        Ticket ticket = ticketGateway.save(
+            new Ticket(request.getIssueDescription(), submitter));
+        
+        response.markAsSuccessful(ticket);
     }
 }

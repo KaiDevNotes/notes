@@ -26,12 +26,9 @@
                     <span class="glyphicon glyphicon-user"></span>
                     &nbsp;
                     Customer
+                    <button type="button" class="btn btn-success btn-lg pull-right" onclick="toggleNewTicketForm();">New Ticket</button>
                 </h2>
                 
-                <br/>
-                <button type="button" class="btn btn-success btn-lg" onclick="toggleNewTicketForm();">New Ticket</button>
-                
-                <br/>
                 <br/>
                 <div class="panel panel-success hide" id="new-ticket-form">
                     <div class="panel-heading">
