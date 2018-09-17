@@ -1,0 +1,319 @@
+﻿
+
+Notes regarding book: Java Concurrency in Practice. Brian Goetz. 2006 
+
+
+---------------------------------------------------------------------
+
+
+
+
+Chapter 2. Thread Safety
+--
+
+
+* Concurrent programming isn't so much about threads or locks. Writing 
+thread safe code is, at its core, about managing access to state, and in 
+particular to shared, mutable state. 
+
+
+* If multiple threads access the same mutable state variable without 
+appropriate synchronization, your program is broken. 
+There are three ways to fix it: 
+- Don't share the state variable across threads; 
+- Make the state variable immutable; or 
+- Use synchronization whenever accessing the state variable.
+
+
+* When designing thread safe classes, good object oriented techniques 
+encapsulation, immutability, and clear specification of invariants are 
+your best friends.
+
+
+
+
+2.1. What is Thread Safety?
+--
+
+
+* A  class  is  thread-safe  if  it  behaves  correctly  when  accessed 
+from  multiple  threads,  regardless  of  the  scheduling  or interleaving 
+of the execution of those threads by the runtime environment, and with no 
+additional synchronization or other coordination on the part of the 
+calling code. 
+
+
+* Thread-safe classes encapsulate any needed synchronization so that 
+clients need not provide their own.
+
+
+* Stateless objects are always thread safe.
+
+
+
+
+2.2. Atomicity
+--
+
+
+* Where practical, use existing thread-safe objects, like AtomicLong, 
+to manage your class's state. It is simpler to reason about the possible 
+states and state transitions for existing thread-safe objects than it is 
+for arbitrary state variables, and this makes it easier to maintain and 
+verify thread safety. 
+
+
+
+
+2.3. Locking
+--
+
+
+* To preserve state consistency, update related state variables in 
+a single atomic operation.
+
+
+* 2.3.2. Reentrancy (reentrancy description)
+
+
+
+
+2.4. Guarding State with Locks
+--
+
+
+* For each mutable state variable that may be accessed by more than one 
+thread, all accesses to that variable must be performed with the same 
+lock held. In this case, we say that the variable is guarded by that lock.
+
+
+* Every shared, mutable variable should be guarded by exactly one lock. 
+Make it clear to maintainers which lock that is.
+
+
+* For every invariant that involves more than one variable, all the 
+variables involved in that invariant must be guarded by the same lock.
+
+
+
+
+2.5. Liveness and Performance
+--
+
+
+* The portions of code that are outside the synchronized blocks operate 
+exclusively on local (stack-based) variables, which are not shared across 
+threads and therefore do not require synchronization.
+
+
+* Atomic variables are useful for effecting atomic operations on 
+a single variable.
+
+
+* There is frequently a tension between simplicity and performance. 
+When implementing a synchronization policy, resist the temptation to 
+prematurely sacrifice simplicity (potentially compromising safety) 
+for the sake of performance. 
+
+
+* Avoid  holding  locks  during  lengthy  computations  or  operations 
+at risk of not completing quickly such as  network  or console I/O.
+
+
+
+
+Chapter 3. Sharing Objects
+--
+
+
+3.1. Visibility
+--
+
+
+* In order to ensure visibility of memory  writes  across  threads, 
+you  must  use synchronization. 
+
+
+* Locking is not just about mutual exclusion; it is also about memory 
+visibility. To ensure that all threads see the most up-to-date values 
+of shared mutable variables, the reading and writing threads must 
+synchronize on a common lock.
+
+
+* Use  volatile  variables  only when  they  simplify implementing and 
+verifying  your  synchronization  policy; avoid using volatile variables 
+when verifying correctness would require subtle reasoning about visibility. 
+Good uses of volatile variables  include  ensuring  the  visibility  of  
+their  own  state,  that  of  the  object  they  refer  to,  or  indicating  
+that an important lifecycle event (such as initialization or shutdown) 
+has occurred.
+
+
+* The  most  common  use  for  volatile  variables  is  as  a completion, 
+interruption, or status flag, such as the asleep flag in Listing 3.4.
+
+
+* Locking can guarantee both visibility and atomicity; 
+volatile variables can only guarantee visibility.
+
+
+* You can use volatile variables only when all the following criteria 
+are met: 
+- Writes  to  the  variable  do  not  depend  on  its  current  value,  
+or you can ensure that only a single thread ever updates the value; 
+- The variable does not participate in invariants with other state 
+variables; and 
+- Locking is not required for any other reason while the variable 
+is being accessed.
+
+
+
+
+3.2. Publication and Escape
+--
+
+
+* A common mistake that can let the "this" reference escape during 
+construction is to start a thread from a constructor.
+
+
+
+
+3.3. Thread Confinement
+--
+
+
+* Thread-local variables are often used to prevent sharing in designs based 
+on mutable Singletons or global variables.
+
+
+* It is easy to abuse ThreadLocal by treating its thread confinement property 
+as a license to use global variables or as a means of creating "hidden" method 
+arguments. Like global variables, thread-local variables can detract from 
+reusability and introduce hidden couplings among classes, and should therefore 
+be used with care.
+
+
+
+
+3.4. Immutability
+--
+
+
+* An immutable object is one whose state cannot be changed after construction.
+
+
+* Immutable objects are always thread-safe.
+
+
+* Just as it is a good practice to make all fields private unless they need 
+greater visibility [EJ Item 12], it is a good practice to make all fields final 
+unless they need to be mutable.
+
+
+
+
+3.5. Safe Publication
+--
+
+
+* Immutable objects can be used safely by any thread without additional 
+synchronization, even when synchronization is not used to publish them.
+
+
+* This guarantee extends to the values of all final fields of properly 
+constructed objects; final fields can be safely accessed without additional 
+synchronization. However, if final fields refer to mutable objects, 
+synchronization is still required to access the state of the objects they 
+refer to.
+
+
+* To publish an object safely, both the reference to the object and the 
+object's state must be made visible to other threads at the same time. 
+A properly constructed object can be safely published by: 
+- Initializing an object reference from a static initializer; 
+- Storing a reference to it into a volatile field or AtomicReference; 
+- Storing a reference to it into a final field of a properly constructed object; 
+- Storing a reference to it into a field that is properly guarded by a lock.
+
+- Placing a key or value in a Hashtable, synchronizedMap, or Concurrent-Map 
+safely publishes it to any thread that retrieves it from the Map 
+(whether directly or via an iterator); 
+- Placing  an  element  in  a  Vector,  CopyOnWriteArrayList,  
+CopyOnWrite-ArraySet,  synchronizedList,  or synchronizedSet safely publishes 
+it to any thread that retrieves it from the collection; 
+- Placing  an  element on a BlockingQueue or a ConcurrentLinkedQueue safely 
+publishes  it  to  any  thread  that retrieves it from the queue.
+
+
+* Safely published effectively immutable objects can be used safely by any 
+thread without additional synchronization.
+
+
+* The publication requirements for an object depend on its mutability:
+- Immutable objects can be published through any mechanism; 
+- Effectively immutable objects must be safely published; 
+- Mutable objects must be safely published, and must be either thread-safe 
+or guarded by a lock. 
+
+
+* The most useful policies for using and sharing objects in a concurrent program 
+are: 
+- "Thread-confined". A thread-confined object is owned exclusively by and confined 
+to one thread, and can be modified by its owning thread. 
+- "Shared read-only". A shared read-only object can be accessed concurrently by 
+multiple  threads  without  additional synchronization, but cannot be modified  
+by any thread. Shared read-only objects include immutable and effectively 
+immutable objects. 
+- "Shared thread-safe". A thread-safe object performs synchronization internally, 
+so  multiple  threads can  freely  access  it through its public interface 
+without further synchronization. 
+- "Guarded". A guarded object can be accessed only with a specific lock held. 
+Guarded objects include those that are encapsulated within other thread-safe 
+objects and published objects that are known to be guarded by a specific lock.
+
+
+
+
+Chapter 4. Composing Objects
+--
+
+
+4.1. Designing a Thread-safe Class
+--
+
+
+* While it is possible to write a thread-safe program that stores all its state 
+in public static fields, it is a lot harder to verify its thread safety or to 
+modify it so that it remains thread-safe than one that uses encapsulation 
+appropriately. Encapsulation makes it possible to determine that a class is 
+thread-safe without having to examine the entire program.
+
+
+* The design process for a thread-safe class should include these 3 basic 
+elements: 
+- Identify the variables that form the object's state; 
+- Identify the invariants that constrain the state variables; 
+- Establish a policy for managing concurrent access to the object's state.
+
+
+>>> p. 53
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
