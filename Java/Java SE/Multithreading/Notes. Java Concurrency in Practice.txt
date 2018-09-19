@@ -297,7 +297,219 @@ elements:
 - Establish a policy for managing concurrent access to the object's state.
 
 
->>> p. 53
+* Multivariable invariants like this one create atomicity requirements: related 
+variables must be fetched or updated in a single atomic operation. 
+
+
+* You cannot ensure thread safety without understanding an object's invariants 
+and postͲconditions. Constraints on the valid values or state transitions for 
+state variables can create atomicity and encapsulation requirements.
+
+
+
+
+4.2. Instance Confinement
+--
+
+
+* Encapsulation simplifies making classes thread-safe by promoting instance 
+confinement.
+
+
+* Encapsulating data within an object confines access to the data to the 
+object's methods, making it easier to ensure that the data is always accessed 
+with the appropriate lock held.
+
+
+* Confinement makes it easier to build thread-safe classes because a class that 
+confines its state can be analyzed for thread safety without having to examine 
+the whole program.
+
+
+
+
+4.3. Delegating Thread Safety
+--
+
+
+* If a class is composed of multiple independent thread-safe state variables 
+and has no operations that have any invalid state transitions, then it can 
+delegate thread safety to the underlying state variables.
+
+
+* A variable is suitable for being declared volatile only if it does not 
+participate in invariants involving other state variables.
+
+
+* If a state variable is thread-safe, does not participate in any invariants 
+that constrain its value, and has no prohibited state transitions for any of 
+its operations, then it can safely be published.
+
+
+
+
+4.5. Documenting Synchronization Policies
+--
+
+
+* Document a class's thread safety guarantees for its clients; document its 
+synchronization policy for its maintainers.
+
+
+* Crafting a synchronization policy requires a number of decisions: which 
+variables to make volatile, which variables to guard with locks, which lock(s) 
+guard which variables, which variables to make immutable or confine to a 
+thread, which operations must be atomic, etc.
+
+
+
+
+Chapter 5. Building Blocks
+--
+
+
+5.1. Synchronized Collections
+--
+
+
+* The iterators returned by the synchronized collections are not designed to 
+deal with concurrent modification, and they are fail-fast - meaning that if 
+they detect that the collection has changed since iteration began, they throw 
+the unchecked ConcurrentModificationException.
+
+
+* An alternative to locking the collection during iteration is to clone the 
+collection and iterate the copy instead.
+
+
+* Just as encapsulating an object's state makes it easier to preserve its 
+invariants, encapsulating its synchronization makes it easier to enforce 
+its synchronization policy.
+
+
+
+
+5.2. Concurrent Collections
+--
+
+
+* Replacing synchronized collections with concurrent collections can offer 
+dramatic scalability improvements with little risk.
+
+
+* ConcurrentHashMap, along with the other concurrent collections, further 
+improve on the synchronized collection classes by providing iterators that 
+do not throw ConcurrentModificationException, thus eliminating the need to 
+lock the collection during iteration.
+
+
+* Because it has so many advantages and so few disadvantages compared to 
+Hashtable or synchronizedMap, replacing synchronized Map implementations with 
+ConcurrentHashMap in most cases results only in better scalability. Only if your
+application needs to lock the map for exclusive access (Or if you are relying 
+on the synchronization side effects of the synchronized Map implementations.) 
+then ConcurrentHashMap is not an appropriate drop-in replacement. 
+
+
+* The iterators returned by the copy-on-write collections do not throw 
+ConcurrentModificationException and return the elements exactly as they were 
+at the time the iterator was created, regardless of subsequent modifications.
+
+
+* The copy-on-write collections are reasonable to use only when iteration is 
+far more common than modification. 
+
+
+
+
+5.3. Blocking Queues and the Producer-Consumer Pattern
+--
+
+
+* Bounded queues are a powerful resource management tool for building reliable 
+applications: they make your program more robust to overload by throttling 
+activities that threaten to produce more work than can be handled.
+
+
+* The last BlockingQueue implementation, SynchronousQueue, is not really a 
+queue at all, in that it maintains no storage space for queued elements. 
+Instead, it maintains a list of queued threads waiting to enqueue or dequeue 
+an element. In the dish-washing analogy, this would be like having no dish 
+rack, but instead handing the washed dishes directly to the next available 
+dryer. While this may seem a strange way to implement a queue, it reduces 
+the latency associated with moving data from producer to consumer because 
+the work can be handed off directly. (In a traditional queue, the enqueue and 
+dequeue operations must complete sequentially before a unit of work can be 
+handed off.) The direct handoff also feeds back more information about the 
+state of the task to the producer; when the handoff is accepted, it knows a 
+consumer has taken responsibility for it, rather than simply letting it sit on 
+a queue somewhere - much like the difference between handing a document to a 
+colleague and merely putting it in her mailbox and hoping she gets it soon.
+Since a SynchronousQueue has no storage capacity, put and take will block 
+unless another thread is already waiting to participate in the handoff. 
+Synchronous queues are generally suitable only when there are enough consumers 
+that there nearly always will be one ready to take the handoff.
+
+
+* Many producer-consumer designs can be expressed using the Executor task 
+execution framework, which itself uses the producer-consumer pattern.
+
+
+* A producer-consumer design has one shared work queue for all consumers; 
+in a work stealing design, every consumer has its own deque. If a consumer 
+exhausts the work in its own deque, it can steal work from the tail of someone 
+else's deque.
+
+
+
+
+5.4. Blocking and Interruptible Methods
+--
+
+
+* When a method can throw InterruptedException, it is telling you that it is 
+a blocking method.
+
+
+* When your code calls a method that throws InterruptedException, then your 
+method is a blocking method too, and must have a plan for responding to 
+interruption.
+
+
+
+
+5.5. Synchronizers
+--
+
+
+>>> p. 76
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
