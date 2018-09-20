@@ -302,7 +302,7 @@ variables must be fetched or updated in a single atomic operation.
 
 
 * You cannot ensure thread safety without understanding an object's invariants 
-and postͲconditions. Constraints on the valid values or state transitions for 
+and post-conditions. Constraints on the valid values or state transitions for 
 state variables can create atomicity and encapsulation requirements.
 
 
@@ -482,50 +482,542 @@ interruption.
 --
 
 
->>> p. 76
+* The implementation of Semaphore has no actual permit objects, and Semaphore 
+does not associate dispensed permits with threads, so a permit acquired in one 
+thread can be released from another thread. You can think of acquire as 
+consuming a permit and release as creating one; a Semaphore is not limited to 
+the number of permits it was created with.
+
+
+* Semaphores are useful for implementing resource pools such as database 
+connection pools.
+
+
+* Exchangers are useful when the parties perform asymmetric activities, 
+for example, when one thread fills a buffer with data and the other thread 
+consumes the data from the buffer; 
+
+
+
+
+5.6. Building an Efficient, Scalable Result Cache
+--
+
+
+* The purpose of a cache is to prevent the same data from being calculated 
+multiple times. 
+
+
+* Cache implementation example: Listing 5.19. Final Implementation of Memorizer
+
+
+
+
+Summary of Part I
+--
+
+
+* All concurrency issues boil down to coordinating access to mutable state. 
+The less mutable state, the easier it is to ensure thread safety.
+
+
+* Make fields final unless they need to be mutable.
+
+
+* Immutable objects are automatically thread-safe.
+
+
+* Immutable objects simplify concurrent programming tremendously. They are 
+simpler and safer, and can be shared freely without locking or defensive 
+copying.
+
+
+* Encapsulation makes it practical to manage the complexity.
+It means that you could write a thread-safe program with all data stored in 
+global variables, but why would you want to? Encapsulating data within objects 
+makes it easier to preserve their invariants; encapsulating synchronization 
+within objects makes it easier to comply with their synchronization policy.
+
+
+* Guard each mutable variable with a lock.
+
+
+* Guard all variables in an invariant with the same lock.
+
+
+* Hold locks for the duration of compound actions.
+
+
+* A program that accesses a mutable variable from multiple threads without 
+synchronization is a broken program.
+
+
+* Don't rely on clever reasoning about why you don't need to synchronize.
+
+
+* Document your synchronization policy.
+
+
+
+
+Chapter 6. Task Execution
+--
+
+
+6.2. The Executor Framework
+--
+
+
+* Tasks are logical units of work, and threads are a mechanism by which tasks 
+can run asynchronously.
+
+
+* Executor framework provides a standard means of decoupling task submission 
+from task execution.
+
+
+* Execution policies are a resource management tool, and the optimal policy 
+depends on the available computing resources and your quality-of-service 
+requirements. By limiting the number of concurrent tasks, you can ensure that 
+the application does not fail due to resource exhaustion or suffer performance 
+problems due to contention for scarce resources. Separating the specification 
+of execution policy from task submission makes it practical to select an
+execution policy at deployment time that is matched to the available hardware.
+
+
+* You can create a thread pool by calling one of the static factory methods in 
+Executors:
+- "newFixedThreadPool" - A fixed-size thread pool creates threads as tasks are 
+submitted, up to the maximum pool size, and then attempts to keep the pool size 
+constant (adding new threads if a thread dies due to an unexpected Exception).
+- "newCachedThreadPool" - A cached thread pool has more flexibility to reap 
+idle threads when the current size of the pool exceeds the demand for 
+processing, and to add new threads when demand increases, but places no bounds 
+on the size of the pool.
+- "newSingleThreadExecutor" - A single-threaded executor creates a single 
+worker thread to process tasks, replacing it if it dies unexpectedly. Tasks are 
+guaranteed to be processed sequentially according to the order imposed by the 
+task queue (FIFO, LIFO, priority order).
+- "newScheduledThreadPool" - A fixed-size thread pool that supports delayed and 
+periodic task execution, similar to Timer.
+
+
+
+
+6.3. Finding Exploitable Parallelism
+--
+
+* The real performance payoff of dividing a program's workload into tasks comes 
+when there are a large number of independent, homogeneous tasks that can be 
+processed concurrently.
+
+
+
+
+Summary
+--
+
+
+* The Executor framework permits you to decouple task submission from execution 
+policy and supports a rich variety of execution policies; whenever you find 
+yourself creating threads to perform tasks, consider using an Executor instead.
+
+
+
+
+Chapter 7. Cancellation and Shutdown
+--
+
+
+7.1. Task Cancellation
+--
+
+
+* There is no safe way to preemptively stop a thread in Java, and therefore no 
+safe way to preemptively stop a task. There are only cooperative mechanisms, by 
+which the task and the code requesting cancellation follow an agreed-upon
+protocol.
+
+
+* A task that wants to be cancellable must have a cancellation policy that 
+specifies the "how", "when", and "what" of cancellationͲhow other code can 
+request cancellation, when the task checks whether cancellation has been 
+requested, and what actions the task takes in response to a cancellation 
+request.
+
+
+* Calling interrupt does not necessarily stop the target thread from doing what 
+it is doing; it merely delivers the message that interruption has been 
+requested.
+
+
+* Interruption is usually the most sensible way to implement cancellation.
+
+
+* Just as tasks should have a cancellation policy, threads should have an 
+interruption policy.
+
+
+* A task should not assume anything about the interruption policy of its 
+executing thread unless it is explicitly designed to run within a service that 
+has a specific interruption policy. Whether a task interprets interruption as 
+cancellation or takes some other action on interruption, it should take care to 
+preserve the executing thread's interruption status. If it is not simply going 
+to propagate InterruptedException to its caller, it should restore the 
+interruption status after catching InterruptedException by calling 
+Thread.currentThread().interrupt(); 
+
+
+* Most code does not know what thread it will run in and so should preserve 
+the interrupted status.
+
+
+* Only code that implements a thread's interruption policy may swallow an 
+interruption request. GeneralͲpurpose task and library code should never 
+swallow interruption requests.
+
+
+* Example of Task Cancelation using "Future": 
+Listing 7.10. Cancelling a Task Using Future
+
+
+* When Future.get() throws InterruptedException or TimeoutException and you 
+know that the result is no longer needed by the program, cancel the task with 
+Future.cancel().
+
+
+
+
+7.3. Handling Abnormal Thread Termination
+--
+
+
+* In long-running applications, always use uncaught exception handlers for all 
+threads that at least log the exception.
+
+
+
+
+Chapter 8. Applying Thread Pools
+--
+
+
+8.1. Implicit Couplings Between Tasks and Execution Policies
+--
+
+
+* Some tasks have characteristics that require or preclude a specific execution 
+policy. Tasks that depend on other tasks require that the thread pool be large 
+enough that tasks are never queued or rejected; tasks that exploit thread 
+confinement require sequential execution. Document these requirements so that 
+future maintainers do not undermine safety or liveness by substituting an 
+incompatible execution policy.
+
+
+* Whenever you submit to an Executor tasks that are not independent, be aware 
+of the possibility of thread starvation deadlock, and document any pool sizing 
+or configuration constraints in the code or configuration file where the 
+Executor is configured.
+
+
+
+
+8.3. Configuring ThreadPoolExecutor
+--
+
+
+* The newCachedThreadPool factory is a good default choice for an Executor, 
+providing better queuing performance than a fixed thread pool.[5] A fixed size 
+thread pool is a good choice when you need to limit the number of concurrent
+tasks for resourceͲmanagement purposes, as in a server application that accepts 
+requests from network clients and would otherwise be vulnerable to overload.
+
+
+* Bounding either the thread pool or the work queue is suitable only when tasks 
+are independent. With tasks that depend on other tasks, bounded thread pools or 
+queues can cause thread starvation deadlock; instead, use an unbounded pool
+configuration like newCachedThreadPool.
+
+
+
+
+8.5. Parallelizing Recursive Algorithms
+--
+
+
+* Sequential loop iterations are suitable for parallelization when each 
+iteration is independent of the others and the work done in each iteration of 
+the loop body is significant enough to offset the cost of managing a new task.
+
+
+
+
+Chapter 9. GUI Applications
+--
+
+
+9.1. Why are GUIs Single-threaded?
+--
+
+
+* The Swing singleͲthread rule: Swing components and models should be created, 
+modified, and queried only from the event-dispatching thread.
 
 
 
 
 
+Chapter 10. Avoiding Liveness Hazards
+--
+
+
+10.1. Deadlock
+--
+
+
+* A program will be free of lockͲordering deadlocks if all threads acquire the 
+locks they need in a fixed global order.
+
+
+* Invoking an alien method with a lock held is asking for liveness trouble. 
+The alien method might acquire other locks (risking deadlock) or block for an 
+unexpectedly long time, stalling other threads that need the lock you hold.
+
+
+* Strive to use open calls throughout your program. Programs that rely on open 
+calls are far easier to analyze for deadlockͲfreedom than those that allow 
+calls to alien methods with locks held.
 
 
 
 
+10.3. Other Liveness Hazards
+--
+
+
+* Avoid the temptation to use thread priorities, since they increase platform 
+dependence and can cause liveness problems. Most concurrent applications can 
+use the default priority for all threads.
 
 
 
 
+Chapter 11. Performance and Scalability
+--
+
+
+* First make your program right, then make it fast - and then only if your 
+performance requirements and measurements tell you it needs to be faster. 
 
 
 
 
+11.1. Thinking about Performance
+--
+
+
+* Scalability describes the ability to improve throughput or capacity when 
+additional computing resources (such as additional CPUs, memory, storage, or 
+I/O bandwidth) are added.
+
+
+* Avoid premature optimization. First make it right, then make it fast - if it 
+is not already fast enough.
+
+
+* Measure, don't guess.
 
 
 
 
+11.4. Reducing Lock Contention
+--
+
+
+* The principal threat to scalability in concurrent applications is 
+the exclusive resource lock.
+
+
+* There are three ways to reduce lock contention:
+- Reduce the duration for which locks are held;
+- Reduce the frequency with which locks are requested; or
+- Replace exclusive locks with coordination mechanisms that 
+permit greater concurrency.
+
+
+* Allocating objects is usually cheaper than synchronizing.
 
 
 
 
+11.6. Reducing Context Switch Overhead
+--
+
+
+* The "get in, get out" principle of Section 11.4.1 tells us that we should 
+hold locks as briefly as possible, because the longer a lock is held, 
+the more likely that lock will be contended.
 
 
 
 
+Summary
+--
+
+
+* Because one of the most common reasons to use threads is to exploit multiple 
+processors, in discussing the performance of concurrent applications, we are 
+usually more concerned with throughput or scalability than we are with raw 
+service time. Amdahl's law tells us that the scalability of an application is 
+driven by the proportion of code that must be executed serially. Since the 
+primary source of serialization in Java programs is the exclusive resource 
+lock, scalability can often be improved by spending less time holding locks, 
+either by reducing lock granularity, reducing the duration for which locks are 
+held, or replacing exclusive locks with nonexclusive or nonͲblocking 
+alternatives.
 
 
 
 
+Chapter 12. Testing Concurrent Programs
+--
+
+
+12.3. Avoiding Performance Testing Pitfalls
+--
+
+
+* If N threads are fetching tasks from a shared work queue and executing them, 
+and the tasks are compute-intensive and long-running (and do not access shared 
+data very much), there will be almost no contention; throughput is dominated by 
+the availability of CPU resources. On the other hand, if the tasks are very 
+short-lived, there will be a lot of contention for the work queue and 
+throughput is dominated by the cost of synchronization.
 
 
 
 
+Chapter 13. Explicit Locks
+--
+
+
+13.4. Choosing Between Synchronized and ReentrantLock
+--
+
+
+* ReentrantLock is an advanced tool for situations where intrinsic locking is 
+not practical. Use it if you need its advanced features: timed, polled, or 
+interruptible lock acquisition, fair queuing, or non-block-structured locking. 
+Otherwise, prefer synchronized.
 
 
 
 
+Chapter 14. Building Custom Synchronizers
+--
+
+
+14.2. Using Condition Queues
+--
+
+
+* When using condition waits (Object.wait or Condition.await):
+- Always have a condition predicate some test of object state that must hold 
+before proceeding;
+- Always test the condition predicate before calling wait, and again after 
+returning from wait;
+- Always call wait in a loop;
+- Ensure that the state variables making up the condition predicate are guarded 
+by the lock associated with the condition queue;
+- Hold the lock associated with the the condition queue when calling wait, 
+notify, or notifyAll; and
+- Do not release the lock after checking the condition predicate but before 
+acting on it.
+
+
+* Whenever you wait on a condition, make sure that someone will perform a 
+notification whenever the condition predicate becomes true.
+
+
+* First make it right, and then make it fast - if it is not already fast enough.
 
 
 
+
+Chapter 15. Atomic Variables and Non-blocking Synchronization
+--
+
+
+15.2. Hardware Support for Concurrency
+--
+
+
+* The optimistic approach is like the old saying, "It is easier to obtain
+forgiveness than permission", where "easier" here means "more efficient".
+
+
+* Compare And Swap (CAS) algorithm description: 15.2.1. Compare and Swap
+
+
+* The primary disadvantage of CAS is that it forces the caller to deal with 
+contention (by retrying, backing off, or giving up), whereas locks deal with 
+contention automatically by blocking until the lock is available. 
+But actually, the biggest disadvantage of CAS is the difficulty of constructing 
+the surrounding algorithms correctly.
+
+
+
+
+Chapter 16. The Java Memory Model
+--
+
+
+16.1. What is a Memory Model, and Why would I Want One?
+--
+
+
+* The rules for happens-before are:
+- Program order rule. Each action in a thread happens-before every action in a 
+thread that comes later in the program order.
+- Monitor lock rule. An unlock on a monitor lock happens-before every subsequent 
+lock on that same monitor lock.
+- Volatile variable rule. A write to a volatile field happens-before every 
+subsequent read of that same field.
+- Thread start rule. A call to Thread.start on a thread happens-before every 
+action in the started thread.
+- Thread termination rule. Any action in a thread happens-before any other 
+thread detects that thread has terminated, either by successfully return from 
+Thread.join or by Thread.isAlive returning false.
+- Interruption rule. A thread calling interrupt on another thread 
+happens-before the interrupted thread detects the interrupt (either by having 
+InterruptedException thrown, or invoking isInterrupted or interrupted).
+- Finalizer rule. The end of a constructor for an object happens-before the 
+start of the finalizer for that object.
+- Transitivity. If A happens-before B, and B happens-before C, 
+then A happens-before C.
+
+
+
+
+16.2. Publication
+--
+
+
+* Description of several way to intialize object safely: 
+16.2.3. Safe Initialization Idioms
+
+
+* Description of safe initialization of final fields:
+16.3. Initialization Safety
+
+
+
+
+Summary
+--
+
+
+* The Java Memory Model specifies when the actions of one thread on memory are 
+guaranteed to be visible to another threads.
 
 
