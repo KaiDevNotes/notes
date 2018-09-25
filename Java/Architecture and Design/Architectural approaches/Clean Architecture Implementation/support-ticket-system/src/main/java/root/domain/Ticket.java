@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-public class Ticket extends DomainObject 
+public class Ticket extends DomainObject
 {
     private final String issueDescription;
     private final List<Message> messages;
@@ -14,7 +14,7 @@ public class Ticket extends DomainObject
     private Status status;
     private final User submitter;
     
-    private Ticket(Builder builder)
+    private Ticket(final Builder builder)
     {
         super(builder.id);
         this.issueDescription = builder.issueDescription;
@@ -77,11 +77,11 @@ public class Ticket extends DomainObject
         return submitter;
     }
     
-    public void addMessage(String messageText, User sender)
+    public void addMessage(final String messageText, final User sender)
     {
         if (ticketIsNotResolved())
         {
-            Message.ConversationParty party = getParty(sender);
+            final Message.ConversationParty party = getParty(sender);
             messages.add(createMessage(messageText, party));
             if (party.equals(Message.ConversationParty.SUPPORT))
             {
@@ -91,7 +91,7 @@ public class Ticket extends DomainObject
     }
     
     private Message createMessage(
-        String messageText, Message.ConversationParty party)
+        final String messageText, final Message.ConversationParty party)
     {
         return new Message.Builder(messageText, party).build();
     }
@@ -107,7 +107,7 @@ public class Ticket extends DomainObject
         return !status.equals(Status.RESOLVED);
     }
     
-    private Message.ConversationParty getParty(User sender)
+    private Message.ConversationParty getParty(final User sender)
     {
         if (submitter.equals(sender))
         {
@@ -124,14 +124,14 @@ public class Ticket extends DomainObject
     public static class Builder
     {
         private String id;
-        private String issueDescription;
+        private final String issueDescription;
         private List<Message> messages;
         private Date creationDate;    
         private Date resolutionDate;
         private Status status;
-        private User submitter;
+        private final User submitter;
         
-        public Builder(String issueDescription, User submitter)
+        public Builder(final String issueDescription, final User submitter)
         {
             this.issueDescription = issueDescription;
             this.submitter = submitter;
@@ -142,31 +142,31 @@ public class Ticket extends DomainObject
             return new Ticket(this);
         }
         
-        public Builder id(String id)
+        public Builder id(final String id)
         {
             this.id = id;
             return this;
         }
         
-        public Builder messages(List<Message> messages)
+        public Builder messages(final List<Message> messages)
         {
             this.messages = messages;           
             return this;
         }
         
-        public Builder creationDate(Date creationDate)
+        public Builder creationDate(final Date creationDate)
         {
             this.creationDate = creationDate;
             return this;
         }
         
-        public Builder resolutionDate(Date resolutionDate)
+        public Builder resolutionDate(final Date resolutionDate)
         {
             this.resolutionDate = resolutionDate;
             return this;
         }
         
-        public Builder status(Status status)
+        public Builder status(final Status status)
         {
             this.status = status;
             return this;

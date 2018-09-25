@@ -8,7 +8,7 @@ public class User extends DomainObject
     private final String password;
     private final Role role;
     
-    private User(Builder builder)
+    private User(final Builder builder)
     {
         super(builder.id);
         this.login = builder.login;
@@ -45,7 +45,7 @@ public class User extends DomainObject
     }
 
     @Override
-    public boolean equals(Object obj) 
+    public boolean equals(final Object obj) 
     {
         if (this == obj) 
         {
@@ -70,11 +70,11 @@ public class User extends DomainObject
     public static class Builder
     {
         private String id;
-        private String login;
-        private String password;
-        private Role role;
+        private final String login;
+        private final String password;
+        private final Role role;
         
-        public Builder(String login, String password, Role role)
+        public Builder(final String login, final String password, final Role role)
         {
             this.login = login;
             this.password = password;
@@ -86,7 +86,7 @@ public class User extends DomainObject
             return new User(this);
         }
         
-        public Builder id(String id)
+        public Builder id(final String id)
         {
             this.id = id;
             return this;

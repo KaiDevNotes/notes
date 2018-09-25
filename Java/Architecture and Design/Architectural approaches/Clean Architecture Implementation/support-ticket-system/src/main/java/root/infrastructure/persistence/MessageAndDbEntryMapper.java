@@ -1,6 +1,7 @@
 package root.infrastructure.persistence;
 
 import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 
 import root.domain.Message;
@@ -10,13 +11,13 @@ public class MessageAndDbEntryMapper
     implements DomainObjectAndDbEntryMapper<Message, MessageDbEntry> 
 {
     @Override
-    public MessageDbEntry mapToDbEntry(Message message)
+    public MessageDbEntry mapToDbEntry(final Message message)
     {
         if (message == null)
         {
             return null;
         }
-        MessageDbEntry messageDbEntry = new MessageDbEntry();
+        final MessageDbEntry messageDbEntry = new MessageDbEntry();
         if (message.getId() != null)
         {
             messageDbEntry.setId(UUID.fromString(message.getId()));
@@ -28,7 +29,7 @@ public class MessageAndDbEntryMapper
     }
     
     @Override
-    public Message mapToDomainObject(MessageDbEntry messageDbEntry)
+    public Message mapToDomainObject(final MessageDbEntry messageDbEntry)
     {        
         if (messageDbEntry == null)
         {

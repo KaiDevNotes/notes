@@ -5,15 +5,15 @@ import static root.application.ValidationHelper.isValidDomainObjectId;
 
 public class CreateTicketRequestValidator extends UseCaseRequestValidator<CreateTicketRequest>
 {
-    public CreateTicketRequestValidator(UseCase delegate) 
+    public CreateTicketRequestValidator(final UseCase<CreateTicketRequest> delegate)
     {
         super(delegate);
     }
     
     @Override
     protected void validate(
-        CreateTicketRequest request, 
-        UseCaseRequestValidationResult validationResult)
+        final CreateTicketRequest request, 
+        final UseCaseRequestValidationResult validationResult)
     {
         if (!isValidDomainObjectId(request.getSubmitterId()))
         {

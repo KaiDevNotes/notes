@@ -3,6 +3,7 @@ package root.infrastructure.persistence;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -25,7 +26,9 @@ import root.domain.Message.ConversationParty;
 @Access(AccessType.FIELD)
 public class MessageDbEntry implements Serializable
 {
-    @Id
+    private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private UUID id;
@@ -50,7 +53,7 @@ public class MessageDbEntry implements Serializable
         return id;
     }
 
-    public void setId(UUID id) 
+    public void setId(final UUID id) 
     {
         this.id = id;
     }
@@ -60,7 +63,7 @@ public class MessageDbEntry implements Serializable
         return messageText;
     }
 
-    public void setMessageText(String messageText)
+    public void setMessageText(final String messageText)
     {
         this.messageText = messageText;
     }
@@ -70,7 +73,7 @@ public class MessageDbEntry implements Serializable
         return date;
     }
 
-    public void setDate(Date date) 
+    public void setDate(final Date date) 
     {
         this.date = date;
     }
@@ -80,7 +83,7 @@ public class MessageDbEntry implements Serializable
         return party;
     }
 
-    public void setParty(ConversationParty party) 
+    public void setParty(final ConversationParty party) 
     {
         this.party = party;
     }
@@ -90,7 +93,7 @@ public class MessageDbEntry implements Serializable
         return ticket;
     }
 
-    public void setTicket(TicketDbEntry ticket)
+    public void setTicket(final TicketDbEntry ticket)
     {
         this.ticket = ticket;
     }

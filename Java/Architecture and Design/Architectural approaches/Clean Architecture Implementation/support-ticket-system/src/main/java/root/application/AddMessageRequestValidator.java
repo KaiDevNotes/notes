@@ -5,15 +5,15 @@ import static root.application.ValidationHelper.isValidDomainObjectId;
 
 public class AddMessageRequestValidator extends UseCaseRequestValidator<AddMessageRequest>
 {
-    public AddMessageRequestValidator(UseCase delegate) 
+    public AddMessageRequestValidator(final UseCase<AddMessageRequest> delegate)
     {
         super(delegate);
     }
     
     @Override
     protected void validate(
-        AddMessageRequest request, 
-        UseCaseRequestValidationResult validationResult)
+        final AddMessageRequest request, 
+        final UseCaseRequestValidationResult validationResult)
     {
         if (!isValidDomainObjectId(request.getTicketId()))
         {

@@ -1,22 +1,23 @@
 package root.infrastructure.persistence;
 
 import java.util.UUID;
+
 import org.springframework.stereotype.Component;
 
 import root.domain.User;
 
 @Component
-public class UserAndDbEntryMapper 
+public class UserAndDbEntryMapper
     implements DomainObjectAndDbEntryMapper<User, UserDbEntry>
 {
     @Override
-    public UserDbEntry mapToDbEntry(User user)
+    public UserDbEntry mapToDbEntry(final User user)
     {   
         if (user == null)
         {
             return null;
         }
-        UserDbEntry userDbEntry = new UserDbEntry();
+        final UserDbEntry userDbEntry = new UserDbEntry();
         if (user.getId() != null)
         {
             userDbEntry.setId(UUID.fromString(user.getId()));
@@ -28,7 +29,7 @@ public class UserAndDbEntryMapper
     }
     
     @Override
-    public User mapToDomainObject(UserDbEntry userDbEntry)
+    public User mapToDomainObject(final UserDbEntry userDbEntry)
     {   
         if (userDbEntry == null)
         {

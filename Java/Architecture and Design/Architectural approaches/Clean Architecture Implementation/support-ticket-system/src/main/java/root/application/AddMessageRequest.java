@@ -1,6 +1,6 @@
 package root.application;
 
-public class AddMessageRequest implements UseCaseRequest 
+public class AddMessageRequest implements UseCaseRequest
 {
     private String ticketId;
     private String senderId;
@@ -10,7 +10,7 @@ public class AddMessageRequest implements UseCaseRequest
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) 
+    public void setTicketId(final String ticketId) 
     {
         this.ticketId = ticketId;
     }
@@ -19,7 +19,7 @@ public class AddMessageRequest implements UseCaseRequest
         return senderId;
     }
 
-    public void setSenderId(String senderId) 
+    public void setSenderId(final String senderId) 
     {
         this.senderId = senderId;
     }
@@ -28,7 +28,7 @@ public class AddMessageRequest implements UseCaseRequest
         return messageText;
     } 
 
-    public void setMessageText(String messageText) 
+    public void setMessageText(final String messageText) 
     {
         this.messageText = messageText;
     }   

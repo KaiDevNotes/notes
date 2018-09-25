@@ -1,6 +1,9 @@
 package root.infrastructure.persistence;
 
+import java.util.UUID;
+
 import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -18,13 +21,13 @@ public class UserGatewayImpl
     private UserAndDbEntryMapper mapper;
     
     @Override
-    protected JpaRepository getRepository()
+    protected JpaRepository<UserDbEntry, UUID> getRepository()
     {
         return userRepository;
     }
     
     @Override
-    protected DomainObjectAndDbEntryMapper getMapper()
+    protected DomainObjectAndDbEntryMapper<User, UserDbEntry> getMapper()
     {
         return mapper;
     }

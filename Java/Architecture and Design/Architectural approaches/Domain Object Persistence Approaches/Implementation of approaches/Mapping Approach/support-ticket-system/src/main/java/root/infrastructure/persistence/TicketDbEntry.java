@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -28,7 +29,9 @@ import root.domain.Ticket;
 @Access(AccessType.FIELD)
 public class TicketDbEntry implements Serializable
 {
-    @Id
+    private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private UUID id;
@@ -60,7 +63,7 @@ public class TicketDbEntry implements Serializable
         return id;
     }
 
-    public void setId(UUID id) 
+    public void setId(final UUID id) 
     {
         this.id = id;
     }
@@ -70,7 +73,7 @@ public class TicketDbEntry implements Serializable
         return issueDescription;
     }
 
-    public void setIssueDescription(String issueDescription) 
+    public void setIssueDescription(final String issueDescription) 
     {
         this.issueDescription = issueDescription;
     }
@@ -80,7 +83,7 @@ public class TicketDbEntry implements Serializable
         return messages;
     }
 
-    public void setMessages(List<MessageDbEntry> messages) 
+    public void setMessages(final List<MessageDbEntry> messages) 
     {
         this.messages = messages;
     }
@@ -90,7 +93,7 @@ public class TicketDbEntry implements Serializable
         return creationDate;
     }
 
-    public void setCreationDate(Date creationDate)
+    public void setCreationDate(final Date creationDate)
     {
         this.creationDate = creationDate;
     }
@@ -100,7 +103,7 @@ public class TicketDbEntry implements Serializable
         return resolutionDate;
     }
 
-    public void setResolutionDate(Date resolutionDate) 
+    public void setResolutionDate(final Date resolutionDate) 
     {
         this.resolutionDate = resolutionDate;
     }
@@ -110,7 +113,7 @@ public class TicketDbEntry implements Serializable
         return status;
     }
 
-    public void setStatus(Ticket.Status status)
+    public void setStatus(final Ticket.Status status)
     {
         this.status = status;
     }
@@ -120,7 +123,7 @@ public class TicketDbEntry implements Serializable
         return submitter;
     }
 
-    public void setSubmitter(UserDbEntry submitter)
+    public void setSubmitter(final UserDbEntry submitter)
     {
         this.submitter = submitter;
     }

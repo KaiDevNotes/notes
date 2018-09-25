@@ -2,6 +2,7 @@ package root.infrastructure.persistence;
 
 import java.io.Serializable;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -20,7 +21,9 @@ import root.domain.User;
 @Access(AccessType.FIELD)
 public class UserDbEntry implements Serializable
 {
-    @Id
+	private static final long serialVersionUID = 1L;
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
     private UUID id;
@@ -40,7 +43,7 @@ public class UserDbEntry implements Serializable
         return id;
     }
 
-    public void setId(UUID id) 
+    public void setId(final UUID id) 
     {
         this.id = id;
     }
@@ -50,7 +53,7 @@ public class UserDbEntry implements Serializable
         return login;
     }
 
-    public void setLogin(String login) 
+    public void setLogin(final String login) 
     {
         this.login = login;
     }
@@ -60,7 +63,7 @@ public class UserDbEntry implements Serializable
         return password;
     }
 
-    public void setPassword(String password) 
+    public void setPassword(final String password) 
     {
         this.password = password;
     }
@@ -70,7 +73,7 @@ public class UserDbEntry implements Serializable
         return role;
     }
 
-    public void setRole(User.Role role) 
+    public void setRole(final User.Role role) 
     {
         this.role = role;
     }

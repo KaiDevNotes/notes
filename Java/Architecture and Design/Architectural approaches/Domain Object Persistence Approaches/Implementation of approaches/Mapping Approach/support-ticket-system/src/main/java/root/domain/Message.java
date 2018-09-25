@@ -8,7 +8,7 @@ public class Message extends DomainObject
     private final Date date;
     private final ConversationParty party;
 
-    private Message(Builder builder) 
+    private Message(final Builder builder) 
     {
         super(builder.id);
         this.messageText = builder.messageText;
@@ -43,11 +43,11 @@ public class Message extends DomainObject
     public static class Builder
     {
         private String id;    
-        private String messageText;
+        private final String messageText;
         private Date date;
-        private ConversationParty party;
+        private final ConversationParty party;
         
-        public Builder(String messageText, ConversationParty party)
+        public Builder(final String messageText, final ConversationParty party)
         {
             this.messageText = messageText;
             this.party = party;
@@ -58,13 +58,13 @@ public class Message extends DomainObject
             return new Message(this);
         }
         
-        public Builder id(String id)
+        public Builder id(final String id)
         {
             this.id = id;
             return this;
         }
         
-        public Builder date(Date date)
+        public Builder date(final Date date)
         {
             this.date = date;
             return this;

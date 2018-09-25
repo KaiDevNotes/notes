@@ -8,23 +8,23 @@ public class CreateTicketUseCase implements UseCase<CreateTicketRequest>
     private final UserGateway userGateway;
     private final TicketGateway ticketGateway;
 
-    public CreateTicketUseCase(UserGateway userGateway, TicketGateway ticketGateway) 
+    public CreateTicketUseCase(final UserGateway userGateway, final TicketGateway ticketGateway) 
     {
         this.userGateway = userGateway;
         this.ticketGateway = ticketGateway;
     }
     
     @Override
-    public void execute(CreateTicketRequest request, UseCaseResponse response)
+    public void execute(final CreateTicketRequest request, final UseCaseResponse response)
     {
-        User submitter = userGateway.findById(request.getSubmitterId());
+        final User submitter = userGateway.findById(request.getSubmitterId());
         if (submitter == null)
         {
             response.markAsFailed("Incorrect Submitter ID");
             return;
         }
         
-        Ticket ticket = ticketGateway.save(
+        final Ticket ticket = ticketGateway.save(
             new Ticket.Builder(request.getIssueDescription(), submitter).build());
         
         response.markAsSuccessful(ticket);

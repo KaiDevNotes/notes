@@ -2,17 +2,17 @@ package root.application;
 
 public abstract class UseCaseRequestValidator<R extends UseCaseRequest> implements UseCase<R> 
 {
-    private final UseCase delegate;
+    private final UseCase<R> delegate;
 
-    public UseCaseRequestValidator(UseCase delegate) 
+    public UseCaseRequestValidator(final UseCase<R> delegate) 
     {
         this.delegate = delegate;
     }
     
     @Override
-    public void execute(R request, UseCaseResponse response)
+    public void execute(final R request, final UseCaseResponse response)
     {       
-        UseCaseRequestValidationResult validationResult = new UseCaseRequestValidationResult();
+        final UseCaseRequestValidationResult validationResult = new UseCaseRequestValidationResult();
         validate(request, validationResult);
         if (validationResult.isSuccessful())
         {
@@ -20,7 +20,7 @@ public abstract class UseCaseRequestValidator<R extends UseCaseRequest> implemen
         }   
         else 
         {
-            String errorMessage = 
+            final String errorMessage = 
                 validationResult.getValidationReport().stream().reduce(" ", String::concat);            
             response.markAsFailed(errorMessage);
         }

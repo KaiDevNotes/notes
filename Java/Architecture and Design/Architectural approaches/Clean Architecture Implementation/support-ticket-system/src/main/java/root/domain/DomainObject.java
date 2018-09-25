@@ -1,10 +1,10 @@
 package root.domain;
 
-public abstract class DomainObject 
+public abstract class DomainObject
 {
     private final String id;
 
-    public DomainObject(String id) 
+    public DomainObject(final String id) 
     {
         this.id = id;
     }

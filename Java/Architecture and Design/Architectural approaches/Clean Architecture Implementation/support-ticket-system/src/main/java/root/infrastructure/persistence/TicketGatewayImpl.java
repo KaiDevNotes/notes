@@ -1,13 +1,16 @@
 package root.infrastructure.persistence;
 
+import java.util.UUID;
+
 import javax.annotation.Resource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import root.application.TicketGateway;
 import root.domain.Ticket;
 
-public class TicketGatewayImpl 
+public class TicketGatewayImpl
     extends AbstractDomainObjectGateway<Ticket, TicketDbEntry> 
     implements TicketGateway
 {
@@ -18,13 +21,13 @@ public class TicketGatewayImpl
     private TicketAndDbEntryMapper mapper;
     
     @Override
-    protected JpaRepository getRepository()
+    protected JpaRepository<TicketDbEntry, UUID> getRepository()
     {
         return ticketRepository;
     }
     
     @Override
-    protected DomainObjectAndDbEntryMapper getMapper()
+    protected DomainObjectAndDbEntryMapper<Ticket, TicketDbEntry> getMapper()
     {
         return mapper;
     }

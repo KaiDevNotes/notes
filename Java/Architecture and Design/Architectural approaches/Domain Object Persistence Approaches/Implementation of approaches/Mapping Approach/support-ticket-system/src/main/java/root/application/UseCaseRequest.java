@@ -1,5 +1,5 @@
 package root.application;
 
-public interface UseCaseRequest 
+public interface UseCaseRequest
 {    
 }

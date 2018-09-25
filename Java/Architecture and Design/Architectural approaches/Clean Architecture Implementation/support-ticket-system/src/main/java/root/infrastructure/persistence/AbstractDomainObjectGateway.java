@@ -3,21 +3,23 @@ package root.infrastructure.persistence;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import javax.transaction.Transactional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class AbstractDomainObjectGateway<D, E> 
+public abstract class AbstractDomainObjectGateway<D, E>
 {
     @Transactional
-    public D save(D domainObject)
+    public D save(final D domainObject)
     {
-        E dbEntry = getRepository().saveAndFlush(getMapper().mapToDbEntry(domainObject));
+        final E dbEntry = getRepository().saveAndFlush(getMapper().mapToDbEntry(domainObject));
         return getMapper().mapToDomainObject(dbEntry);
     }
     
-    public D findById(String domainObjectId)
+    public D findById(final String domainObjectId)
     {
-        E dbEntry = getRepository().findOne(UUID.fromString(domainObjectId));
+        final E dbEntry = getRepository().findOne(UUID.fromString(domainObjectId));
         return getMapper().mapToDomainObject(dbEntry);
     }
     
@@ -29,7 +31,7 @@ public abstract class AbstractDomainObjectGateway<D, E>
     }
     
     @Transactional
-    public void delete(String domainObjectId)
+    public void delete(final String domainObjectId)
     {
         getRepository().delete(UUID.fromString(domainObjectId));
         getRepository().flush();

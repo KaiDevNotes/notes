@@ -2,18 +2,19 @@ package root.application;
 
 import java.util.Map;
 
-public class UseCaseExecutor  
+public class UseCaseExecutor
 {
-    private Map<Class<?>, UseCase> requestToUseCaseMap;
+    private final Map<Class<? extends UseCaseRequest>, UseCase<? extends UseCaseRequest>> requestToUseCaseMap;
 
-    public UseCaseExecutor(Map<Class<?>, UseCase> requestToUseCaseMap) 
+    public UseCaseExecutor(final Map<Class<? extends UseCaseRequest>, UseCase<? extends UseCaseRequest>> requestToUseCaseMap) 
     {
         this.requestToUseCaseMap = requestToUseCaseMap;
     }
     
-    public void execute(UseCaseRequest request, UseCaseResponse response)
+    @SuppressWarnings({"unchecked", "rawtypes"})
+	public void execute(final UseCaseRequest request, final UseCaseResponse response)
     {
-        UseCase useCaseToExecute = requestToUseCaseMap.get(request.getClass());
+        final UseCase useCaseToExecute = requestToUseCaseMap.get(request.getClass());
         if (useCaseToExecute == null)
         {
             response.markAsFailed("Request is not supported.");

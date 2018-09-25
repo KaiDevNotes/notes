@@ -1,6 +1,6 @@
 package root.application;
 
-public class MarkTicketAsResolvedRequest implements UseCaseRequest  
+public class MarkTicketAsResolvedRequest implements UseCaseRequest
 {
     private String ticketId;
 
@@ -8,7 +8,7 @@ public class MarkTicketAsResolvedRequest implements UseCaseRequest
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) 
+    public void setTicketId(final String ticketId) 
     {
         this.ticketId = ticketId;
     }   

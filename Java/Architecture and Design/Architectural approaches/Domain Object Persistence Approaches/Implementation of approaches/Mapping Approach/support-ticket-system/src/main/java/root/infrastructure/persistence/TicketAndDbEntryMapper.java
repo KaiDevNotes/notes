@@ -2,6 +2,7 @@ package root.infrastructure.persistence;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import root.domain.Ticket;
 
 @Component
 public class TicketAndDbEntryMapper
-    implements DomainObjectAndDbEntryMapper<Ticket, TicketDbEntry> 
+    implements DomainObjectAndDbEntryMapper<Ticket, TicketDbEntry>
 {
     @Autowired 
     private MessageAndDbEntryMapper messageAndDbEntryMapper;
@@ -19,13 +20,13 @@ public class TicketAndDbEntryMapper
     private UserAndDbEntryMapper userAndDbEntryMapper;
     
     @Override
-    public TicketDbEntry mapToDbEntry(Ticket ticket)
+    public TicketDbEntry mapToDbEntry(final Ticket ticket)
     {      
         if (ticket == null)
         {
             return null;
         }
-        TicketDbEntry ticketDbEntry = new TicketDbEntry();
+        final TicketDbEntry ticketDbEntry = new TicketDbEntry();
         if (ticket.getId() != null)
         {
             ticketDbEntry.setId(UUID.fromString(ticket.getId()));
@@ -43,7 +44,7 @@ public class TicketAndDbEntryMapper
     }
     
     @Override
-    public Ticket mapToDomainObject(TicketDbEntry ticketDbEntry)
+    public Ticket mapToDomainObject(final TicketDbEntry ticketDbEntry)
     {              
         if (ticketDbEntry == null)
         {
@@ -63,9 +64,9 @@ public class TicketAndDbEntryMapper
     }
     
     private MessageDbEntry createMessageDbEntry(
-            Message message, TicketDbEntry ticketDbEntry)
+            final Message message, final TicketDbEntry ticketDbEntry)
     {
-        MessageDbEntry messageDbEntry = messageAndDbEntryMapper.mapToDbEntry(message);
+        final MessageDbEntry messageDbEntry = messageAndDbEntryMapper.mapToDbEntry(message);
         messageDbEntry.setTicket(ticketDbEntry);
         return messageDbEntry;
     }
