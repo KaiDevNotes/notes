@@ -8,7 +8,9 @@ import javax.transaction.Transactional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public abstract class AbstractDomainObjectGateway<D, E>
+import root.domain.DomainObject;
+
+public abstract class AbstractDomainObjectGateway<D extends DomainObject, E extends DbEntry>
 {
     @Transactional
     public D save(final D domainObject)

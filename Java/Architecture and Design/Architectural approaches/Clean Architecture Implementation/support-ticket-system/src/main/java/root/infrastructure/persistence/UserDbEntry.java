@@ -19,7 +19,7 @@ import root.domain.User;
 @Entity
 @Table(name="user")
 @Access(AccessType.FIELD)
-public class UserDbEntry implements Serializable
+public class UserDbEntry implements DbEntry, Serializable
 {
 	private static final long serialVersionUID = 1L;
 

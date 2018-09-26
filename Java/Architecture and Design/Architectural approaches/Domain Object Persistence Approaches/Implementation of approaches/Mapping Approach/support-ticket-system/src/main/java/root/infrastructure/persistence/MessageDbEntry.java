@@ -24,7 +24,7 @@ import root.domain.Message.ConversationParty;
 @Entity
 @Table(name="message")
 @Access(AccessType.FIELD)
-public class MessageDbEntry implements Serializable
+public class MessageDbEntry implements DbEntry, Serializable
 {
     private static final long serialVersionUID = 1L;
 

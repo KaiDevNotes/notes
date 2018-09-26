@@ -27,7 +27,7 @@ import root.domain.Ticket;
 @Entity
 @Table(name="ticket")
 @Access(AccessType.FIELD)
-public class TicketDbEntry implements Serializable
+public class TicketDbEntry implements DbEntry, Serializable
 {
     private static final long serialVersionUID = 1L;
 
