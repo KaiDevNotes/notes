@@ -6,13 +6,13 @@ import root.domain.DomainObject;
 
 public class MarkTicketAsResolvedResponse extends AbstractUseCaseResponse
 {
-    public MarkTicketAsResolvedResponse(RedirectAttributes model) 
+    public MarkTicketAsResolvedResponse(final RedirectAttributes model) 
     {
         super(model);
     }
     
     @Override
-    public void markAsSuccessful(DomainObject domainObject)
+    public void markAsSuccessful(final DomainObject domainObject)
     {
         model.addFlashAttribute(SUCCESS_MESSAGE, 
             String.format("Issue described in ticket [%s] has been resolved.", domainObject.getId()));

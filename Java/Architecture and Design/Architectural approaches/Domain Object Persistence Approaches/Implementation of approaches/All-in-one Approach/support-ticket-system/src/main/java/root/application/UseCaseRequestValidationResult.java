@@ -6,7 +6,7 @@ import java.util.Collections;
 
 public class UseCaseRequestValidationResult 
 {
-    private Collection<String> report;
+    private final Collection<String> report;
 
     public UseCaseRequestValidationResult() 
     {
@@ -18,7 +18,7 @@ public class UseCaseRequestValidationResult
         return report.isEmpty();
     }
     
-    public void addValidationError(String errorDescription)
+    public void addValidationError(final String errorDescription)
     {
         report.add(errorDescription);
     }

@@ -1,7 +1,9 @@
 package root.presentation;
 
 import java.util.UUID;
+
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +39,7 @@ public class TicketSystemUIController
     private UseCaseExecutor useCaseExecutor;
     
     @RequestMapping(value="/", method=RequestMethod.GET)
-    public String openApplication(Model model)
+    public String openApplication(final Model model)
     {
         model.addAttribute(TICKETS, ticketGateway.findAll());
         model.addAttribute(CUSTOMER, userGateway.findById(CUSTOMER_ID));
@@ -47,27 +49,27 @@ public class TicketSystemUIController
     
     @RequestMapping(value="/ticket", method=RequestMethod.POST)
     public String createNewTicket(
-        @Valid CreateTicketRequest request, RedirectAttributes model)
+        @Valid final CreateTicketRequest request, final RedirectAttributes model)
     {
-        CreateTicketResponse response = new CreateTicketResponse(model);
+        final CreateTicketResponse response = new CreateTicketResponse(model);
         useCaseExecutor.execute(request, response);
         return "redirect:/";
     }
     
     @RequestMapping(value="/ticket/message", method=RequestMethod.POST)
     public String addMessageToTicket(
-        @Valid AddMessageRequest request, RedirectAttributes model)
+        @Valid final AddMessageRequest request, final RedirectAttributes model)
     {
-        AddMessageResponse response = new AddMessageResponse(model);
+        final AddMessageResponse response = new AddMessageResponse(model);
         useCaseExecutor.execute(request, response);
         return "redirect:/";
     }
     
     @RequestMapping(value="/ticket/mark-as-resolved", method=RequestMethod.POST)
     public String markTicketAsResolved(
-        @Valid MarkTicketAsResolvedRequest request, RedirectAttributes model)
+        @Valid final MarkTicketAsResolvedRequest request, final RedirectAttributes model)
     {
-        MarkTicketAsResolvedResponse response = new MarkTicketAsResolvedResponse(model);
+        final MarkTicketAsResolvedResponse response = new MarkTicketAsResolvedResponse(model);
         useCaseExecutor.execute(request, response);
         return "redirect:/";
     }

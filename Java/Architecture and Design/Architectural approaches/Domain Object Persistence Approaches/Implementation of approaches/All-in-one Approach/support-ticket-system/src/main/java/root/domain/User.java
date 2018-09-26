@@ -3,6 +3,7 @@ package root.domain;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -19,6 +20,8 @@ import javax.persistence.Table;
 @Access(AccessType.FIELD)
 public class User implements DomainObject, Serializable 
 {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -38,7 +41,7 @@ public class User implements DomainObject, Serializable
     {
     }
     
-    public User(String login, String password, Role role)
+    public User(final String login, final String password, final Role role)
     {
         this.login = login;
         this.password = password;
@@ -80,7 +83,7 @@ public class User implements DomainObject, Serializable
     }
 
     @Override
-    public boolean equals(Object obj) 
+    public boolean equals(final Object obj) 
     {
         if (this == obj) 
         {

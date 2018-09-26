@@ -3,6 +3,7 @@ package root.domain;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -23,6 +24,8 @@ import javax.persistence.TemporalType;
 @Access(AccessType.FIELD)
 public class Message implements DomainObject, Serializable 
 {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -47,7 +50,7 @@ public class Message implements DomainObject, Serializable
     {
     }
 
-    public Message(String messageText, ConversationParty party, Ticket ticket) 
+    public Message(final String messageText, final ConversationParty party, final Ticket ticket) 
     {
         this.messageText = messageText;
         this.date = new Date();

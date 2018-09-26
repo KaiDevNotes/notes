@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -28,6 +29,8 @@ import javax.persistence.TemporalType;
 @Access(AccessType.FIELD)
 public class Ticket implements DomainObject, Serializable  
 {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -59,7 +62,7 @@ public class Ticket implements DomainObject, Serializable
     {
     }
     
-    public Ticket(String issueDescription, User submitter)
+    public Ticket(final String issueDescription, final User submitter)
     {
         this.issueDescription = issueDescription;
         this.messages = new ArrayList<>();
@@ -104,11 +107,11 @@ public class Ticket implements DomainObject, Serializable
         return submitter;
     }
     
-    public void addMessage(String messageText, User sender)
+    public void addMessage(final String messageText, final User sender)
     {
         if (ticketIsNotResolved())
         {
-            Message.ConversationParty party = getParty(sender);
+            final Message.ConversationParty party = getParty(sender);
             messages.add(new Message(messageText, party, this));
             if (party.equals(Message.ConversationParty.SUPPORT))
             {
@@ -128,7 +131,7 @@ public class Ticket implements DomainObject, Serializable
         return !status.equals(Status.RESOLVED);
     }
     
-    private Message.ConversationParty getParty(User sender)
+    private Message.ConversationParty getParty(final User sender)
     {
         if (submitter.equals(sender))
         {

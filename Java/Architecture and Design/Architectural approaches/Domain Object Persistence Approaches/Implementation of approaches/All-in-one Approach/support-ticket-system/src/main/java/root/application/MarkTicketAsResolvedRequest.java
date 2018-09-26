@@ -8,7 +8,7 @@ public class MarkTicketAsResolvedRequest implements UseCaseRequest
         return ticketId;
     }
 
-    public void setTicketId(String ticketId) 
+    public void setTicketId(final String ticketId) 
     {
         this.ticketId = ticketId;
     }   
