@@ -1,6 +1,9 @@
 package root.infrastructure.persistence;
 
+import java.util.UUID;
+
 import javax.annotation.Resource;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import root.application.TicketGateway;
@@ -13,7 +16,7 @@ public class TicketGatewayImpl
     private TicketRepository ticketRepository;
     
     @Override
-    protected JpaRepository getRepository()
+    protected JpaRepository<TicketDbEntry, UUID> getRepository()
     {
         return ticketRepository;
     }

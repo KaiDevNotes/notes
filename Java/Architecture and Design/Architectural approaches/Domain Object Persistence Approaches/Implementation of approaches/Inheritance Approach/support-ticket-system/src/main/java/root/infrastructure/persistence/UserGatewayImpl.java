@@ -1,6 +1,9 @@
 package root.infrastructure.persistence;
 
+import java.util.UUID;
+
 import javax.annotation.Resource;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import root.application.UserGateway;
@@ -13,7 +16,7 @@ public class UserGatewayImpl
     private UserRepository userRepository;
     
     @Override
-    protected JpaRepository getRepository()
+    protected JpaRepository<UserDbEntry, UUID> getRepository()
     {
         return userRepository;
     }

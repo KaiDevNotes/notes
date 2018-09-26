@@ -12,7 +12,7 @@ public abstract class AbstractUseCaseResponse implements UseCaseResponse
     
     protected RedirectAttributes model;
 
-    protected AbstractUseCaseResponse(RedirectAttributes model) 
+    protected AbstractUseCaseResponse(final RedirectAttributes model) 
     {
         this.model = model;
     }
@@ -21,7 +21,7 @@ public abstract class AbstractUseCaseResponse implements UseCaseResponse
     public abstract void markAsSuccessful(DomainObject domainObject);
     
     @Override
-    public void markAsFailed(String errorMessage)
+    public void markAsFailed(final String errorMessage)
     {
         model.addFlashAttribute(FAILURE_MESSAGE, errorMessage);
     }

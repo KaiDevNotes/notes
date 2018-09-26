@@ -2,6 +2,7 @@ package root.infrastructure.persistence;
 
 import java.io.Serializable;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -20,6 +21,8 @@ import root.domain.User;
 @Access(AccessType.FIELD)
 public class UserDbEntry extends User implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")

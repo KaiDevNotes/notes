@@ -22,7 +22,7 @@ public abstract class User implements DomainObject
     }
 
     @Override
-    public boolean equals(Object obj) 
+    public boolean equals(final Object obj) 
     {
         if (this == obj) 
         {

@@ -2,6 +2,7 @@ package root;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,13 +19,14 @@ import root.application.TicketFactory;
 import root.application.TicketGateway;
 import root.application.UseCase;
 import root.application.UseCaseExecutor;
+import root.application.UseCaseRequest;
 import root.application.UserGateway;
 import root.infrastructure.persistence.TicketFactoryImpl;
 import root.infrastructure.persistence.TicketGatewayImpl;
 import root.infrastructure.persistence.UserGatewayImpl;
 
 @Configuration
-public class ApplicationConfiguration 
+public class ApplicationConfiguration
 {    
     @Bean
     public UserGateway getUserGateway()
@@ -36,7 +38,7 @@ public class ApplicationConfiguration
     public TicketGateway getTicketGateway()
     {
         return new TicketGatewayImpl();
-    }    
+    }   
     
     @Bean 
     public TicketFactory getTicketFactory()
@@ -47,7 +49,7 @@ public class ApplicationConfiguration
     @Bean
     public UseCaseExecutor getUseCaseExecutor()
     {
-        Map<Class<?>, UseCase> requestToUseCaseMap = new HashMap<>();
+    	final Map<Class<? extends UseCaseRequest>, UseCase<? extends UseCaseRequest>> requestToUseCaseMap = new HashMap<>();
         
         requestToUseCaseMap.put(CreateTicketRequest.class, getCreateTicketUseCase());
         requestToUseCaseMap.put(AddMessageRequest.class, getAddMessageUseCase());
@@ -56,34 +58,34 @@ public class ApplicationConfiguration
         return new UseCaseExecutor(requestToUseCaseMap);
     }
     
-    private UseCase getCreateTicketUseCase()
+    private UseCase<CreateTicketRequest> getCreateTicketUseCase()
     {
-        UseCase createTicketUseCase = new CreateTicketUseCase(
-            getUserGateway(), getTicketGateway(), getTicketFactory());
+    	final UseCase<CreateTicketRequest> createTicketUseCase = 
+            new CreateTicketUseCase(getUserGateway(), getTicketGateway(), getTicketFactory());
         
-        UseCase requestValidationDecorator = 
+    	final UseCase<CreateTicketRequest> requestValidationDecorator = 
             new CreateTicketRequestValidator(createTicketUseCase);
         
         return requestValidationDecorator;
     }
     
-    private UseCase getAddMessageUseCase()
+    private UseCase<AddMessageRequest> getAddMessageUseCase()
     {
-        UseCase addMessageUseCase = 
+        final UseCase<AddMessageRequest> addMessageUseCase = 
             new AddMessageUseCase(getUserGateway(), getTicketGateway());
         
-        UseCase requestValidationDecorator = 
+        final UseCase<AddMessageRequest> requestValidationDecorator = 
             new AddMessageRequestValidator(addMessageUseCase);
         
         return requestValidationDecorator;
     }
     
-    private UseCase getMarkTicketAsResolvedUseCase()
+    private UseCase<MarkTicketAsResolvedRequest> getMarkTicketAsResolvedUseCase()
     {
-        UseCase markTicketAsResolvedUseCase = 
+        final UseCase<MarkTicketAsResolvedRequest> markTicketAsResolvedUseCase = 
             new MarkTicketAsResolvedUseCase(getTicketGateway());
         
-        UseCase requestValidationDecorator = 
+        final UseCase<MarkTicketAsResolvedRequest> requestValidationDecorator = 
             new MarkTicketAsResolvedRequestValidator(markTicketAsResolvedUseCase);
         
         return requestValidationDecorator;

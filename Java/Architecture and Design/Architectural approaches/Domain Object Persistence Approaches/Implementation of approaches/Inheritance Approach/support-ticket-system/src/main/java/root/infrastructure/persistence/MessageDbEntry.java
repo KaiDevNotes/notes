@@ -3,6 +3,7 @@ package root.infrastructure.persistence;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Column;
@@ -17,14 +18,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
 import root.domain.Message;
-import root.domain.Message.ConversationParty;
 
 @Entity
 @Table(name="message")
 @Access(AccessType.FIELD)
 public class MessageDbEntry extends Message implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -50,7 +53,7 @@ public class MessageDbEntry extends Message implements Serializable
     }
     
     public MessageDbEntry(
-        String messageText, ConversationParty party, TicketDbEntry ticket)
+        final String messageText, final ConversationParty party, final TicketDbEntry ticket)
     {
         this.messageText = messageText;
         this.date = new Date();

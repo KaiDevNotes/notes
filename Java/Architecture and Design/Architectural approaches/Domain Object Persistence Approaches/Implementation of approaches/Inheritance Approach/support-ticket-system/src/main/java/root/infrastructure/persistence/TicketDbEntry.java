@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
@@ -25,7 +26,6 @@ import javax.persistence.TemporalType;
 
 import root.domain.Message;
 import root.domain.Ticket;
-import root.domain.Ticket.Status;
 import root.domain.User;
 
 @Entity
@@ -33,6 +33,8 @@ import root.domain.User;
 @Access(AccessType.FIELD)
 public class TicketDbEntry extends Ticket implements Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="id")
@@ -64,7 +66,7 @@ public class TicketDbEntry extends Ticket implements Serializable
     {
     }
     
-    public TicketDbEntry(String issueDescription, User submitter)
+    public TicketDbEntry(final String issueDescription, final User submitter)
     {
         this.issueDescription = issueDescription;
         this.messages = new ArrayList<>();
@@ -112,13 +114,13 @@ public class TicketDbEntry extends Ticket implements Serializable
     }
 
     @Override
-    protected void setResolutionDate(Date resolutionDate) 
+    protected void setResolutionDate(final Date resolutionDate) 
     {
         this.resolutionDate = resolutionDate;
     }
 
     @Override
-    protected void setStatus(Status status) 
+    protected void setStatus(final Status status) 
     {
         this.status = status;
     }
@@ -130,7 +132,7 @@ public class TicketDbEntry extends Ticket implements Serializable
     }   
     
     @Override
-    protected void addMessage(String messageText, Message.ConversationParty party)
+    protected void addMessage(final String messageText, final Message.ConversationParty party)
     {
         messages.add(new MessageDbEntry(messageText, party, this));
     }

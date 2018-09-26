@@ -10,7 +10,7 @@ public class CreateTicketRequest implements UseCaseRequest
         return submitterId;
     }
 
-    public void setSubmitterId(String submitterId) 
+    public void setSubmitterId(final String submitterId) 
     {
         this.submitterId = submitterId;
     }
@@ -20,7 +20,7 @@ public class CreateTicketRequest implements UseCaseRequest
         return issueDescription;
     }
 
-    public void setIssueDescription(String issueDescription) 
+    public void setIssueDescription(final String issueDescription) 
     {
         this.issueDescription = issueDescription;
     }

@@ -7,7 +7,7 @@ import root.domain.User;
 public class TicketFactoryImpl implements TicketFactory
 {
     @Override
-    public Ticket create(String issueDescription, User submitter)
+    public Ticket create(final String issueDescription, final User submitter)
     {
         return new TicketDbEntry(issueDescription, submitter);
     }
