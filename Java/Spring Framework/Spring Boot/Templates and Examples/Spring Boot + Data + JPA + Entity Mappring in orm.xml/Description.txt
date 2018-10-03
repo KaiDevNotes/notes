@@ -16,3 +16,7 @@ Also it is important to note that we don't have to describe all properties of do
 "/entity/attributes" tag if property name is equal to appropriate column name.
 But it is necessary to describe property which represents "id", has Date or Enum type, properties which are used in relationships
 ONE-TO-MANY, MANY-TO-ONE, MANY-TO-MANY and so on.
+
+
+For more information about the ways of mapping via orm.xml see sections under "5. Mapping, Round Pegs into Square Holes" in
+https://en.wikibooks.org/wiki/Java_Persistence 
