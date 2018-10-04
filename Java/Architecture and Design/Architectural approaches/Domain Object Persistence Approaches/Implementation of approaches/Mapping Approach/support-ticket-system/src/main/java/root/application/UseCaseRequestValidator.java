@@ -10,7 +10,7 @@ public abstract class UseCaseRequestValidator<R extends UseCaseRequest> implemen
     }
     
     @Override
-    public void execute(final R request, final UseCaseResponse response)
+    public final void execute(final R request, final UseCaseResponse response)
     {       
         final UseCaseRequestValidationResult validationResult = new UseCaseRequestValidationResult();
         validate(request, validationResult);

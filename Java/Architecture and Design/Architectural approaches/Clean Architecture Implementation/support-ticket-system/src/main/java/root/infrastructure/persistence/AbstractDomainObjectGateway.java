@@ -13,19 +13,19 @@ import root.domain.DomainObject;
 public abstract class AbstractDomainObjectGateway<D extends DomainObject, E extends DbEntry>
 {
     @Transactional
-    public D save(final D domainObject)
+    public final D save(final D domainObject)
     {
         final E dbEntry = getRepository().saveAndFlush(getMapper().mapToDbEntry(domainObject));
         return getMapper().mapToDomainObject(dbEntry);
     }
     
-    public D findById(final String domainObjectId)
+    public final D findById(final String domainObjectId)
     {
         final E dbEntry = getRepository().findOne(UUID.fromString(domainObjectId));
         return getMapper().mapToDomainObject(dbEntry);
     }
     
-    public List<D> findAll()
+    public final List<D> findAll()
     {
         return getRepository().findAll().stream()
             .map(dbEntry -> getMapper().mapToDomainObject(dbEntry))
@@ -33,7 +33,7 @@ public abstract class AbstractDomainObjectGateway<D extends DomainObject, E exte
     }
     
     @Transactional
-    public void delete(final String domainObjectId)
+    public final void delete(final String domainObjectId)
     {
         getRepository().delete(UUID.fromString(domainObjectId));
         getRepository().flush();
