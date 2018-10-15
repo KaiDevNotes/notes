@@ -6,6 +6,10 @@ public class ValidationHelper
 {    
     public static boolean isValidDomainObjectId(final String domainObjectId)
     {
+        if (domainObjectId == null)
+        {
+            return false;
+        }
         try
         {
             UUID.fromString(domainObjectId);
