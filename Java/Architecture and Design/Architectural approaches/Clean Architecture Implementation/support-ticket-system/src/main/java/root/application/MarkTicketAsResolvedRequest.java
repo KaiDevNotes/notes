@@ -1,7 +1,10 @@
 package root.application;
 
+import root.application.validation.DomainObjectId;
+
 public class MarkTicketAsResolvedRequest implements UseCaseRequest
 {
+    @DomainObjectId(errorMessage = "Ticket Id is invalid.")
     private String ticketId;
 
     public String getTicketId() {

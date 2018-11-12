@@ -7,27 +7,50 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import root.application.AddMessageRequest;
-import root.application.AddMessageRequestValidator;
 import root.application.AddMessageUseCase;
 import root.application.CreateTicketRequest;
-import root.application.CreateTicketRequestValidator;
 import root.application.CreateTicketUseCase;
 import root.application.MarkTicketAsResolvedRequest;
-import root.application.MarkTicketAsResolvedRequestValidator;
 import root.application.MarkTicketAsResolvedUseCase;
 import root.application.TicketFactory;
 import root.application.TicketGateway;
 import root.application.UseCase;
 import root.application.UseCaseExecutor;
+import root.application.UseCaseExecutorImpl;
 import root.application.UseCaseRequest;
 import root.application.UserGateway;
+import root.application.ValidatingUseCaseExecutor;
+import root.application.validation.UseCaseRequestValidator;
 import root.infrastructure.persistence.TicketFactoryImpl;
 import root.infrastructure.persistence.TicketGatewayImpl;
 import root.infrastructure.persistence.UserGatewayImpl;
 
 @Configuration
 public class ApplicationConfiguration
-{    
+{   
+    @Bean
+    public UseCaseExecutor getUseCaseExecutor()
+    {
+        final Map<Class<? extends UseCaseRequest>, UseCase<? extends UseCaseRequest>> requestToUseCaseMap = new HashMap<>();
+        
+        requestToUseCaseMap.put(
+            CreateTicketRequest.class, 
+            new CreateTicketUseCase(getUserGateway(), getTicketGateway(), getTicketFactory()));
+        
+        requestToUseCaseMap.put(
+            AddMessageRequest.class, 
+            new AddMessageUseCase(getUserGateway(), getTicketGateway()));
+        
+        requestToUseCaseMap.put(
+            MarkTicketAsResolvedRequest.class, 
+            new MarkTicketAsResolvedUseCase(getTicketGateway()));
+        
+        final UseCaseExecutor executor = new UseCaseExecutorImpl(requestToUseCaseMap); 
+        final UseCaseExecutor validatingExecutor = new ValidatingUseCaseExecutor(executor, new UseCaseRequestValidator());
+        
+        return validatingExecutor;
+    }
+    
     @Bean
     public UserGateway getUserGateway()
     {
@@ -44,50 +67,5 @@ public class ApplicationConfiguration
     public TicketFactory getTicketFactory()
     {
         return new TicketFactoryImpl();
-    }
-    
-    @Bean
-    public UseCaseExecutor getUseCaseExecutor()
-    {
-    	final Map<Class<? extends UseCaseRequest>, UseCase<? extends UseCaseRequest>> requestToUseCaseMap = new HashMap<>();
-        
-        requestToUseCaseMap.put(CreateTicketRequest.class, getCreateTicketUseCase());
-        requestToUseCaseMap.put(AddMessageRequest.class, getAddMessageUseCase());
-        requestToUseCaseMap.put(MarkTicketAsResolvedRequest.class, getMarkTicketAsResolvedUseCase());
-        
-        return new UseCaseExecutor(requestToUseCaseMap);
-    }
-    
-    private UseCase<CreateTicketRequest> getCreateTicketUseCase()
-    {
-    	final UseCase<CreateTicketRequest> createTicketUseCase = 
-            new CreateTicketUseCase(getUserGateway(), getTicketGateway(), getTicketFactory());
-        
-    	final UseCase<CreateTicketRequest> requestValidationDecorator = 
-            new CreateTicketRequestValidator(createTicketUseCase);
-        
-        return requestValidationDecorator;
-    }
-    
-    private UseCase<AddMessageRequest> getAddMessageUseCase()
-    {
-        final UseCase<AddMessageRequest> addMessageUseCase = 
-            new AddMessageUseCase(getUserGateway(), getTicketGateway());
-        
-        final UseCase<AddMessageRequest> requestValidationDecorator = 
-            new AddMessageRequestValidator(addMessageUseCase);
-        
-        return requestValidationDecorator;
-    }
-    
-    private UseCase<MarkTicketAsResolvedRequest> getMarkTicketAsResolvedUseCase()
-    {
-        final UseCase<MarkTicketAsResolvedRequest> markTicketAsResolvedUseCase = 
-            new MarkTicketAsResolvedUseCase(getTicketGateway());
-        
-        final UseCase<MarkTicketAsResolvedRequest> requestValidationDecorator = 
-            new MarkTicketAsResolvedRequestValidator(markTicketAsResolvedUseCase);
-        
-        return requestValidationDecorator;
     }
 }

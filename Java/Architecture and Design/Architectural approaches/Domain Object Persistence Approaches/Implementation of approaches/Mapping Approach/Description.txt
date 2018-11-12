@@ -10,7 +10,7 @@ This additional classes (*DbEntry) are placed on INFRASTRUCTURE layer and contai
 JPA annotations and other stuff which is needed to persist state of Domain Objects 
 in DB.
 
-It means that we have separeted models for Domain and Persistence.
+It means that we have two separeted models for Domain and Persistence.
 
 So Domain Objects (Ticket, Message, User) from DOMAIN layer are free from 
 persistence details. And as a result Domain Objects don't know anything 

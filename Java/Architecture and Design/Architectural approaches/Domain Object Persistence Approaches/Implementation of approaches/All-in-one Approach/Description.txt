@@ -9,6 +9,8 @@ MAPPING and INHERITANCE approaches;
 [-] Classes of Domain Objects should implement Serializable, contain JPA 
 annotations and additional fields for one-to-many or many-to-one relationships. 
 So Domain Objects are coupled with persistence mechanism and dependent on it.
+!BUT we can use XML mapping files (orm.xml and so on) in order to avoid using 
+JPA annotations in classes of Domain Objects.
 
 [-] Problems related to ORM mechanisms are spread throughout the application 
 e.g. we might get a lazy-init exception in our web controller.
