@@ -17,14 +17,16 @@ public abstract class Ticket implements DomainObject
     
     public void addMessage(final String messageText, final User sender)
     {
-        if (ticketIsNotResolved())
+        if (Status.RESOLVED.equals(getStatus()))
         {
-            final Message.ConversationParty party = getParty(sender);
-            addMessage(messageText, party);
-            if (party.equals(Message.ConversationParty.SUPPORT))
-            {
-                setStatus(Status.OPENED);
-            }
+            return;
+        }
+        
+        final Message.ConversationParty party = getParty(sender);
+        addMessage(messageText, party);
+        if (party.equals(Message.ConversationParty.SUPPORT))
+        {
+            setStatus(Status.OPENED);
         }
     }
     
@@ -35,11 +37,6 @@ public abstract class Ticket implements DomainObject
     {
         setStatus(Status.RESOLVED);
         setResolutionDate(new Date());
-    }
-    
-    private boolean ticketIsNotResolved()
-    {
-        return !getStatus().equals(Status.RESOLVED);
     }
     
     private Message.ConversationParty getParty(final User sender)

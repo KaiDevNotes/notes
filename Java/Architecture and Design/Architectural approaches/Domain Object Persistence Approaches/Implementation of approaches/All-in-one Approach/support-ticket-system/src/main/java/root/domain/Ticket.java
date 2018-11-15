@@ -109,14 +109,16 @@ public class Ticket implements DomainObject, Serializable
     
     public void addMessage(final String messageText, final User sender)
     {
-        if (ticketIsNotResolved())
+        if (Status.RESOLVED.equals(status))
         {
-            final Message.ConversationParty party = getParty(sender);
-            messages.add(new Message(messageText, party, this));
-            if (party.equals(Message.ConversationParty.SUPPORT))
-            {
-                status = Status.OPENED;
-            }
+            return;
+        }
+        
+        final Message.ConversationParty party = getParty(sender);
+        messages.add(new Message(messageText, party, this));
+        if (party.equals(Message.ConversationParty.SUPPORT))
+        {
+            status = Status.OPENED;
         }
     }
     
@@ -124,11 +126,6 @@ public class Ticket implements DomainObject, Serializable
     {
         status = Status.RESOLVED;
         resolutionDate = new Date();
-    }
-    
-    private boolean ticketIsNotResolved()
-    {
-        return !status.equals(Status.RESOLVED);
     }
     
     private Message.ConversationParty getParty(final User sender)
