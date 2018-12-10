@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import root.application.AddMessageRequest;
-import root.application.CreateTicketRequest;
-import root.application.MarkTicketAsResolvedRequest;
 import root.application.TicketGateway;
 import root.application.UseCaseExecutor;
 import root.application.UserGateway;
+import root.application.usecases.AddMessageRequest;
+import root.application.usecases.CreateTicketRequest;
+import root.application.usecases.MarkTicketAsResolvedRequest;
 
 @Controller
 public class TicketSystemUIController

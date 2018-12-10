@@ -1,5 +1,7 @@
 package root.application;
 
+import java.util.stream.Collectors;
+
 import root.application.validation.UseCaseRequestValidator;
 import root.application.validation.ValidationResult;
 
@@ -27,7 +29,7 @@ public class ValidatingUseCaseExecutor implements UseCaseExecutor
         else 
         {
             final String errorMessage = result.getValidationReport()
-                .stream().reduce(SEPARATOR, String::concat).trim();            
+                .stream().collect(Collectors.joining(SEPARATOR));            
             response.markAsFailed(errorMessage);
         }
     }   

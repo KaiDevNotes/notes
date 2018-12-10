@@ -18,32 +18,10 @@ public class Ticket extends DomainObject
     {
         super(builder.id);
         this.issueDescription = builder.issueDescription;
-        if (builder.messages == null)
-        {
-            this.messages = new ArrayList<>();
-        }
-        else 
-        {
-            this.messages = builder.messages;
-        }
-        if (builder.creationDate == null)
-        {
-            this.creationDate = new Date();
-        }
-        else 
-        {
-            this.creationDate = builder.creationDate;
-        }
-        
+        this.messages = (builder.messages == null ? new ArrayList<>() : builder.messages);
+        this.creationDate = (builder.creationDate == null ? new Date() : builder.creationDate);        
         this.resolutionDate = builder.resolutionDate;
-        if (builder.status == null)
-        {
-            this.status = Status.NEW;
-        }
-        else
-        {
-            this.status = builder.status;
-        }
+        this.status = (builder.status == null ? Status.NEW : builder.status);
         this.submitter = builder.submitter;
     }
 

@@ -12,14 +12,7 @@ public class Message extends DomainObject
     {
         super(builder.id);
         this.messageText = builder.messageText;
-        if (builder.date == null)
-        {
-            this.date = new Date();
-        }
-        else 
-        {
-            this.date = builder.date;
-        }
+        this.date = (builder.date == null ? new Date() : builder.date);
         this.party = builder.party;
     }
 
