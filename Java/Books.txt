@@ -15,4 +15,5 @@
 15) Patterns of Enterprise Application Architecture. Martin Fowler. 2016
 16) Kanban vs Scrum. Henrik Kniberg. 2010
 17) Java Concurrency in Practice. Brian Goetz. 2006
+18) Domain-Driven Design Distilled. Vaughn Vernon. 2016
 
