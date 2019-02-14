@@ -16,4 +16,5 @@
 16) Kanban vs Scrum. Henrik Kniberg. 2010
 17) Java Concurrency in Practice. Brian Goetz. 2006
 18) Domain-Driven Design Distilled. Vaughn Vernon. 2016
+19) Implementing Domain-Driven Design. Vaughn Vernon. 2013
 
