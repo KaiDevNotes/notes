@@ -1,0 +1,479 @@
+﻿
+
+Books and sources:
+
+[B1]: Implementing Domain-Driven Design. Vaughn Vernon. 2013
+[B2]: Domain-Driven Design Distilled. Vaughn Vernon. 2016
+
+
+--------------------------------------------------------
+--------------------------------------------------------
+
+
+
+
+
+[+] DDD BUILDING BLOCKS/PATTERNS of STRATEGIC DESIGN
+
+
+* Ubiquitous Language
+
+* Bounded Contexts
+
+* Core Domain
+
+* Subdomains (Supporting / Generic)
+
+* Context Mapping
+
+
+
+
+
+[+] DDD BUILDING BLOCKS/PATTERNS of TACTICAL DESIGN
+
+
+* Aggregates
+
+* Entities
+
+* Value Objects
+
+* Domain Services
+
+* Domain Events
+
+* Repositories
+
+* Factories
+
+* Modules
+
+
+
+
+
+--------------------------------------------------------
+--------------------------------------------------------
+
+
+
+
+
+[+] COMMON
+
+
+* The use of any tool should be with full awareness of trade-offs. (B1 p. 284)
+
+
+* Use DDD to Simplify, Not to Complicate: Use DDD to model a complex domain in 
+the simplest possible way. Never use DDD to make your solution more complex.
+(B1 p. 31)
+
+
+* The Data Model Should Be Subordinate: Design your data model for the sake of 
+your domain model, not your domain model for the sake of your data model.
+(B1 p. 183)
+
+
+* A powerful architectural style for hosting a Bounded Context is Hexagonal. 
+(B1 p. 23, 105)
+On a greenfield project it would be well to consider using Hexagonal as the 
+overarching style. (B1 p. 119)
+
+
+* Sometimes it can be helpful to start domain modeling by defining the core of 
+your Ubiquitous Language by defining the primary incoming Commands and outgoing 
+Events, as well as the behaviors that are performed. Only at a later stage would
+we actually group some concepts as Aggregates, based on similarity, relevance, 
+and business rules. Such an approach — even if it is just a temporary development 
+spike used as a part of a domain modeling exercise — can lead to a deeper 
+understanding of our core business concepts. (B1 p. 391)
+
+
+
+
+
+[+] BOUNDED CONTEXTS
+
+
+* Bounded Context is an explicit boundary within which a domain model exists. 
+The domain model expresses a Ubiquitous Language as a software model. 
+The boundary is created because each of the model’s concepts inside, with its
+properties and operations, has a special meaning. If you are a member of such 
+a modeling team, you’d know exactly the meaning of each of the concepts in your 
+Bounded Context. (B1 p. 62)
+
+
+* A properly designed Bounded Context modifies only one Aggregate instance 
+per transaction in all cases. (B1 p. 250)
+
+
+* A Bounded Context is often housed in a single project. Packege structure
+which can be like in example in (B1 p. 67).
+
+
+* A Single Team for a Single Bounded Context. (B1 p. 67)
+
+
+* It is a good goal to align Subdomains one-to-one with Bounded Contexts.
+It means that we should create separated Bounded Context for Core Domain and 
+each Subdomain. (B1 p. 85)
+
+
+* Core Domain is downstream of the others Subdomains. (B1 p. 88)
+
+
+* When a Bounded Context provides a rich set of RESTful resources through URIs, 
+it is a kind of Open Host Service. (B1 p. 317)
+
+
+
+
+
+[+] AGGREGATES
+
+
+* Aggregate is synonymous with transactional consistency boundary.
+A properly designed Aggregate is one that can be modified in any way required 
+by the business with its invariants completely consistent within a single 
+transaction. (B1 p. 250)
+
+
+* Modify one Aggregate instance per transaction. (B1 p. 218)
+
+
+* Aggregate Rules of Thumb:
+
+- Protect Business Invariants inside Aggregate Boundaries 
+(B2 p. 76; B1 p. 250)
+
+- Design Small Aggregates 
+(B2 p. 77; B1 p. 251)
+
+- Reference Other Aggregates by Identity Only 
+(B2 p. 79; B1 p. 253, 248, 264)
+
+- Update Other Aggregates Using Eventual Consistency
+(B2 p. 80; B1 p. 256) 
+
+
+
+* Aggregate Root is always an Entity (Root Entity). (B1 p. 155)
+
+
+* Size of Aggregate should be limited to just the Root Entity and a minimal 
+number of attributes and/or Value-typed properties. (B1 p. 252)
+
+
+* Choose to model a contained Aggregate part as a Value Object rather than an 
+Entity whenever possible. (B1 p. 267)
+
+
+* Aggregate's (Root Entity'e) Identity is always a Value Object. 
+See, for example, Figure 10.8 where ProductId, ReleaseId, SprintId, 
+BacklogItemId, TaskId are Value Objects. (B1 p. 264)
+
+
+* We should avoid injecting of a Repository or Domain Service into an Aggregate.
+(B1 p. 270)
+
+
+* Accessing Repositories from an Aggregate instance is not a recommended 
+practice. (B1 p. 202)
+
+
+* According to Aggregate's rule "Reference Other Aggregates by Identity Only" 
+preferably dependent objects are looked up before an Aggregate command method 
+is invoked, and passed in to it.
+It means that all domain objects and/or Domain Service(-s), which are needed by 
+Aggregate in order to perform logic of its method, can be looked up and be 
+passed as a parameter(-s) into this method, for example, by Application Service. 
+(B1 p. 270)
+
+
+* The Aggregate's method may require passing one or more Domain Services as 
+parameters. (B1 p. 372, 373)
+
+
+* When examining the use case (or story), ask whether it's the job of the user 
+executing the use case to make the data consistent. If it is, try to make it 
+transactionally consistent, but only by adhering to the other rules of 
+Aggregates. If it is another user's job, or the job of the system, allow it to
+be eventually consistent.
+
+
+* An Aggregate Root that provides a Factory Method for producing instances of 
+another Aggregate type (or inner parts) will have the primary responsibility of 
+providing its main Aggregate behavior, the Factory Method being just one of those.
+(B1 p. 272)
+
+
+* Use the Mediator pattern to Publish Aggregate's Internal State.
+To work around the problem of tight coupling between the domain model and its 
+clients, you may choose to design Mediator (aka Double-Dispatch or Callback) 
+interfaces to which the Aggregate publishes its internal state. Clients would 
+implement the Mediator interface, passing the implementer’s object reference to 
+the Aggregate as a method argument. The Aggregate would then double-dispatch to 
+that Mediator to publish the requested state, all without revealing its internal 
+structure. (B1 p. 355)
+
+
+* Resist the temptation to produce representations (of REST-based resources) 
+that are a one-to-one reflection of states of Aggregates in your domain model. 
+Rather, create representations that are based on use cases. (B1 p. 356) 
+
+
+
+
+
+[+] ENTITIES
+
+
+* Entity Characteristics (B1 p. 133):
+
+- Individuality (Unique Identity);
+
+- Mutability (it can be changed continuously during a long period of time)
+
+
+
+* A validation component has the responsibility to determine whether or not the 
+Entity state is valid. When designing a separate validation class with Java, 
+place it in the same Module (package) as the Entity. Assuming the use of Java, 
+declare attribute/property read accessors with at least protected/package scope, 
+and public is fine. Private scope will not allow the validation class to read 
+the necessary state. If the validation class is not placed in the same Module 
+as the Entity, all attribute/property accessors must be public, which is 
+undesirable in many cases.
+
+
+
+
+
+[+] VALUE OBJECTS
+
+
+* Value Object Characteristics (B1 p. 165):
+
+- It measures, quantifies, or describes a thing in the domain;
+
+- It can be maintained as immutable;
+
+- It models a conceptual whole by composing related attributes as an integral 
+unit;
+
+- It is completely replaceable when the measurement or description changes;
+
+- It can be compared with others using Value equality;
+
+- It supplies Side-Effect-Free Behavior to its collaborators.
+
+
+
+* Using Value Objects, we compose cohesive primitive types into an explicitly 
+named immutable type. (B1 p. 396)
+
+
+* It may surprise you to learn that we should strive to model using 
+Value Objects instead of Entities wherever possible. Even when a domain concept 
+must be modeled as an Entity, the Entity’s design should be biased toward 
+serving as a Value container rather than a child Entity container. That advice 
+is not based on an arbitrary preference. Value types that measure, quantify, or
+describe things are easier to create, test, use, optimize and maintain.
+(B1 p. 164)
+
+
+* Where possible use Value Objects to model concepts in the downstream 
+Bounded Context when objects from the upstream Bounded Context flow in. 
+(B1 p. 171)
+
+
+* When you can, choose Value Objects to model integrations. (B1 p. 172)
+
+
+* The use of self-encapsulation is highly recommended as a way to protect 
+a single attribute or property from being set to an invalid value.
+To quote Martin Fowler, "Self encapsulation is designing your classes so 
+that all access to data, even from within the same class, goes through 
+accessor methods". (B1 p. 157)
+
+
+
+
+
+[+] DOMAIN SERVICES
+
+
+* Use stateless Domain Services inside the domain model to perform business 
+operations that don’t fit naturally as an operation on an Entity or a Value 
+Object. Domain Services carry out domain-specific operations, which may involve 
+multiple domain objects. (B1 p. 25)
+
+
+* Make sure the Domain Service is stateless and has an interface that clearly 
+expresses the Ubiquitous Language in its Bounded Context. (B1 p. 194)
+
+
+* A Domain Service can be defined in the downstream Bounded Context for each 
+type of Anticorruption Layer (ACL). You may also put an ACL behind a Repository 
+interface. If using REST, a client Domain Service implementation accesses a 
+remote Open Host Service (OHS). OHS responses with representations as a 
+Published Language (PL). The downstream Anticorruption Layer translates 
+representations into domain objects (it should be Value Object) of its local 
+Bounded Context. (B1 p. 89, 92-93)
+
+
+* A Domain Service is welcome to use Repositories as needed. (B1 p. 202)
+
+
+* Domain Service operations could include calling a payment gateway, 
+requesting a unique identity, querying data from a remote system and so on.
+(B1 p. 372)
+
+
+* Address transactions and security as application concerns in Application 
+Services, not in Domain Services. (B1 p. 203)
+
+
+
+
+
+[+] DOMAIN EVENTS
+
+
+* A Domain Event rule of thumb says to design them with enough information to 
+satisfy 80 percent of subscribers, even though doing so would require Events 
+to have more information than needed by a good number of subscribers. 
+(B1 p. 394)
+
+
+
+
+
+[+] REPOSITORIES
+
+
+* Strictly speaking, only Aggregates have Repositories, so we should create 
+Repositories only for Aggregates. (B1 p. 281)
+
+
+* Interface of Repository should be placed in the same Module (Java package) 
+with Aggregate, which is stored by this Repository. 
+And implementation of Repository interface should be placed in infrastructure 
+layer. (B1 p. 285)
+
+
+* A COLLECTION-ORIENTED Repository should mimic a Set collection. Whatever the 
+backing implementation with a specific persistence mechanism, you must not allow 
+instances of the same object to be added twice. Also, when retrieving objects 
+from a Repository and modifying them, you don’t need to "re-save" them to the 
+Repository. 
+It means that we do not need to re-save modified object, but changes in its 
+state should be automatically reflected in persistence store (e.g. DB) in the 
+same way like we modify the state of an object whose reference is stored in Set.
+(B1 p. 283)
+
+
+* Using PERSISTENCE-ORIENTED Repository we must explicitly .put() both new and 
+changed objects into the store, effectively replacing any value previously
+associated with the given key. Using these kinds of data stores greatly 
+simplifies the basic writes and reads of Aggregates. For this reason they are 
+sometimes called Aggregate Stores or Aggregate-Oriented Databases. (B1 p. 291)
+
+
+* Using a COLLECTION-ORIENTED Repository, Aggregate instances are added only 
+when they are created. When using a PERSISTENCE-ORIENTED Repository, Aggregate 
+instances must be saved both when they are created and when they are modified.
+(B1 p. 293)
+
+
+* The PERSISTENCE-ORIENTED Repository will allow you to completely replace your 
+persistence mechanism with potentially little impact on your application.
+(B1 p. 291)
+
+
+* DAO and related patterns tend to serve as wrappers around database tables. 
+On the other hand, Repository and Data Mapper, having object affinity, are 
+typically the patterns that would be used with a domain model. (B1 p. 305)
+
+
+
+
+
+[+] FACTORIES
+
+
+* Factory may itself have no responsibility in domain model but is still part 
+of the domain design. (B1 p. 272)
+
+
+
+
+
+[+] APPLICATION SERVICES
+
+
+* Application Services reside in the Application Layer. These are different 
+from Domain Services and are thus devoid of domain logic. They may control 
+persistence transactions and security. They may also be in charge of sending 
+Event-based notifications to other systems and/or for composing e-mail messages 
+to be sent to users. The Application Services in this layer are the direct 
+clients of the domain model, though themselves possessing no business logic. 
+They remain very lightweight, coordinating operations performed against domain 
+objects, such as Aggregates. They are the primary means of expressing USE CASES 
+or user stories on the model. Hence, a common function of an Application Service 
+is to accept parameters from the User Interface, use a Repository to obtain an 
+Aggregate instance, and then execute some command operation on it. (B1 p. 101)
+
+
+* Application Service controls the transaction. When a method of an Application 
+Service is invoked by the User Interface Layer, it begins a transaction and then 
+acts as a client to the domain model. After all necessary interaction with the 
+domain model is successfully completed, the method commits the transaction it 
+started. If an error/exception occurs that prevents completion of the use case 
+task, the transaction is rolled back by the same method. (B1 p. 301)
+
+
+* Don’t use the Domain Event notification to modify a second Aggregate instance. 
+That breaks a rule of thumb "to modify one Aggregate instance per transaction". 
+Instead, Event Hendler should call necessary Application Service in order to 
+modify another Agregate transactionally (in other transaction). See highlight 
+and code snippet on page 212, and Figure 8.2. (B1 p. 218)
+
+
+* An Application Service may also use a Domain Service to fulfill some 
+domain-specific task designed as a stateless operation. (B1 p. 102)
+
+
+* Keep Application Services thin, using them only to coordinate tasks on the 
+domain model. (B1 p. 359)
+
+
+* The Command instance may be passed to an Application Service method. 
+Also as Command pattern states we could send Commands to a queue to be 
+dispatched to a Command Handler. Consider a Command Handler to be semantically 
+equivalent to an Application Service method, but temporally decoupled. This 
+enables greater throughput and scalability of Command handling. (B1 p. 363, 378)
+
+
+* A Command can be delivered in the same way as an Event to the interested part 
+of the system, then be passed to a method of an Application Service in that part 
+of the system and cause execution of necessary behaviour. (B1 p. 378)
+
+
+* According to Hexagonal Architecture we can declare methods of Application 
+Service or Use Case (in case of Clean Architecture) as void and use Ports and 
+Adapters style in order allow clients to get results of the Application Service's 
+command execution. In other words, we can use Output Port with any number of 
+Adapters, one for each client type. (B1 p. 364)
+
+
+* It could be quite useful to inject Repository and Domain Service references 
+into Application Services. (B1 p. 271)
+
+
+* When an Application Service looks up a Repository, it will be dependent only 
+on the interface from the domain model, but using the implementation from the
+infrastructure layer. (B1 p. 366, 367)
+
