@@ -13,7 +13,7 @@ Books and sources:
 
 
 
-[+] DDD BUILDING BLOCKS/PATTERNS of STRATEGIC DESIGN
+[+] DDD TOOLS/BUILDING BLOCKS/PATTERNS of STRATEGIC DESIGN
 
 
 * Ubiquitous Language
@@ -30,7 +30,7 @@ Books and sources:
 
 
 
-[+] DDD BUILDING BLOCKS/PATTERNS of TACTICAL DESIGN
+[+] DDD TOOLS/BUILDING BLOCKS/PATTERNS of TACTICAL DESIGN
 
 
 * Aggregates
@@ -60,7 +60,7 @@ Books and sources:
 
 
 
-[+] COMMON
+[+] COMMON NOTES
 
 
 * The use of any tool should be with full awareness of trade-offs. (B1 p. 284)
@@ -71,24 +71,12 @@ the simplest possible way. Never use DDD to make your solution more complex.
 (B1 p. 31)
 
 
-* The Data Model Should Be Subordinate: Design your data model for the sake of 
-your domain model, not your domain model for the sake of your data model.
-(B1 p. 183)
-
-
-* A powerful architectural style for hosting a Bounded Context is Hexagonal. 
-(B1 p. 23, 105)
-On a greenfield project it would be well to consider using Hexagonal as the 
-overarching style. (B1 p. 119)
-
-
-* Sometimes it can be helpful to start domain modeling by defining the core of 
-your Ubiquitous Language by defining the primary incoming Commands and outgoing 
-Events, as well as the behaviors that are performed. Only at a later stage would
-we actually group some concepts as Aggregates, based on similarity, relevance, 
-and business rules. Such an approach — even if it is just a temporary development 
-spike used as a part of a domain modeling exercise — can lead to a deeper 
-understanding of our core business concepts. (B1 p. 391)
+* There are several techniques which can help us to explore domain.
+One of the most interesting is EVENT STORMING which can help us to define such
+artifacts as Events, Commands, Aggregates, Bounded Contexts and UI Views.
+Description of EVENT STORMING:
+- Event Storming (B2 p. 102-111) 
+- How to Implement (B2 p. 117)
 
 
 
@@ -111,6 +99,12 @@ per transaction in all cases. (B1 p. 250)
 
 * A Bounded Context is often housed in a single project. Packege structure
 which can be like in example in (B1 p. 67).
+
+
+* A powerful architectural style for hosting a Bounded Context is Hexagonal. 
+(B1 p. 23, 105)
+On a greenfield project it would be well to consider using Hexagonal as the 
+overarching style. (B1 p. 119)
 
 
 * A Single Team for a Single Bounded Context. (B1 p. 67)
@@ -140,10 +134,9 @@ by the business with its invariants completely consistent within a single
 transaction. (B1 p. 250)
 
 
-* Modify one Aggregate instance per transaction. (B1 p. 218)
-
-
 * Aggregate Rules of Thumb:
+
+- Modify one Aggregate instance per transaction (B1 p. 218)
 
 - Protect Business Invariants inside Aggregate Boundaries 
 (B2 p. 76; B1 p. 250)
@@ -170,7 +163,7 @@ number of attributes and/or Value-typed properties. (B1 p. 252)
 Entity whenever possible. (B1 p. 267)
 
 
-* Aggregate's (Root Entity'e) Identity is always a Value Object. 
+* Aggregate's (Root Entity's) Identity is always a Value Object. 
 See, for example, Figure 10.8 where ProductId, ReleaseId, SprintId, 
 BacklogItemId, TaskId are Value Objects. (B1 p. 264)
 
@@ -396,6 +389,11 @@ persistence mechanism with potentially little impact on your application.
 * DAO and related patterns tend to serve as wrappers around database tables. 
 On the other hand, Repository and Data Mapper, having object affinity, are 
 typically the patterns that would be used with a domain model. (B1 p. 305)
+
+
+* The Data Model Should Be Subordinate: Design your data model for the sake of 
+your domain model, not your domain model for the sake of your data model.
+(B1 p. 183)
 
 
 
