@@ -1,0 +1,172 @@
+﻿
+
+
+PREREQUISITES:
+--------------
+
+
+
+1) Next software should be installed:
+
+- JDK 1.8
+- Maven
+- Docker Toolbox
+
+
+2) We should have a Spring Boot application which will be used for creation
+of Docker Image. 
+
+Empty Spring Boot application with actuator included can be used. 
+
+This application will be placed in, for example, D:\springboot-to-docker 
+directory.
+
+
+
+-------------------------------------------------------------------------
+
+
+
+STEPS:
+------
+
+
+
+1) Build our Spring Boot application:
+
+1.1 - Navigate to root directory of our java project (in this case, 
+D:\springboot-to-docker), which contains pom.xml, via PowerShell/CMD
+
+1.2 - Execute next command in order to BUILD our application using Maven:
+|
+|
+	$ mvn clean install
+|
+|
+
+
+
+2) Create file named "Dockerfile" in the root directory of the application 
+near the pom.xml
+
+
+
+3) Add next content to Dockerfile:
+|
+|
+	FROM ubuntu:latest
+	
+	RUN \
+	# Update
+	apt-get update -y && \
+	# Install Java
+	apt-get install default-jre -y
+
+	ADD ./target/springboot-docker-1.0.jar springboot-docker.jar
+
+	EXPOSE 8080
+
+	CMD java -jar springboot-docker.jar
+|
+|
+
+* FROM ubuntu:latest --> this line tells docker that it should create image 
+based on Ubuntu docker image with lates version of Ubuntu
+
+* RUN apt-get update -y && apt-get install default-jre -y --> this line 
+performe installation of JRE (Java Runtime Environment)
+
+* ADD ./target/springboot-docker-1.0.jar springboot-docker.jar -->
+this line adds JAR file of our built application to created docker image 
+with name springboot-docker.jar (use JAR name of your application 
+accordingly)
+
+* EXPOSE 8080 --> this line exposes 8080 port, so it can be accessed outside 
+of docker image. We need to expose this particular port since it is default 
+port for all Spring Boot web applications 
+
+* CMD java -jar springboot-docker.jar --> this line starts our application 
+right after Docker Container (created based on our Docker Image) is started
+
+
+
+4) Build Docker Image using created Dockerfile.
+For this purpose we should execute next command from directory which contains 
+Dockerfile (root directory of our java project):
+|
+|
+	$ docker build . -t springboot-docker-image
+|
+|
+Next we can make sure that our image has been created using next command
+|
+|
+	$ docker images
+|
+|
+
+
+
+5) Next we can push created image to our own repository on cloud.docker.com:
+|
+|
+	$ docker login
+	$ docker tag <IMAGE_ID> <REPO_USERNAME>/<IMAGE_NAME_IN_REPO>:<TAG_NAME>
+	$ docker push <REPO_USERNAME>/<IMAGE_NAME_IN_REPO>:<TAG_NAME>
+|
+|
+And as a result this image can be found using next URL structure 
+https://cloud.docker.com/repository/docker/<username>/<image_name>
+and be deployed to, for example, Kubernetes
+
+
+
+6) Also we can create Docker Container based on created springboot-docker-image
+and make sure that our java application inside works correctly.
+To create Docker Container we should execute next command:
+|
+|
+	$ docker run -t -p 8089:8080 --name springboot-docker-container springboot-docker-image
+|
+|
+Next we will be able to see created container using next command:
+|
+|
+	$ docker ps -a
+|
+|
+As a result our application will be available on http://localhost:8089, it means
+that requests to http://localhost:8089 will be forwarded to port 8080 inside of
+created container.
+
+
+
+7) Also we can remove this container using next command
+|
+|
+	$ docker rm -f <CONTAINER_ID>
+|
+|
+
+
+
+-------------------------------------------------------------------------
+
+
+
+USEFUL LINKS:
+-------------
+
+
+Dockerization on a Java Application [Maven]:
+https://medium.com/devopslinks/dockerize-your-java-application-ec7ac056d066
+
+
+Docker toolbox download link:
+https://docs.docker.com/toolbox/overview/
+
+
+Using Docker with VirtualBox on Windows 10:
+https://medium.com/@peorth/using-docker-with-virtualbox-and-windows-10-b351e7a34adc
+
+

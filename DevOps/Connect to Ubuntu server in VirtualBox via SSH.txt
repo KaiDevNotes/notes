@@ -1,0 +1,29 @@
+﻿
+In order to connect to Ubuntu server in VirtualBox via SSH we should configure "port forwarding":
+
+For example our Ubuntu server in VirtualBox has IP 10.0.2.15 (this IP is shown during installation 
+Ubuntu on VirtualBox in "Network connections section"). So we should do next:
+
+1) Go to: Machine -> Settings -> Network -> Adapter 1
+
+2) Set "Attached to: NAT"
+
+3) Expand "Advanced"
+
+4) Click "Port Forwarding" button
+
+5) Click "Add" button
+
+6) Create new rule, for example:
+Name [ubuntu-server-ssh]
+Protocol [TCP]
+Host IP [127.0.1.1]
+Host Port [22]
+Guest IP [10.0.2.15] - IP of our Ubuntu server in VirtualBox
+Guest Port [22]
+
+7) Open Putty and create new connection using IP [127.0.1.1] and Port [22]
+
+
+
+	
