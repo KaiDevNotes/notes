@@ -1,0 +1,9 @@
+﻿
+[Java]
+
+Window > Preferences > Java > Code Style > Formatter > Import > Select ./Code Formatters/JavaFormatter.xml
+
+
+[JavaScript]
+
+Window > Preferences > JavaScript > Code Style > Formatter > Import > Select ./Code Formatters/JavaScriptFormatter.xml
