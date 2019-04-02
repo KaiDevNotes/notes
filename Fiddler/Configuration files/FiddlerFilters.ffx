@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SimpleFilter LastSave="2018-11-21T16:30:19.3970553+03:00" ExtensionVersion="2.6.2.0">
+  <Settings FiltersEnabled="true">
+    <slHosts>download.oracle.com; login.windows.net; templateservice.office.com; www.google.by; www.xmind.net; ads.viber.com; springide.org; eclipse-cs.sf.net; eclipse-cs.sourceforge.net; api.vstsusers.visualstudio.com; v20.vortex-win.data.microsoft.com; outlook.office.com; login.microsoftonline.com; static-asm.secure.skypeassets.com; checkstyle.org; login.live.com; eclipse-javacc.sourceforge.net; onedriveclubprodbn20002.blob.core.windows.net; services.gradle.org; onedriveclubproddm20009.blob.core.windows.net; *.tkassets.com; *google.com; *.officeapps.live.com; *fiddler2.com; *.microsoft.com; *eclipse.org; *.pramati.com; *aimp.su; *download.jboss.org; *.viber.com; *visualstudio-devdiv-c2s.msedge.net; *outlook.office365.com; *downloads.sourceforge.net; *outlook.com; *apps.skype.com; *ftp-stud.fht-esslingen.de; *mirrors.uniri.hr; *msecnd.net; *skype.com; client-office365-tas.msedge.net:443; *.microsoft.com; *webex.com;</slHosts>
+    <iFilterActions>1</iFilterActions>
+    <iResponseType>0</iResponseType>
+    <bHideSvcHost>true</bHideSvcHost>
+    <bHideNonIE>false</bHideNonIE>
+    <bBreakPost>false</bBreakPost>
+    <bBreakXHR>false</bBreakXHR>
+    <bBreakQueryString>false</bBreakQueryString>
+    <bRequestURLFilter>false</bRequestURLFilter>
+    <sRequestURLFilter />
+    <bHideIfURLContains>false</bHideIfURLContains>
+    <sHideIfURLContains />
+    <bHideRedirects>false</bHideRedirects>
+    <bHideSuccess>false</bHideSuccess>
+    <bHideNon2xx>false</bHideNon2xx>
+    <bHide304>false</bHide304>
+    <bHide401>false</bHide401>
+    <bUseMinSize>false</bUseMinSize>
+    <bUseMaxSize>false</bUseMaxSize>
+    <iMinSize>0</iMinSize>
+    <iMaxSize>1000</iMaxSize>
+    <bBlockScript>false</bBlockScript>
+    <bHeatMap>false</bHeatMap>
+    <bBlockImages>false</bBlockImages>
+    <bBlockFlash>false</bBlockFlash>
+    <bBlockCSS>false</bBlockCSS>
+    <iShowOnlyZone>0</iShowOnlyZone>
+    <bBreakContentType>false</bBreakContentType>
+    <sBreakContentType />
+    <bFlagRequestHeader>false</bFlagRequestHeader>
+    <sFlagRequestHeader />
+    <bDeleteRequestHeader>false</bDeleteRequestHeader>
+    <sDeleteRequestHeader />
+    <bSetRequestHeader>false</bSetRequestHeader>
+    <sSetRequestHeader />
+    <sSetRequestHeaderValue />
+    <bFlagSetCookie>false</bFlagSetCookie>
+    <bFlagResponseHeader>false</bFlagResponseHeader>
+    <sFlagResponseHeader />
+    <bDeleteResponseHeader>false</bDeleteResponseHeader>
+    <sDeleteResponseHeader />
+    <bSetResponseHeader>false</bSetResponseHeader>
+    <sSetResponseHeader />
+    <sSetResponseHeaderValue />
+  </Settings>
+</SimpleFilter>

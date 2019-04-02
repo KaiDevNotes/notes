@@ -1,0 +1,52 @@
+
+
+
+Prerequisites:
+--------------
+
+
+* FiddlerScript should be updated according to "step 1" 
+of ./Manual Configuration.pdf
+
+
+
+-----------------------------------------------------------------
+
+
+
+For example, we would like to configure Fiddler as PROXY for requests 
+to [POST http://samplehost.net/v1/books] endpoint.
+
+
+We should perform next steps in order to accomplish this:
+
+
+1) Set empty "Custom Address..." in
+Rules --> CUSTOM FORWARDING --> Custom Address...
+
+
+2) On the module side which makes call to target endpoint 
+[POST http://samplehost.net/v1/books] we should change request URL 
+in the next way:
+|
+|
+http://[fiddler-host-ip-address]:[fiddler-port]/samplehost.netxyz195/v1/books/
+|
+|
+where we added:
+* [fiddler-host-ip-address]:[fiddler-port] 
+* xyz195 - at the end of target domain name [samplehost.net]
+
+
+[fiddler-host-ip-address]:[fiddler-port] - can be obtained using 
+./Configuration files/iptoclip.bat
+
+fiddler-port - by default has value 8888
+
+For example:
+|
+|
+http://127.0.1.1:8888/samplehost.netxyz195/v1/books/
+|
+|
+

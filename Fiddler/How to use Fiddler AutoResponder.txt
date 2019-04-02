@@ -1,0 +1,61 @@
+﻿
+
+
+Fiddler AutoResponder tool is used as STUB for REAL SERVER, 
+it means that Fiddler can respond to requests it receives.
+
+
+For example, we would like to configure Fiddler to respond to requests 
+to [GET http://samplehost.net/v1/books] endpoint with predefined response.
+
+
+We should perform next steps in order to accomplish this:
+
+
+1) Intercept real call to [GET http://samplehost.net/v1/books] endpoint
+
+
+2) Highlight this call in Fiddler
+
+
+3) Click: File -> Save -> Response -> Entire Response...
+
+
+4) Modify content of obtained *.txt file (if necessary) and save it 
+as *.dat file into C:\Users\{Your_User}\Documents\Fiddler2\Captures\Responses\
+directory
+
+
+5) Restart your Fiddler
+
+
+6) Create new AutoResponder Rule:
+
+6.1 - Open AutoResponder tab
+
+6.2 - Click "Add Rule"
+
+6.3 - Put URL into top field of "Rule Editor". 
+In this case we should put: /v1/books
+
+6.4 - Choose created *.dat file which contains predefined response in bottom 
+select box of "Rule Editor"
+
+6.5 - Click "Save"
+
+
+7) Activate created rule and AutoResponder tool:
+
+7.1 - Make checkbox "Enable rules" checked
+
+7.2 - Make checkbox near necessary rule checked
+
+
+
+Now your Fiddler will respond to calls which contain /v1/books in URL 
+with your predefined response.
+
+
+
+
+
