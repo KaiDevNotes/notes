@@ -1,0 +1,33 @@
+
+Ubuntu server with Docker in Virtual Box:
+
+IP: 10.0.2.15
+
+Root [ubuntu / ubuntu]
+Docker user [docker-user / docker-user]
+
+
+-----------------------------
+
+
+Start Minikube: 
+
+Open PowerShell as administrator and execute next command:
+|
+|
+$ minikube start --vm-driver=virtualbox
+|
+|
+
+
+-----------------------------
+
+
+To find Node IP when using Minikube we should execute next command
+|
+|
+$ minikube ip
+|
+|
+
+

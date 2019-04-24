@@ -1,0 +1,187 @@
+﻿
+
+Brief overview:
+---------------
+
+
+This example of Service Discovery in Kubernetes is based on 2 simple Java 
+Spring Boot applications/services:
+
+* ipprovider - provides IP address of container/POD in which this 
+service is deployed and run.
+Contains one endpoint: GET http://[host]:[port]/ip 
+
+* greeter - provides greeting message which is formed based on IP address which 
+is provided by [ipprovider] application. It means that [greeter] application 
+should communicate with [ipprovider] application using Kubernetes Service Discovery.
+Message template is: Hello from host [IP]
+Contains one endpoint: GET http://[host]:[port]/greeting 
+
+
+
+-----------------------------------------------
+
+
+
+Deployment process:
+-------------------
+
+
+
+[1] - Dockerize our Spring Boot applications
+
+We should create Docker Images for [ipprovider] and [greeter] applications
+(Appropriate Dockerfile can found in source directory near the pom.xml file). 
+And then push created images to Docker Cloud. In this example Docker images 
+are:
+
+* k41dockeruser/ipprovider
+* k41dockeruser/greeter
+
+See "How to Dockerize Java (Spring Boot) application.txt" for more details.
+
+
+
+[2] - Create K8s resources (deployments, services etc.)
+
+Manifests of deployments and services for our [ipprovider] and [greeter] 
+applications/services are stored in "k8s-resources.yml". So it is necessary
+to execute next command via PowerShell/CMD from directory in which this file 
+is stored:
+|
+|
+$ kubectl create -f .\k8s-resources.yml
+|
+|  
+
+
+
+[3] - Make call to [greeter] service
+
+In manifest of [greeter-service] we can see that it has type=NodePort and
+nodePort=31044. It means that this service can be called from outside of 
+K8s cluster via http://[NodeIP]:[NodePort]/...
+Since we use Minikube, we need to execute next command in order to find IP 
+of the Node
+|
+|
+$ minikube ip
+|
+| 
+If this command returns ip, for example, 10.10.10.10 then we should make next 
+call [GET http://10.10.10.10:31044/greeting] in order to get greeting message. 
+
+
+
+-----------------------------------------------
+
+
+
+Service Discovery notes
+-----------------------
+
+
+
+[*] - In order to make call from [greeter] application to [ipprovider-service]
+within K8s cluster we have to find FQDN of [ipprovider-service]. 
+
+To do this we should:
+
+1) Get list of PODs via command
+|
+|
+$ kubectl get pods
+|
+|
+
+2) Connect via SSH to POD which contains [greeter] application via command
+|
+|
+$ kubectl exec -it <pod-name> sh
+|
+|
+
+3) Perform nslookup for ipprovider-service from this POD
+|
+|
+$ nslookup ipprovider-service
+|
+|
+As a result we will get next FQDN: 
+ipprovider-service.default.svc.cluster.local
+
+Since [ipprovider-service] has port 8033 according to manifest from 
+"k8s-resources.yml" this service can be accessed by [greeter] application via 
+next call: GET http://ipprovider-service.default.svc.cluster.local:8033/ip 
+
+And as we can see the same URL is configured as "ipprovider.service.url" 
+property in .\greeter\src\main\resources\application.properties 
+
+
+
+[*] - According to official documentation it is not absolutely necessary 
+to know FQDN of the service which we are going to call inside K8s cluster.
+
+For example, if you have a Service called "service1" in a Kubernetes Namespace 
+called "namespace1", a DNS record for "service1.namespace1" is created. 
+Pods which exist in the "namespace1" Namespace should be able to find it by 
+simply doing a name lookup for "service1". Pods which exist in other Namespaces 
+must qualify the name as "service1.namespace1". 
+The result of these name lookups is the cluster IP.
+
+Since POD(s) containing [greeter] application and [ipprovider-service] are 
+placed in the same [default] Namespace then [ipprovider-service] can be accessed 
+by [greeter] application via next call: 
+GET http://ipprovider-service:8033/ip
+
+
+
+[*] - K8s Namespaces
+
+There can be configured several namespaces and full list can be found via command
+|
+|
+$ kubectl get namespaces
+|
+|
+And if we want to find information about resources which are related to namespaces 
+which are different to [default] namespace then name of necessary namespace should
+be provided explicitly:
+|
+|
+$ kubectl get <pods|deployments|services|...|all> -n <namespace-name>
+|
+| 
+
+
+
+[*] - resolv.conf 
+
+This file is used in various operating systems to configure the system's 
+Domain Name System (DNS) resolver.
+
+To see this file we should:
+
+1) Connect via SSH to any POD using command
+|
+|
+$ kubectl exec -it <pod-name> sh
+|
+|
+ 
+2) Open /etc/resolv.conf via, for example, vi editor
+|
+|
+$ vi /etc/resolv.conf
+|
+|
+Content of this file will look like:
+|
+|
+nameserver 10.96.0.10
+search default.svc.cluster.local svc.cluster.local cluster.local
+options ndots:5
+...
+|
+| 
+
