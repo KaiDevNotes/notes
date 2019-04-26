@@ -1,10 +1,7 @@
 
-Ubuntu server with Docker in Virtual Box:
 
-IP: 10.0.2.15
-
-Root [ubuntu / ubuntu]
-Docker user [docker-user / docker-user]
+Kubectl commands cheatsheet from official documentation:
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
 
 
 -----------------------------
