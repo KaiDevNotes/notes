@@ -1,0 +1,40 @@
+
+
+Services with [type=ClusterIP] can be accessed from outside of K8s cluster 
+via PROXY.
+
+
+For example, we would like to access [ipprovider-service] from "service-
+discovery" example from outside of K8s cluster. As we can see in manifest 
+of [ipprovider-service] this service has type=ClusterIP.
+
+
+In order to access [ipprovider-service] we should:
+
+
+1) Start K8s proxy on, for example, 8777 port via command:
+|
+|
+$ kubectl proxy --port=8777
+|
+|
+
+
+2) Next we should make call to URL which should be created according to the 
+next pattern:
+|
+|
+http://localhost:[proxy-port]/api/v1/namespaces/[namespace]/services/[service-name]/proxy/[endpoint]
+|
+|
+In our case the URL would look like:
+|
+|
+http://localhost:8777/api/v1/namespaces/default/services/ipprovider-service/proxy/ip
+|
+|
+
+
+More information about K8s proxy can be found in official documentation:
+https://kubernetes.io/docs/tasks/administer-cluster/access-cluster-services/
+
