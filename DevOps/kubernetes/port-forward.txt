@@ -1,0 +1,39 @@
+
+
+K8s port-forwarding is used in order to provide direct access to a POD 
+from outside of K8s cluster.
+
+For example, we would like to provide direct access to a pod which contains 
+[ipprovider] application/service, so we should:
+
+
+1) Find name of appropriate POD via command:
+|
+|
+$ kubectl get pods [-n=<namespace-name>]
+|
+|
+For example, we will use a pod with name "ipprovider-xyz".
+
+
+2) Find a port on which [ipprovider] application/service is
+deployed in the POD from the POD's description:
+|
+|
+$ kubectl describe pod ipprovider-xyz [-n=<namespace-name>]
+|
+|
+For example, the port is 8333
+
+
+3) Make port-forward to this port via command:
+|
+|
+$ kubectl port-forward pod/ipprovider-xyz 8999:8333 [-n=<namespace-name>]
+|
+|
+As a result the pod will be accessible from outside of K8s cluster on 8999 port.
+It means that we can make call to [ipprovider] application/service in the 
+ipprovider-xyz POD via URL http://localhost:8999/ip
+
+
