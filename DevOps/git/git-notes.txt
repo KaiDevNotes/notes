@@ -1,0 +1,84 @@
+
+
+
+[BRANCHING]
+
+
+
+* Create a new branch with name "branch1" based on branch 
+with name "parent-branch" locally and remotely:
+
+$ git checkout parent-branch
+
+$ git checkout -b branch1
+
+$ git push -u <remote-name> branch1
+
+
+--
+
+
+* List all branches and see which is already used:
+
+$ git branch -a
+
+
+--
+
+
+* Fetch branch which exists on remote server to local area:
+
+$ git fetch <branch-name>
+
+
+--
+
+
+* Switch to the necessary branch:
+
+$ git checkout <branch-name> 
+
+
+--
+
+
+* Remove branch locally and remotely:
+
+$ git push --delete <remote-name> <branch-name>
+
+$ git branch -d <branch-name>
+
+
+
+-----------------------------------------------------------
+
+
+
+[MERGING]
+
+
+
+* Merge branch "branch1" with branch "parent-branch":
+
+$ git checkout parent-branch
+
+$ git merge branch1
+
+>> confirm or modify merge message and exit "vi" editor via: ESC + :q! + ENTER  
+
+$ git push <remote-name> parent-branch
+
+
+
+-----------------------------------------------------------
+
+
+
+[STASHING]
+
+
+
+
+
+
+
