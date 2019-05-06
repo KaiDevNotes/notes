@@ -1,6 +1,48 @@
 
 
 
+[GENERAL WORKFLOW]
+
+
+
+* Pull last version of target branch to your workstation:
+
+$ git pull <remote-name> <branch-name>
+
+
+--
+
+* MAKE NECESSARY CHANGES
+
+--
+
+
+* Add all changes to staging area:
+
+$ git add .
+
+
+--
+
+
+* Make commit of the changes:
+
+$ git commit -m "commit-message-text"
+
+
+--
+
+
+* Push the commit to remote git server:
+
+$ git push <remote-name> <branch-name>
+
+
+
+-----------------------------------------------------------
+
+
+
 [BRANCHING]
 
 
@@ -58,15 +100,15 @@ $ git branch -d <branch-name>
 
 
 
-* Merge branch "branch1" with branch "parent-branch":
+* Merge branch "branch1" with "master" branch:
 
-$ git checkout parent-branch
+$ git checkout master
 
 $ git merge branch1
 
 >> confirm or modify merge message and exit "vi" editor via: ESC + :q! + ENTER  
 
-$ git push <remote-name> parent-branch
+$ git push <remote-name> master
 
 
 
@@ -78,7 +120,77 @@ $ git push <remote-name> parent-branch
 
 
 
+Stash in GIT is an analogy to shelveset in TFS. 
+Stash can be used to avoid problems during pulling of the last version of 
+code from remote git server.
+
+It means that before commit we should:
+
+1) stash changes (make shelveset - in TFS) which have been made in order to 
+implement/fix something
+
+2) pull last version of target branch (get latest version - in TFS)
+
+3) apply changes from stash (unshelve changes - in TFS) 
+
+4) resolve merge conflicts if any
+
+5) add changes to stage 
+
+6) make commit
+
+7) make push to remote git server
 
 
+--
+
+
+* Stash changes:
+
+$ git stash save "stash-label-or-message"
+
+or just
+
+$ git stash
+
+
+--
+
+
+* View all stashes:
+
+$ git stash list
+
+
+--
+
+
+* Show changes associated with last stash
+
+$ git stash show
+
+
+--
+
+
+* Apply changes from last stash:
+
+$ git stash apply
+
+
+--
+
+
+* Clear all stashes:
+
+$ git stash clear
+
+
+
+-----------------------------------------------------------
+
+
+
+[UNDOING OF CHANGES]
 
 
