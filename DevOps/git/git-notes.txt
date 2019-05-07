@@ -194,3 +194,62 @@ $ git stash clear
 [UNDOING OF CHANGES]
 
 
+
+* Undo all changes in working directory (or in other words "unstaged changes"):
+
+$ git checkout .
+
+or to undo unstaged changes in particular file (e.g. 1.txt)
+
+$ git checkout 1.txt 
+
+
+--
+
+
+* Move all changes back from staging area to working directory:
+
+$ git reset .
+
+or move changes in particular file (e.g. 1.txt) from staging area to working directory
+
+$ git reset 1.txt 
+
+
+--
+
+
+* Undo staged changes completely (or "git reset" + "git checkout"):
+
+$ git reset --hard
+
+
+--
+
+
+* Remove the last not pushed commit and move changes from 
+this commit to working directory:
+
+$ git reset HEAD~1
+
+
+--
+
+
+* Remove the last not pushed commit with all its changes:
+
+$ git reset --hard HEAD~1
+
+
+--
+
+
+* Undo last pushed commit (rollback - in TFS)
+
+$ git revert HEAD
+
+>> confirm or modify revert message and exit "vi" editor via: ESC + :q! + ENTER
+
+$ git push  <remote-name> <branch-name>
+
+
