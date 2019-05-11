@@ -70,7 +70,7 @@ $ git branch -a
 
 * Fetch branch which exists on remote server to local area:
 
-$ git fetch <branch-name>
+$ git fetch <remote-name> <branch-name>
 
 
 --
