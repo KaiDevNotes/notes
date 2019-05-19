@@ -116,6 +116,61 @@ $ git push <remote-name> master
 
 
 
+[TAGGING]
+
+
+
+A tag is used to label and mark a specific commit in the history or in other 
+words TAG is alias to hexadecimal version name (commit).
+It is usually used to mark release points (eg. v1.0, etc.).
+
+Although a tag may appear similar to branch, but we cannot change a tag because 
+it just points to a specific commit in the history (in any branch).
+
+
+--
+
+
+* Create a new tag for current version of current branch you are in:
+
+$ git tag <tag-name>
+
+
+--
+
+
+* List all tags
+
+$ git tag
+
+
+--
+
+
+* Push locally created tags to remote server:
+
+$ git push <remote-name> --tags
+
+or only specific tag
+
+$ git push <remote-name> <tag-name>
+
+
+--
+
+
+* Remove tag locally and remotely:
+
+$ git push --delete <remote-name> <tag-name>
+
+$ git tag -d <tag-name>
+
+
+
+-----------------------------------------------------------
+
+
+
 [STASHING]
 
 
