@@ -96,6 +96,51 @@ $ git branch -d <branch-name>
 
 
 
+[REBASING]
+
+
+Rebasing is about moving our branch from one base commit to another.
+E.g. we made branch based on last commit of "master" branch. 
+Next we made any development in our branch, but during this process there were 
+made several commits into "master" by other developers, so we would like to 
+place changes from our branch on top of all changes in "master" or in other 
+words to base our branch on the last commit from "master". 
+
+
+To perform rebase which is described above we should:
+
+1) switch to "master":
+
+$ git checkout master
+
+2) Pull the latest version of "master":
+
+$ git pull <remote-name> master
+
+3) switch to our branch, e.g. "branch1":
+
+$ git checkout branch1
+
+4) perform rebase:
+
+$ git rebase master
+
+5) Resolve merge conflicts if any and then:
+
+$ git add <file(s)-with-resolved-conflicts> 
+$ git rebase --continue 
+
+
+The rebase process can be controlled via:
+
+$ git log
+
+
+
+-----------------------------------------------------------
+
+
+
 [MERGING]
 
 
