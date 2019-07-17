@@ -1,0 +1,193 @@
+
+
+
+Description:
+
+
+
+Server Service Provider (SSP) is application which was implemented according to 
+Domain-Driven Design (DDD).
+
+
+SSP is application which provides abstract "Server Service" (which can be, e.g 
+VPN, DNS or any other service which can be provided by a server). 
+
+
+The main usage scenario consists of next steps:
+
+1) Customer creates an account in the application;
+
+2) Customer chooses a subscription plan and a server, and creates an order;
+
+3) Customer pays the order;
+
+4) Service user is created on the server;
+
+5) Customer uses the Service user (login/password) in order to connect 
+to the server and to get the service.
+
+
+
+---
+
+
+
+SSP consists of next Subdomains / Bounded Contexts:
+
+* ServiceProvider (package ssp.serviceprovider) - Core Domain
+
+* Account (package ssp.account) - Subdomain
+
+* Order (package ssp.order) - Subdomain
+
+* Payment (package ssp.payment) - Subdomain
+
+
+SSP has some kind of Shared Kernel which is placed in package ssp.common. 
+
+Since communication between Bounded Contexts is established via Application Layer 
+Events then SSP can be easily transformed from monolith application to microservices 
+where each Subdomains / Bounded Contexts is a separate microservice.
+
+
+
+---
+
+
+
+SSP application assumes next usage scenarios / use cases:
+
+
+[1] - General scenario:
+
+[1.1] - Register Account use case
+
+[1.2] - Create Order use case
+
+[1.3] - Create Service User use case
+
+
+[2] - Move Service User from one server to another (Change Server use case)
+
+
+[3] - Delete Service User
+
+
+
+---
+
+
+
+Practical application:
+
+
+Use cases will be invoked via Swagger UI so we should start SSP application and 
+go to http://localhost:8080/swagger-ui.html
+
+
+
+[1] - General scenario:
+
+
+
+[1.1] - Register Account use case
+
+We should use [POST /api/v1/accounts] API endpoint and as a result we should get 
+log output which is similar to:
+
+2019-07-17 18:14:48.170  INFO 682 --- [nio-8080-exec-9] s.a.presentation.AccountController       : [Account Subdomain]: API endpoint [POST /api/v1/accounts] was called
+2019-07-17 18:14:48.170  INFO 682 --- [nio-8080-exec-9] ssp.account.application.AccountService   : [Account Subdomain]: RegisterAccount command was received
+2019-07-17 18:14:48.285  INFO 682 --- [nio-8080-exec-9] ssp.account.application.AccountService   : [Account Subdomain]: AccountRegistred event will be published
+
+AccountRegistred event is published as a result of the use case and can be used, 
+e.g. by Email/Delivery Subdomain in order to form email and send it to the customer
+
+
+
+[1.2] - Create Order use case
+
+We should use [POST /api/v1/orders] API endpoint and as a result we should get 
+log output which is similar to:
+
+2019-07-17 18:20:39.879  INFO 682 --- [nio-8080-exec-2] ssp.order.presentation.OrderController   : [Order Subdomain]: API endpoint [POST /api/v1/orders] was called
+2019-07-17 18:20:39.879  INFO 682 --- [nio-8080-exec-2] ssp.order.application.OrderService       : [Order Subdomain]: CreateOrder command was received
+2019-07-17 18:20:39.898  INFO 682 --- [nio-8080-exec-2] ssp.order.application.OrderService       : [Order Subdomain]: OrderCreated event will be published
+
+
+
+[1.3] - Create Service User use case
+
+Service User is created when order is payed so it is necessary to use 
+[POST /api/v1/payments/system/stubpaymentsystem/notification] API endpoint 
+in order to simulate payment notification which indicates that order 
+has been payed.
+
+As a result of call to the endpoint we should get next log output which is 
+similar to:
+
+2019-07-17 18:25:20.162  INFO 682 --- [nio-8080-exec-6] s.p.presentation.PaymentController       : [Payment Subdomain]: API endpoint [POST /api/v1/payments/system/stubpaymentsystem/notification] was called
+2019-07-17 18:25:20.163  INFO 682 --- [nio-8080-exec-6] ssp.payment.application.PaymentService   : [Payment Subdomain]: PaymentNotification was received from [STUBPAYMENTSYSTEM]
+2019-07-17 18:25:20.163  INFO 682 --- [nio-8080-exec-6] ssp.payment.application.PaymentService   : [Payment Subdomain]: PaymentCompleted event will be published
+2019-07-17 18:25:20.163  INFO 682 --- [nio-8080-exec-6] s.order.application.event.EventListener  : [Order Subdomain]: PaymentCompleted event was received
+2019-07-17 18:25:20.164  INFO 682 --- [nio-8080-exec-6] ssp.order.application.OrderService       : [Order Subdomain]: MarkOrderAsPayed command was received
+2019-07-17 18:25:20.173  INFO 682 --- [nio-8080-exec-6] ssp.order.application.OrderService       : [Order Subdomain]: OrderPayed event will be published
+2019-07-17 18:25:20.173  INFO 682 --- [nio-8080-exec-6] s.s.application.event.EventListener      : [ServiceProvider Core Domain]: OrderPayed event was received
+2019-07-17 18:25:20.180  INFO 682 --- [nio-8080-exec-6] s.s.application.ServiceProviderService   : [ServiceProvider Core Domain]: CreateServiceUser command was received
+2019-07-17 18:25:20.190  INFO 682 --- [nio-8080-exec-6] s.s.i.s.StubbedServiceController         : [ServiceProvider Core Domain]: User [USR-29BA3D9A2FA2] was created on server [1d868671-93c7-4fa7-b6a2-36141f0a0727 -- USA_NEW_YORK]
+2019-07-17 18:25:20.204  INFO 682 --- [nio-8080-exec-6] s.s.application.ServiceProviderService   : [ServiceProvider Core Domain]: ServiceUserCreated event will be published
+2019-07-17 18:25:20.205  INFO 682 --- [nio-8080-exec-6] s.order.application.event.EventListener  : [Order Subdomain]: ServiceUserCreated event was received
+2019-07-17 18:25:20.205  INFO 682 --- [nio-8080-exec-6] ssp.order.application.OrderService       : [Order Subdomain]: MarkOrderAsFulfilled command was received
+2019-07-17 18:25:20.208  INFO 682 --- [nio-8080-exec-6] ssp.order.application.OrderService       : [Order Subdomain]: OrderFulfilled event will be published
+
+As we can see [Payment Subdomain] publishes PaymentCompleted as a result of 
+PaymentNotification handling. 
+Next [Order Subdomain] receives PaymentCompleted event, marks the order as PAYED 
+and publishes OrderPayed event.
+This event is received by [ServiceProvider Core Domain], which creates necessary
+ServiceUser and publishes ServiceUserCreated event.
+And finally ServiceUserCreated is received by [Order Subdomain], which marks the 
+order as FULFILLED and publishes OrderFulfilled event.
+
+OrderFulfilled event can be used, e.g. by Email/Delivery Subdomain in order to 
+form email and send it to the customer.
+
+
+
+[2] - Move Service User from one server to another (Change Server use case)
+
+We should use [PUT /api/v1/serviceusers/{serviceUserId}] API endpoint and as a 
+result we should get log output which is similar to:
+
+2019-07-17 21:49:36.678  INFO 4540 --- [nio-8080-exec-3] s.s.presentation.ServiceUserController   : [ServiceProvider Core Domain]: API endpoint [PUT /api/v1/serviceusers/1c868671-93c7-4fa7-b6a2-36141f0a0727] was called
+2019-07-17 21:49:36.711  INFO 4540 --- [nio-8080-exec-3] s.s.application.ServiceProviderService   : [ServiceProvider Core Domain]: MoveServiceUser command was received
+2019-07-17 21:49:36.832  INFO 4540 --- [nio-8080-exec-3] s.s.i.s.StubbedServiceController         : [ServiceProvider Core Domain]: User [USR-36141F0A0727] was deleted from server [1d868671-93c7-4fa7-b6a2-36141f0a0727 -- USA_NEW_YORK]
+2019-07-17 21:49:36.833  INFO 4540 --- [nio-8080-exec-3] s.s.i.s.StubbedServiceController         : [ServiceProvider Core Domain]: User [USR-36141F0A0727] was created on server [3d868671-93c7-4fa7-b6a2-36141f0a0727 -- JAPAN_TOKYO]
+2019-07-17 21:49:36.990  INFO 4540 --- [nio-8080-exec-3] s.s.application.ServiceProviderService   : [ServiceProvider Core Domain]: ServiceUserMoved event will be published
+
+
+
+[3] - Delete Service User
+
+We should use [DELETE /api/v1/serviceusers/{serviceUserId}] API endpoint and as a 
+result we should get log output which is similar to:
+
+2019-07-17 21:55:56.375  INFO 4540 --- [nio-8080-exec-5] s.s.presentation.ServiceUserController   : [ServiceProvider Core Domain]: API endpoint [DELETE /api/v1/serviceusers/1c868671-93c7-4fa7-b6a2-36141f0a0727] was called
+2019-07-17 21:55:56.378  INFO 4540 --- [nio-8080-exec-5] s.s.application.ServiceProviderService   : [ServiceProvider Core Domain]: DeleteServiceUser command was received
+2019-07-17 21:55:56.386  INFO 4540 --- [nio-8080-exec-5] s.s.i.s.StubbedServiceController         : [ServiceProvider Core Domain]: User [USR-36141F0A0727] was deleted from server [3d868671-93c7-4fa7-b6a2-36141f0a0727 -- JAPAN_TOKYO]
+2019-07-17 21:55:56.411  INFO 4540 --- [nio-8080-exec-5] s.s.application.ServiceProviderService   : [ServiceProvider Core Domain]: ServiceUserDeleted event will be published
+
+
+
+---
+
+
+
+Also it is necessary to mention that Dependency Injection (DI) in Application Core
+(domain and application layers) is performed via Spring Annotation Configuration,
+but if we want to make our Application Core independent from Spring stuff we can 
+perform DI in Configuration classes for each Subdomain such as:
+* ServiceProviderCoreDomainConfiguration
+* AccountSubdomainConfiguration
+and so on...
+
+
