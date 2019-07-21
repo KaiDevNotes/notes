@@ -5,12 +5,12 @@ Description:
 
 
 
-Server Service Provider (SSP) is application which was implemented according to 
-Domain-Driven Design (DDD).
+Server Service Provider (SSP) is an application which was implemented according 
+to Domain-Driven Design (DDD).
 
 
-SSP is application which provides abstract "Server Service" (which can be, e.g 
-VPN, DNS or any other service which can be provided by a server). 
+SSP is an application which provides abstract "Server Service" (which can be, 
+e.g VPN, DNS or any other service which can be provided by a server). 
 
 
 The main usage scenario consists of next steps:
@@ -24,7 +24,7 @@ The main usage scenario consists of next steps:
 4) Service user is created on the server;
 
 5) Customer uses the Service user (login/password) in order to connect 
-to the server and to get the service.
+to the server and to get the service it provides.
 
 
 
@@ -43,11 +43,39 @@ SSP consists of next Subdomains / Bounded Contexts:
 * Payment (package ssp.payment) - Subdomain
 
 
-SSP has some kind of Shared Kernel which is placed in package ssp.common. 
+SSP has some kind of [Shared Kernel] which is placed in package ssp.common.
+This package contains definitions of Application Level/Layer Events. 
+Also it contains abstractions for domain, application and infrastructure 
+layers, and other code which is common for all Subdomains / Bounded Contexts.
 
 Since communication between Bounded Contexts is established via Application Layer 
 Events then SSP can be easily transformed from monolith application to microservices 
 where each Subdomains / Bounded Contexts is a separate microservice.
+
+
+
+---
+
+
+
+[!] Statements of [Ubiquitous Language] which are reflected in Domain Model/Layer 
+	of [ServiceProvider Core Domain / Bounded Context]:
+
+* Server (Aggregate) provides "Server Service". There can be several Servers.
+
+* Server can be activated/deactivated.
+	
+* Customer gets access to "Server Service" using ServiceUser (Aggregate)
+which in common is login/password pair.
+
+* ServiceUser is created on a Server (is assigned to a Server) via 
+ServiceController (Domain Service).
+
+* ServiceUser cannot be created on deactivated Server.
+
+* ServiceUser can be moved from one Server to another.
+
+* ServiceUser can be deleted/unassigned from Server.
 
 
 
