@@ -13,7 +13,7 @@ Books and sources:
 
 
 
-[+] DDD TOOLS/BUILDING BLOCKS/PATTERNS of STRATEGIC DESIGN
+[+] DDD TOOLS / BUILDING-BLOCKS / PATTERNS of STRATEGIC DESIGN
 
 
 * Ubiquitous Language
@@ -30,7 +30,7 @@ Books and sources:
 
 
 
-[+] DDD TOOLS/BUILDING BLOCKS/PATTERNS of TACTICAL DESIGN
+[+] DDD TOOLS / BUILDING-BLOCKS / PATTERNS of TACTICAL DESIGN
 
 
 * Aggregates
@@ -302,6 +302,12 @@ accessor methods". (B1 p. 157)
 operations that don’t fit naturally as an operation on an Entity or a Value 
 Object. Domain Services carry out domain-specific operations, which may involve 
 multiple domain objects. (B1 p. 25)
+
+
+* Use Domain Services for modelling operations/processes which can require two, 
+and possibly many, different Aggregates or their composed parts as input. 
+Or for modelling operations/processes which requires input from more than one 
+domain object. (B1 p. 194)
 
 
 * Make sure the Domain Service is stateless and has an interface that clearly 
