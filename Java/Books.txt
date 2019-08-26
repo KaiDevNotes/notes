@@ -19,4 +19,4 @@
 19) Implementing Domain-Driven Design. Vaughn Vernon. 2013
 20) Microservices for Java Developers. C. Posta. 2016
 21) Docker and Kubernetes for Java Developers. J. Krochmalski. 2017
-
+22) Mastering Kubernetes. Gigi Sayfan. 2017
