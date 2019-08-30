@@ -105,6 +105,8 @@ which can be like in example in (B1 p. 67).
 (B1 p. 23, 105)
 On a greenfield project it would be well to consider using Hexagonal as the 
 overarching style. (B1 p. 119)
+Hexagonal architecture (aka Ports and Adapters) implies Outside-In 
+dependencies direction.
 
 
 * A Single Team for a Single Bounded Context. (B1 p. 67)
@@ -161,6 +163,26 @@ number of attributes and/or Value-typed properties. (B1 p. 252)
 
 * Choose to model a contained Aggregate part as a Value Object rather than an 
 Entity whenever possible. (B1 p. 267)
+
+
+* The choice between Aggregate containing Entity / Value Object and 2 separated 
+Aggregates:
+
+- If an Aggregate contains a part, this part does not have Identity and can be 
+fully replaced, then this part should be modeled as a Value Object inside the 
+Aggregate;
+
+- If an Aggregate contains a part, this part has its Identity and should be 
+accesible/changed via the Aggregate's methods ONLY, in order to respect 
+consistency of Domain concept, then this part should be modeled as an Entity 
+inside an Aggregate. This Entity should not have its Repository - only Aggregate 
+should have its Repository;
+
+- If an Aggregate contains a part, this part has its Identity and should be 
+accesible/changed independently from the Aggregate, then this part/concept 
+should be modeled as a separated Aggregate (Root Entity of separated Aggregate) 
+with its own Repository and transactional consistency boundary. This separated 
+Aggregates can be linked via Identity if necessary.
 
 
 * Aggregate's (Root Entity's) Identity is always a Value Object. 
