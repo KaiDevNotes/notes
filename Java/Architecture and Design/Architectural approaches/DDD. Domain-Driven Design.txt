@@ -157,6 +157,17 @@ transaction. (B1 p. 250)
 * Aggregate Root is always an Entity (Root Entity). (B1 p. 155)
 
 
+* In practice, creation of an Aggregate means creation of an Aggregate Root. 
+This Aggregate Root carries name of the entire Aggregate and has links to 
+Aggregate's parts (Value Objects, Entities). Access to Aggregate's parts 
+have to be performed ONLY via methods of the Aggregate Root in order to 
+respect consistency of the Aggregate. Saving of an Aggregate's state means 
+saving of state of the Aggregate Root Entity and all other Aggregate's parts 
+in one transaction. 
+So, in practice, an Aggregate is an Aggregate Root, 
+and an Aggregate Root is an Entity.
+
+
 * Size of Aggregate should be limited to just the Root Entity and a minimal 
 number of attributes and/or Value-typed properties. (B1 p. 252)
 
@@ -175,7 +186,7 @@ Aggregate;
 - If an Aggregate contains a part, this part has its Identity and should be 
 accesible/changed via the Aggregate's methods ONLY, in order to respect 
 consistency of Domain concept, then this part should be modeled as an Entity 
-inside an Aggregate. This Entity should not have its Repository - only Aggregate 
+inside the Aggregate. This Entity should not have its Repository - only Aggregate 
 should have its Repository;
 
 - If an Aggregate contains a part, this part has its Identity and should be 
