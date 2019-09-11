@@ -130,6 +130,9 @@ $ git rebase master
 $ git add <file(s)-with-resolved-conflicts> 
 $ git rebase --continue 
 
+6) Push changes to the remote
+
+$ git push -f origin branch1
 
 The rebase process can be controlled via:
 
