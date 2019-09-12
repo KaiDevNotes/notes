@@ -1,0 +1,17 @@
+spring:
+  main:
+    banner-mode: "off"
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: password
+
+amqp:
+  exchange: ssp.exchange
+  routing-key: ssp.routingkey
+  queue: ssp.payments.queue
+      
+swagger:
+  title: Payment Service
+  version: 1.0.0

@@ -1,0 +1,25 @@
+spring:
+  main:
+    banner-mode: "off"
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:sspdb
+    username: admin
+    password: admin
+  h2:
+    console:
+      enabled: true
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: password
+
+amqp:
+  exchange: ssp.exchange
+  routing-key: ssp.routingkey
+  queue: ssp.order.queue
+      
+swagger:
+  title: Order Service
+  version: 1.0.0

@@ -1,0 +1,106 @@
+
+
+
+Description:
+
+
+
+This implementation of microservices architecture is based on DDD project 
+"Server Service Provider" or SSP. Each service represents particular 
+Subdomains / Bounded Contexts form SSP project:
+
+* service-provider-service --> ServiceProvider Core Domain
+
+* account-service --> Account Subdomain
+
+* order-service --> Order Subdomain
+
+* payment-service --> Payment Subdomain
+
+
+
+---
+
+
+
+As we can see "server-service-provider" project contains 6 subprojects:
+
+* account-service
+* common-core
+* common-infrastructure
+* order-service
+* payment-service
+* service-provider-service
+
+which are modules of parent "server-service-provider" project in terms of 
+Maven, see /server-service-provider/pom.xml
+
+
+
+"common-core" project is some kind of Shared Kernel which contains some 
+abstraction for application core (Domain and Application layers)
+
+"common-infrastructure" project contains common code which is related to 
+infrastructure aspects such as Messaging (AMPQ), RESTAPI and so on.
+
+
+
+---
+
+
+
+Communication between microservices is established via Events which are 
+transmitted by EventBus.
+
+EventBus uses AMQP implementation (in this case RabbitMQ).
+
+In this case all Events (messages) are sent to Exchange (ssp.exchange) which 
+transmits the messages based on Routing Key (ssp.routingkey) to each Queue, 
+one for each mircoservice, see /src/main/resources/application.yaml for each 
+microservice: 
+ 
+* ssp.account.queue
+* ssp.order.queue
+* ssp.payments.queue
+* ssp.service-provider.queue
+
+It means that each message which is sent to Exchange (ssp.exchange) will be 
+received by each service. This routing mechanism is used for the sake of 
+simplicity and can be easily changed if necessary.
+
+
+
+
+-----------------------------------
+
+
+
+
+Deployment and Running:
+
+
+
+Each microservice is Spring Boot application with in-memory H2 DB.
+But it is necessary to install RabbitMQ and configure it via RabbitMQ web 
+management tool in the next way:
+
+1) Create Exchange with name "ssp.exchange"
+
+2) Create next queues:
+- ssp.account.queue
+- ssp.order.queue
+- ssp.payments.queue
+- ssp.service-provider.queue
+
+3) Bind Exchange "ssp.exchange" to each of the queues using 
+Routing Key "ssp.routingkey".
+
+
+
+Also it is necessary to run each microservice on different port using 
+--server.port=XXXX argument
+
+
+Check correctness of SSP functionality using Description for SSP project.
+
+
