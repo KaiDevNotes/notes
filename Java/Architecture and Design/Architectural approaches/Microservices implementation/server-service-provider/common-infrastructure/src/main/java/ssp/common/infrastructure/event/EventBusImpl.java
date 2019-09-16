@@ -52,11 +52,11 @@ public class EventBusImpl implements EventBus
     @RabbitListener(queues="${amqp.queue}")
     private void receiveEvent(Event event)
     {
-        List<Consumer<Event>> cosumers = eventConsumersMap.get(event.getClass());
-        if (cosumers == null || cosumers.isEmpty())
+        List<Consumer<Event>> consumers = eventConsumersMap.get(event.getClass());
+        if (consumers == null || consumers.isEmpty())
         {
             return;
         }
-        cosumers.forEach(consumer -> consumer.accept(event));
+        consumers.forEach(consumer -> consumer.accept(event));
     }
 }
