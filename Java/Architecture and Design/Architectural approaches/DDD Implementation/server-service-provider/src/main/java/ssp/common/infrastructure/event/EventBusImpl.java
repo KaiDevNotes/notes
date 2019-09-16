@@ -19,12 +19,12 @@ public class EventBusImpl implements EventBus
     @Override
     public synchronized void publish(Event event)
     {
-        List<Consumer<Event>> cosumers = eventConsumersMap.get(event.getClass());
-        if (cosumers == null || cosumers.isEmpty())
+        List<Consumer<Event>> consumers = eventConsumersMap.get(event.getClass());
+        if (consumers == null || consumers.isEmpty())
         {
             return;
         }
-        cosumers.forEach(consumer -> consumer.accept(event));        
+        consumers.forEach(consumer -> consumer.accept(event));
     }
     
     @Override
