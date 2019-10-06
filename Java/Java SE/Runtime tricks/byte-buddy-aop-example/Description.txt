@@ -1,0 +1,22 @@
+
+
+[Byte Buddy] is a code generation and manipulation library for creating and 
+modifying Java classes during the runtime of a Java application and without 
+the help of a compiler.
+
+https://bytebuddy.net/#/
+https://stackoverflow.com/questions/tagged/byte-buddy
+
+In particular it easily allows us to modify 3rd party libraries by creating 
+Aspects / Advices using net.bytebuddy.agent.ByteBuddyAgent. It means that we 
+can modify behaviour of code which is added to our project as dependency 
+(compiled JAR).
+
+
+In this example we modify behaviour of classes/objects from Guava and JodaTime
+libraries which are added to project as maven dependencies.
+And as we can see [Byte Buddy] works perfectly with static and instance methods,
+with public and private methods.
+
+
+
