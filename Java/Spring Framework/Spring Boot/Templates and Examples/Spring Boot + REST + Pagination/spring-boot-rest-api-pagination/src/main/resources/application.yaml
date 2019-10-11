@@ -1,0 +1,15 @@
+spring:
+  main:
+    banner-mode: "off"
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:justdb
+    username: admin
+    password: admin
+  h2:
+    console:
+      enabled: true
+      
+swagger:
+  title: Spring Boot Pagination Example
+  version: 1.0.0

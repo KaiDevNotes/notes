@@ -1,0 +1,15 @@
+
+
+Description:
+
+
+Sometimes it is necessary to return data page by page. 
+It is convenient for large amount of data and in case 
+when data should be presented in table (Table Data).
+
+
+This example shows configuration of Spring Boot project 
+in conjunction with Swagger in order to be able to return 
+Pages of data. As we can see it is possible to obtain Page 
+from JpaRepository or build Page manually.
+
