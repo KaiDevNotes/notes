@@ -1,0 +1,145 @@
+
+
+
+
+
+-----------------------------------------------------------------------------
+Description for deployment-service-ingress-secret-configmap.yml k8s manifest:
+-----------------------------------------------------------------------------
+
+
+
+
+
+This manifest contains YAML definitions for 5 k8s resources which are usually 
+needed for deployment regular Java (Spring Boot in this case) application to 
+Kubernetes. The resources are:
+
+* deployment
+* secret
+* configmap
+* service
+* ingress
+
+
+
+
+
+-----------------------------------------------------------------------------
+
+
+
+
+------------
+[deployment]
+------------
+
+
+Interesting parts of deployment's definition are:
+
+
+[1] spec.template.spec.containers.command
+
+In this section we can see "java -jar ..." command for running a java application 
+but with several arguments for:
+
+- tuning consumption of resources;
+- exposing JMX interface
+- exposing JDWP for remote debug of the application
+
+
+---
+
+
+[2] spec.template.spec.containers.env
+
+In this section we can define environment variables which can be used by our 
+java application. In runtime values of this variables can be obtained via
+{
+	org.springframework.core.env.Environment::getProperty()
+}
+or in application configuration file (e.g. src/main/resources/application.yaml)
+via next construction ${ENV_VAR_NAME:default-value}, for example:
+{
+	spring:
+	  main:
+		banner-mode: "off"
+	  datasource:
+		driver-class-name: org.postgresql.Driver
+		url: jdbc:postgresql://${DB_ADDR:localhost}:${DB_PORT:6432}/${DB_DATABASE:appdb}
+		username: ${DB_USER:appdb-user}
+		password: ${DB_PASSWORD:appdb-password}
+		hikari:
+		  maximum-pool-size: 5
+		  minimum-idle: 1
+		  schema: ${DB_SCHEMA:appdb-schema}
+	  jpa:
+		hibernate:
+		  ddl-auto: none
+		show-sql: false
+		properties:
+		  hibernate:
+			format_sql: false
+}
+
+Values for the environment variables can be set directly or,
+for example, can be obtained from secret resource via "secretKeyRef".
+
+
+---
+
+
+[3] spec.template.spec.containers.volumeMounts
+
+Using this section we are able to take content of any section of configmap and 
+store it as file inside of application's pod/container. Configmap is mounted via
+spec.template.spec.volumes section.
+
+For example, in this case we take content of section with name "config-1.txt" 
+and store it in /opt/app-name/config-1.txt file inside of pod/container.
+
+
+---
+
+
+[4] spec.template.spec.containers.readinessProbe/livenessProbe
+
+This sections hold configuration for readiness and liveness probes.
+In this case (in case of simple Spring Boot application) probes are 
+invokation of [GET /manage/health] standard endpoint which is provided 
+by Spring Boot Actuator which should be added to project as maven 
+dependency in pom.xml:
+{
+    <dependencies>
+		...
+    	<dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+}
+and should be configured in src/main/resources/application.yaml:
+{
+	management:
+	  endpoints:
+		jmx:
+		  exposure:
+			include: health,loggers
+		web:
+		  base-path: /manage
+		  exposure:
+			include: health,loggers
+}
+
+
+
+
+
+
+
+
+
+
