@@ -5,6 +5,7 @@ modifying Java classes during the runtime of a Java application and without
 the help of a compiler.
 
 https://bytebuddy.net/#/
+https://medium.com/@shehan.a.perera/java-agents-with-byte-buddy-93185305c9e9
 https://stackoverflow.com/questions/tagged/byte-buddy
 
 In particular it easily allows us to modify 3rd party libraries by creating 
