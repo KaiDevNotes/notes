@@ -1,0 +1,14 @@
+spring:
+  main:
+    banner-mode: "off"
+
+swagger:
+  title: UDP Retransmitter
+  version: 1.0.0
+
+destination:
+  host: localhost
+  port: 8999
+  connection-pool:
+    max-idle: 2
+    max-total: 5

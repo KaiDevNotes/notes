@@ -1,0 +1,15 @@
+
+
+Project [udp-retransmitter] is used in order to demonstrate a way to create 
+a custom connection pool. It is simple spring-boot application which retransmits
+messages which are received via HTTP call to particular host via UDP protocol.
+
+
+In this case we create pool of UDP connections (java.net.DatagramSocket) and 
+implementation of this pool is based on GenericObjectPool type which is 
+provided by "Apache Commons Pool 2" library. 
+
+
+So using org.apache.commons.pool2.impl.GenericObjectPool we can create pools
+of any objects and control their life-cycle in the pool.
+
