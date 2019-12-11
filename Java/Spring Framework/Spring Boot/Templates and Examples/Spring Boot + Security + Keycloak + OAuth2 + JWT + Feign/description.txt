@@ -1,0 +1,113 @@
+
+
+
+
+Useful links:
+
+https://blog.jdriven.com/2019/10/spring-security-5-2-oauth-2-exploration-part1/
+https://blog.jdriven.com/2019/10/spring-security-5-2-oauth-2-exploration-part2/
+
+https://medium.com/@bcarunmail/securing-rest-api-using-keycloak-and-spring-oauth2-6ddf3a1efcc2
+
+
+
+
+----------------------------------------------
+
+
+
+
+This example describes process of securing spring boot application using:
+Spring Security + Keycloak + OAuth2 + JWT
+
+
+It consists of 2 services: 
+
+* Backend service - has secured endpoints and allows to performs CRUD 
+operations against Item entities.
+
+* Proxy Service - just transmits requests to "Backend service". 
+It is necessary to show how to perform secured communication between
+services using Feign client.
+
+
+
+----------------------------------------------
+
+
+
+Keycloak: 
+
+It is used as OAuth2 provider in this example.
+
+We should use official docs in order to install Keycloak:
+https://www.keycloak.org/docs/latest/getting_started/index.html
+
+
+
+----------------------------------------------
+
+
+
+
+Each service provides Swagger UI:
+
+* Backend service (started on 8881 port): http://localhost:8881/swagger-ui.html
+
+* Proxy Service (started on 8882 port): http://localhost:8882/swagger-ui.html
+
+
+
+In order to be able to make calls to service's API via Swagger UI we have to create
+Realm (dev), Client (frontend-client), Role (FRONTEND_USER) and User (frontend-user)
+in Keycloak.
+
+* Client:
+---------
+- Client ID: frontend-client
+- Client Protocol: openid-connect
+- Access Type: public
+- Standard Flow Enabled: ON
+- Implicit Flow Enabled: ON
+- Direct Access Grants Enabled: ON
+- Valid Redirect URIs: http://localhost:8881/*, http://localhost:8882/*
+- Web Origins: http://localhost:8881, http://localhost:8882
+
+* User
+------
+- Username: frontend-user
+- Set credential on Credentials Tab. And next update this creadentials by pressing "Impersonate" button on Details tab -> Sign Out -> Try to login -> Update password
+- Add role FRONTEND_USER on Role Mappings tab
+
+
+So, we can use user ("frontend-user" with appropriate password) in order to make call to the service from Swagger UI.
+
+
+----------------------------------------------
+
+
+
+
+Also we have to create secured client which will be use for secured communication 
+between services using Feign client with Role (BACKEND_USER)
+
+
+* Client:
+---------
+- Client ID: backend-client
+- Enabled: ON
+- Client Protocol: openid-connect
+- Access Type: confidential
+- Standard Flow Enabled: OFF
+- Implicit Flow Enabled: OFF
+- Direct Access Grants Enabled: ON
+- Service Accounts Enabled: ON
+- Authorization Enabled: OFF
+- Web Origins: http://localhost:8882
+- Add role BACKEND_USER (which we should create) to this client on "Service Account Roles" tab
+
+- Take "secret" from "Credentials" tab of the client and insert it into "backend-client-secret" 
+property of /proxy-service/src/main/resources/application.yml
+
+
+

@@ -1,0 +1,25 @@
+server.port: 8882
+
+spring:
+  main:
+    banner-mode: "off"
+      
+swagger:
+  title: Proxy Service
+  version: 1.0
+  
+backend-service-url: "http://localhost:8881"
+
+keycloak:
+  auth-url: "http://localhost:8080/auth"
+  tokent-url: "${keycloak.auth-url}/realms/${keycloak.realm}/protocol/openid-connect/token"
+  certs-url: "${keycloak.auth-url}/realms/${keycloak.realm}/protocol/openid-connect/certs"
+  realm: dev
+  # client for access via swagger
+  frontend-client-id: frontend-client
+  # client for access "Backend Service" via Feign client
+  backend-client-id: backend-client
+  backend-client-secret: 0c6e5f6b-5602-4817-a86b-5da434dcea01
+  
+  
+  

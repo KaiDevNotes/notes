@@ -1,0 +1,21 @@
+server.port: 8881
+
+spring:
+  main:
+    banner-mode: "off"
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:justdb
+      
+swagger:
+  title: Backend Service
+  version: 1.0
+
+keycloak:
+  auth-url: "http://localhost:8080/auth"
+  tokent-url: "${keycloak.auth-url}/realms/${keycloak.realm}/protocol/openid-connect/token"
+  certs-url: "${keycloak.auth-url}/realms/${keycloak.realm}/protocol/openid-connect/certs"
+  realm: dev
+  # client for access via swagger
+  frontend-client-id: frontend-client
+  
