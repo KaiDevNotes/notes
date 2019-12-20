@@ -1,0 +1,40 @@
+﻿
+
+CAP stands for Consistency, Availability and Partition Tolerance.
+
+* Consistency (C): All nodes see the same data at the same time. 
+What you write you get to read.
+
+* Availability (A): A guarantee that every request receives a response 
+about whether it was successful or failed. Whether you want to read or 
+write you will get some response back.
+
+* Partition Tolerance (P): The system continues to operate despite 
+arbitrary message loss or failure of part of the system. Irrespective 
+of communication cut down among the nodes, system still works.
+
+Key point here is (P) is not visible to customer. Customer can only 
+experience (C) and (A). (P) is driven by wires, electricity, software and 
+hardware and none of us have any control and often (P) may not be met. 
+If (P) is existing, there is no challenge with (A) and (C) (except for 
+latency issues). The problem comes when (P) is not met. Now we have two 
+choices to make:
+
+* AP: When there is no Partition Tolerance (P), system is available (A) 
+but with inconsistent data (e.g. we have several replicas of a microservice 
+which are able to respond to all requests, but there is no data consistency 
+between this replicas and each replica can respond with different data).
+
+* CP: When there is no Partition Tolerance (P), system is not fully available
+but the data is consistent (C) (e.g. we have single instance of a microservice 
+and as a result this instance is not able to respond to all requests 
+(no availability), but data is consistent since we have only one instance of 
+the microservice).
+
+
+In other words the main point of CAP theorem is that when we don't have 
+Partition Tolerance (P), we can keep our system available (AP) OR 
+consistent (CP).
+
+
+
