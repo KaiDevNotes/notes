@@ -235,26 +235,13 @@ class Handlers
             oSession["ui-backcolor"] = "Lavender";
         }
         if (sForwardHost != null) {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            for (var i = 0; i < host.AddressList.Length; i++) {
-                var ip = host.AddressList[i].ToString();
-                if (oSession.host == (ip + ":" + Fiddler.CONFIG.ListenPort) || (Fiddler.CONFIG.ListenPort == 80 && oSession.host == ip + "")) {
-                    //FiddlerApplication.Log.LogFormat("PathAndQuery: {0}", oSession.PathAndQuery);
-                    if(oSession.PathAndQuery.Contains("xyz195")){
-                        oSession.host = oSession.PathAndQuery.Substring(1, oSession.PathAndQuery.IndexOf("xyz195")-1);
-                        //FiddlerApplication.Log.LogFormat("New Host: {0}", oSession.host);
-                        oSession.PathAndQuery = oSession.PathAndQuery.Substring(oSession.PathAndQuery.IndexOf("xyz195")+6);
-                        //FiddlerApplication.Log.LogFormat("New PathAndQuery: {0}", oSession.PathAndQuery);
-                    } else {
-                        oSession.host = sForwardHost;
-                    }
-                    //FiddlerApplication.Log.LogFormat("x-cobalt-host: {0}", oSession.oRequest["x-cobalt-host"]);
-                    oSession.oRequest.headers.Remove("x-cobalt-host");
-                }
-                if (oSession.host.Contains("-" + Fiddler.CONFIG.ListenPort + ".ip")) {
-                    oSession.host = sForwardHost;
-                    oSession.oRequest.headers.Remove("x-cobalt-host");
-                }
+            if(oSession.PathAndQuery.Contains("xyz195")){
+                oSession.host = oSession.PathAndQuery.Substring(1, oSession.PathAndQuery.IndexOf("xyz195")-1);
+                //FiddlerApplication.Log.LogFormat("New Host: {0}", oSession.host);
+                oSession.PathAndQuery = oSession.PathAndQuery.Substring(oSession.PathAndQuery.IndexOf("xyz195")+6);
+                //FiddlerApplication.Log.LogFormat("New PathAndQuery: {0}", oSession.PathAndQuery);
+            } else {
+                oSession.host = sForwardHost;
             }                        
         }
     }
