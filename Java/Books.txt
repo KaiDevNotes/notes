@@ -1,4 +1,4 @@
-﻿1) Head First. Java (Изучаем Java) 2ое изд.
+1) Head First. Java (Изучаем Java) 2ое изд.
 2) Java 8. Полное руководство. Г. Шилдт. 9 издание 2015 год 
 3) Java. Методы программирования. И. Блинов. 2013 год
 4) Java. Эффективное программирование. Дж. Блох. 2-е издание 2014 год
@@ -24,3 +24,4 @@
 24) Machine Learning in Java. Bostjan Kaluza. 2016
 25) Head First. Networking. 2009
 26) 45 татуировок менеджера. М. Батырев. 2014
+27) Beginning Java Data Structures and Algorithms. J. Cutajar. 2018
