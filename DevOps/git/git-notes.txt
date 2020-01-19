@@ -356,3 +356,44 @@ $ git revert HEAD
 $ git push  <remote-name> <branch-name>
 
 
+
+-----------------------------------------------------------
+
+
+
+[SQUASHING]
+
+
+Squash operation is used in order to make 1 commit from sequence of N last commits.
+It is necessary to keep git log clean.
+
+Squash operation consists of next steps:
+
+
+1) Perform "rebase" command in the next format:
+
+$ git rebase -i HEAD~N
+
+where N - is number of commits we would like to squash into 1 commit
+
+
+2) In opened editor replace "pick" on the second and subsequent commits with "fixup"
+
+
+3) Perform force push
+
+$ git push -f origin [branch-name]
+
+
+For example, we would like to make 1 commit from last 5 commits in order
+to keep our git log clean.
+
+$ git rebase -i HEAD~5
+
+then replace "pick" on the 2-5 commits with "fixup" and
+
+$ git push -f origin [branch-name]
+
+
+
+
