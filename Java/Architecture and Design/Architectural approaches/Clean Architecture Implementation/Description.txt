@@ -26,9 +26,9 @@ CUSTOMER or SUPPORT_ENGINEER.
 
 
 
-Actually SUPPORT TICKET SYSTEM application has architecture which is mix 
-of architectures such as Hexagonal, Onion and Clean. And the main point 
-is that DEPENDENCIES SHOULD GO INWARD (OUTSIDE-IN DEPENDENCIES DIRECTION).
+Actually SUPPORT TICKET SYSTEM application has architecture which is mix of 
+architectures such as Hexagonal, Onion and Clean. And the main point is that 
+DEPENDENCIES SHOULD GO INWARD (FROM-OUTSIDE-TO-INSIDE DEPENDENCIES DIRECTION).
 
 
 
@@ -128,7 +128,7 @@ scheduling of commands execution and so on. (See CQRS.pdf for more details)
 
 
 It is important to note that DEPENDENCIES GO TOWARDS CENTER 
-(OUTSIDE-IN DEPENDENCIES DIRECTION). 
+(FROM-OUTSIDE-TO-INSIDE DEPENDENCIES DIRECTION). 
 It means that classes in inner layer don't know about classes in outer layers.
 
 For example:

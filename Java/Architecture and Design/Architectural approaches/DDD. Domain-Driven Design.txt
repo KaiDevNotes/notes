@@ -105,7 +105,7 @@ which can be like in example in (B1 p. 67).
 (B1 p. 23, 105)
 On a greenfield project it would be well to consider using Hexagonal as the 
 overarching style. (B1 p. 119)
-Hexagonal architecture (aka Ports and Adapters) implies Outside-In 
+Hexagonal architecture (aka Ports and Adapters) implies FROM-OUTSIDE-TO-INSIDE 
 dependencies direction.
 
 
