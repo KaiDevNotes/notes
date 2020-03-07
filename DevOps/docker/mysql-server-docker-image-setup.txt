@@ -1,0 +1,77 @@
+
+
+
+Useful links:
+
+https://hub.docker.com/r/mysql/mysql-server/
+
+
+
+--------------------------------------------
+
+
+
+Run next commands one-by-one to start MySQL Server inside Docker:
+
+
+docker pull mysql/mysql-server:5.7
+docker run --name=mysql-server-5.7 -e MYSQL_ROOT_HOST=% -e MYSQL_ROOT_PASSWORD=admin -p 3306:3306 -d mysql/mysql-server:5.7
+
+
+Next we can mainatian our container:
+
+* See the status of created container:  
+  docker ps -a
+  
+* See logs:
+  docker logs mysql-server-5.7
+  
+* Exec into the container:
+  docker exec -it mysql-server-5.7 bash
+  
+* Stop the container:
+  docker stop mysql-server-5.7
+  
+* Start the container:
+  docker start mysql-server-5.7
+  
+* Remove the container:
+  docker rm -f mysql-server-5.7
+  
+  
+And maintain schemas and tables on the MySQL Server:
+
+1) Exec into the container:
+   docker exec -it mysql-server-5.7 bash
+   
+2) Coonect to MySQL Server using "mysql" console utility
+   mysql -uroot -padmin
+   
+3) Show existing schemas:
+   show schemas;
+
+4) Use any schema, e.g. "mysql"
+   use mysql;
+   
+5) Show existing tables in the schema:
+   show tables;
+   
+6) Perform query against any table, e.g. "user":
+   select Host, User from user;
+
+
+--------------------------------------------
+
+
+
+Notes:
+
+
+[1] Environment variable: MYSQL_ROOT_HOST=% is necessary in order to address problem with connectivity restriction which is described here:
+	https://stackoverflow.com/questions/41700622/can-t-connect-to-mysql-docker-image
+	
+[2] -p 3306:3306 is necessary in order to map port localhost:3306 to port 3306 of MySQL Server inside Docker container
+
+
+
+
