@@ -25,3 +25,4 @@
 25) Head First. Networking. 2009
 26) 45 татуировок менеджера. М. Батырев. 2014
 27) Beginning Java Data Structures and Algorithms. J. Cutajar. 2018
+28) Тайная опора. Л. Петрановская. 2015
