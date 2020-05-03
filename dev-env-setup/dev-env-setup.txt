@@ -1,0 +1,48 @@
+
+
+[dev env fresh setup]:
+
+
+[1] Windows 10 Pro
+
+
+[2] Google Chrome
+	+ JSONView plug-in
+	
+
+[3] Notepad++
+	+ JSTools plug-in
+	+ XML Tool plug-in  
+	
+
+[4] Git
+	+ git-bash
+	+ git-citool
+	
+	
+[5] Docker Desktop
+	+ Activate embedded Kubernetes node
+	  https://collabnix.com/kubernetes-dashboard-on-docker-desktop-for-windows-2-0-0-3-in-2-minutes/
+	+ Configure command completion for Kubectl
+	  https://medium.com/@sandipchitale/command-completion-for-minikube-and-kubectl-on-windows-10-580710bc464c
+	
+
+[6] OpenJDK 11
+	
+	
+[7] IntelliJ IDEA Community Edition
+	+ Lombok plug-in
+
+
+[8] DBeaver
+
+
+[9] Kafka tool
+
+
+[10] Fiddler
+
+
+[11] GrepWin
+
+
