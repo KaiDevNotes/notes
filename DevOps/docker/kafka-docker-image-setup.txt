@@ -1,0 +1,78 @@
+
+
+Kafka requires Zookeeper in order to manage kafka cluster.
+So first of all we have to run zookeeper docker container,
+and only then run kafka docker container.
+
+It can be done as described in the next article:
+https://github.com/confluentinc/cp-docker-images/wiki/Getting-Started
+
+Or without "--net=host" via next steps:
+1. Run zookeeper docker container
+2. Find ip address of zookeeper docker container
+3. Use this ip address to run kafka docker container
+
+
+
+To simplify the process we can do next:
+
+
+
+[1] Create kafka-setup.sh with next content
+
+
+	#!/bin/bash
+
+	ZOOKEEPER_DOCKER_IMAGE=confluentinc/cp-zookeeper:5.4.1
+	ZOOKEEPER_DOCKER_CONTAINER_NAME=zookeeper1
+	ZOOKEEPER_CLIENT_PORT=42181 
+
+	KAFKA_DOCKER_IMAGE=confluentinc/cp-kafka:5.4.1
+	KAFKA_DOCKER_CONTAINER_NAME=kafka1
+	KAFKA_LISTENING_PORT=59092
+
+
+	# Run zookeeper docker container
+	docker run -d \
+		--name=$ZOOKEEPER_DOCKER_CONTAINER_NAME \
+		-e ZOOKEEPER_CLIENT_PORT=$ZOOKEEPER_CLIENT_PORT \
+		-e ZOOKEEPER_TICK_TIME=2000 \
+		-p $ZOOKEEPER_CLIENT_PORT:$ZOOKEEPER_CLIENT_PORT \
+		$ZOOKEEPER_DOCKER_IMAGE
+		
+	# Obtain IP Address of created zookeeper's docker container
+	ZOOKEEPER_CONTAINER_IP="$(docker inspect -f '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $ZOOKEEPER_DOCKER_CONTAINER_NAME)"
+	ZOOKEEPER_CONNECTION="$ZOOKEEPER_CONTAINER_IP:$ZOOKEEPER_CLIENT_PORT"
+
+	# Run kafka docker container
+	docker run -d \
+		--name=$KAFKA_DOCKER_CONTAINER_NAME \
+		-e KAFKA_ZOOKEEPER_CONNECT=$ZOOKEEPER_CONNECTION \
+		-e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:$KAFKA_LISTENING_PORT \
+		-p $KAFKA_LISTENING_PORT:$KAFKA_LISTENING_PORT \
+		$KAFKA_DOCKER_IMAGE
+
+
+
+[2] Run this script via GitBash via next command from script's directory:
+
+	./kafka-setup.sh
+
+ 
+ 
+[3] Connect to kafka via kafka-tool:
+
+	3.1 - File -> Add New Connection...
+	
+	3.2 - Set cluster name
+	
+	3.3 - Set zookeeper port to value of ZOOKEEPER_CLIENT_PORT (42181, in this case)
+	
+	3.4 - Click "Test" button
+	
+	3.5 - Click "Yes"
+	
+	3.6 - Enjoy!	
+	
+	
+
