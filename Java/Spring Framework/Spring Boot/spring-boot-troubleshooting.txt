@@ -1,0 +1,20 @@
+
+		
+
+[1] Use "--debug" mode in case of problems with auto-configurations as described here:
+	https://docs.spring.io/spring-boot/docs/current/reference/html/howto.html#howto-troubleshoot-auto-configuration
+	It will allow us to see what auto-configurations have been applied.
+	
+	If it is necessary to see auto-configurations during test run then we can switch on "--debug" mode via 
+	class-level annotation: 
+	
+	@TestPropertySource(properties="debug=true")
+
+
+
+[2] Use "-U" flag in order to force Maven to re-download all dependencies during build process.
+
+	mvn clean install -U
+	
+	
+	
