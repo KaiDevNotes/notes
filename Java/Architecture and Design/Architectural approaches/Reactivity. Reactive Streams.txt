@@ -1,0 +1,151 @@
+
+
+Books and sources:
+
+[B1]: Hands-On Reactive Programming in Spring 5. O. Dokuka. 2018
+
+
+
+--------------------------------------------------------
+--------------------------------------------------------
+
+
+
+
+[+] THE REACTIVE MANIFESTO
+
+
+* "The Reactive Manifesto" defines next requirements for reactive systems:
+- Responsive
+- Resilient
+- Elastic
+- Message Driven
+Visit next links in order to find more details:
+https://www.reactivemanifesto.org/
+https://www.reactivemanifesto.org/glossary
+
+
+* Responsiveness is the main outcome of reactivity usage (B1 p. 30).
+
+
+* Reactivity is a foundation of "Streaming Architecture" which is about 
+the construction of the flow of data processing and transformation. In general,
+such a system is characterized by low latency and high throughput. Thus, to 
+build such a highly-available system, we have to rely on fundamental principles,
+as mentioned in the Reactive Manifesto. 
+For example, achieving resilience might be done by enabling backpressure support. 
+Backpressure refers to a sophisticated mechanism of workload management between
+processing stages in such a way that one stage does not overwhelm another stage.
+Efficient workload management may be achieved by using message-driven 
+communication over a reliable message broker, which may persist messages
+internally and send messages on demand.
+
+
+
+
+
+[+] REACTIVE STREAM SPECIFICATION
+
+
+* "Reactive Streams Specification" is a definition of API and rules for 
+implementation of reactive approach (reactive libraries):
+https://www.reactive-streams.org/
+https://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/package-summary.html
+
+
+* Reactive Streams specification makes reactive libraries (such as RxJava, 
+Project Reactor e.t.c) compatible with each other. 
+
+
+* Reactive Streams specification resolved the backpressure problem by 
+introducing the "pull-push" data exchange model. It means that data items is 
+propagated downstream, from publisher to subscriber via Subscriber::onNext(Object)
+method, but at the same time, subscription and demand control signals are 
+propagated upstream, from a subscriber to a publisher via method 
+Subscription::request(long n).
+See diagram 4.1 (B1 p. 153) and diagram 3.7 (B1 p. 106) for more details.
+See custom subscriber implementation for better understanding of the backpressure 
+mechanism usage (B1 p. 165 "Implementing custom subscriber" section).
+
+
+* Backpressure mechanism 
+
+
+
+
+[+] PROJECT REACTOR
+
+
+* Project Reactor is the most popular implementation of the Reactive Streams 
+specification. 
+
+
+* Project Reactor supports all common modes of backpressure propagation, 
+as follows:
+
+- "push only": When a subscriber asks for an effectively infinite number of 
+elements via Subscription::request(Long.MAX_VALUE)
+
+- "pull only": When a subscriber requests the next element only after receiving
+the previous one: Subscription::request(1)
+
+- "pull-push" (sometimes called mixed): When a subscriber has real-time control
+over the demand and the publisher may adapt to the announced speed of data
+consumption.
+
+
+* It is recommended to extend the BaseSubscriber class provided by Project 
+Reactor instead of implementing a custom one.
+
+
+* Project Reactor provides excellent documentation, including a guide to 
+selecting appropriate operators: 
+http://projectreactor.io/docs/core/release/reference/#which-operator
+
+
+* Project Reactor is used by Spring Framework 5 for:
+
+- non-blocking reactive http requests processing via WebFlux + Netty
+See comparison of non-blocking WebFlux and blocking WebMVC on Diagram 5.1 
+(B1 p. 244)
+
+- non-blocking reactive SSE (server-sent events) as lihgtweight alternative 
+to WebSocket support
+
+- non-blocking reactive cross-service communication via WebClient and 
+WebSocketClient
+
+- non-blocking reactive data access: the Spring Data project provides reactive 
+connectivity for MongoDB, Cassandra, Redis, Couchbase e.t.c.
+
+So it is possible to build fully non-blocking reactive application using 
+Spring Framework 5.  
+
+
+* Using Reactor and WebFlux in particular CPU-intensive tasks should be 
+scheduled on separate Thread or ThreadPool instances via ::publishOn() or 
+::subscribeOn() methods.
+
+
+* We have to be careful when using methods that, at first glance, look like 
+they are I/O operations-free but in fact hide some specific interactions with 
+OS (e.g. java.util.UUID.randomUUID()). Without proper attention to such methods,
+we may dramatically decrease the entire system's performance. It is, therefore, 
+crucial to use only non-blocking operations with Reactor and WebFlux in 
+particular.
+
+
+* "WebFlux + Netty" allows us to handle 20.000 simultaneous requests/users using
+cheap hardware e.g. Amazon EC2 (1 virtual CPU, 2 GB RAM) (B1 p. 313)
+
+
+* Spring Cloud Stream is an easy way to integrate message broker kafka/rabbitmq
+with application which is based on Project Reactor and Spring Framework 5 and 
+as a result to build distributed reactive system.
+It allows backpressure control and other things which are related to reactive 
+approach.
+See "Spring Cloud Streams as a bridge to Spring Ecosystem" section (B1 p. 428)
+
+
+* RSocket...
+
