@@ -15,7 +15,8 @@ Books and sources:
 [+] THE REACTIVE MANIFESTO
 
 
-* "The Reactive Manifesto" defines next requirements for reactive systems:
+* "The Reactive Manifesto" defines requirements for reactive systems, so 
+such system shoul be:
 - Responsive
 - Resilient
 - Elastic
@@ -63,12 +64,10 @@ propagated downstream, from publisher to subscriber via Subscriber::onNext(Objec
 method, but at the same time, subscription and demand control signals are 
 propagated upstream, from a subscriber to a publisher via method 
 Subscription::request(long n).
-See diagram 4.1 (B1 p. 153) and diagram 3.7 (B1 p. 106) for more details.
+See Diagram 4.1 (B1 p. 153) and Diagram 3.7 (B1 p. 106) for more details.
 See custom subscriber implementation for better understanding of the backpressure 
 mechanism usage (B1 p. 165 "Implementing custom subscriber" section).
 
-
-* Backpressure mechanism 
 
 
 
@@ -77,7 +76,12 @@ mechanism usage (B1 p. 165 "Implementing custom subscriber" section).
 
 
 * Project Reactor is the most popular implementation of the Reactive Streams 
-specification. 
+specification.
+
+
+* Project Reactor provides excellent documentation, including a guide to 
+selecting appropriate operators: 
+http://projectreactor.io/docs/core/release/reference/#which-operator
 
 
 * Project Reactor supports all common modes of backpressure propagation, 
@@ -96,11 +100,6 @@ consumption.
 
 * It is recommended to extend the BaseSubscriber class provided by Project 
 Reactor instead of implementing a custom one.
-
-
-* Project Reactor provides excellent documentation, including a guide to 
-selecting appropriate operators: 
-http://projectreactor.io/docs/core/release/reference/#which-operator
 
 
 * Project Reactor is used by Spring Framework 5 for:
@@ -122,6 +121,14 @@ So it is possible to build fully non-blocking reactive application using
 Spring Framework 5.  
 
 
+* According to Diagram 5.1 (B1 p. 244) with comparison of non-blocking WebFlux 
+and blocking WebMVC it is clear that in WebMVC the thread which processes each 
+incoming request may be blocked by reading/writting from/to the I/O (see 
+Diagram 6.10, B1 p. 296). On the other hand WebFlux is built on top of a 
+non-blocking API. This efficient technique of accepting and processing requests 
+is depicted on Diagram 6.11 (B1 p. 296).
+
+
 * Using Reactor and WebFlux in particular CPU-intensive tasks should be 
 scheduled on separate Thread or ThreadPool instances via ::publishOn() or 
 ::subscribeOn() methods.
@@ -139,7 +146,13 @@ particular.
 cheap hardware e.g. Amazon EC2 (1 virtual CPU, 2 GB RAM) (B1 p. 313)
 
 
-* Spring Cloud Stream is an easy way to integrate message broker kafka/rabbitmq
+* WebFlux has ability to process the incoming request body faster, with less 
+memory consumption. This feature turns on when the incoming body is a collection 
+of elements and our system can process each item separately, as depicted on
+Diagram 6.23 (B1 p. 314)
+
+
+* Spring Cloud Streams is an easy way to integrate message broker kafka/rabbitmq
 with application which is based on Project Reactor and Spring Framework 5 and 
 as a result to build distributed reactive system.
 It allows backpressure control and other things which are related to reactive 
@@ -147,5 +160,10 @@ approach.
 See "Spring Cloud Streams as a bridge to Spring Ecosystem" section (B1 p. 428)
 
 
-* RSocket...
+* RSocket. The central problem of Reactor-Netty is that the actual demand (call 
+of Subscription::request(long n)) of the components does not cross the network 
+boundaries, as depicted on Diagram 8.13 (B1 p. 457). In contrast, RSockets offers
+a binary protocol that is an application protocol for reactive streams semantics 
+across an asynchronous, network boundary (see Diagram 8.14 B1 p. 459)
+
 
