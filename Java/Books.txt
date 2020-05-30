@@ -27,3 +27,4 @@
 27) Beginning Java Data Structures and Algorithms. J. Cutajar. 2018
 28) Тайная опора. Л. Петрановская. 2015
 29) Hands-On Reactive Programming in Spring 5. O. Dokuka. 2018
+30) Kafka Streams in Action. B. Bejeck. 2018
