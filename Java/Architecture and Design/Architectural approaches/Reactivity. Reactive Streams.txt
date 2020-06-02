@@ -181,8 +181,8 @@ processing logic in appropriate layer/level of our application;
 
 2 - Then this Publisher is moved via all necessary layers/levels of our 
 application where each layer/level adds layer-specific logic for processing,
-filtering and transformation of each item which is pushed by the Publisher
-(via methods ::map(), ::filter() etc.);
+filtering and transformation of each item (via methods ::map(), ::filter() etc.) 
+which is pushed by the Publisher;
 
 3 - And finally at some point of request processing logic we subscribe to the
 Publisher and send pushed item(s) as response to the request.
@@ -196,10 +196,10 @@ by the Publisher to the Pipeline.
 Let's consider the next Reactive application which can be created according to 
 DDD and will perform next logic:
 - Accepts SSE connection from a client; 
-- Obtain data via WebSocket connection from 3rd party service;
-- Apply logic which is specific for domain and application layers to the data
+- Obtains data via WebSocket connection from 3rd party service;
+- Applies logic which is specific for domain and application layers to the data
 as soon as it arrives via WebSocket connection;
-- Send back processed data to the client via established SSE connection as 
+- Sends back processed data to the client via established SSE connection as 
 response. 
 
 Workflow can be described in the next way:
@@ -223,8 +223,8 @@ logic to each item and returns this Flux to Application Service (from
 APPLICATION layer);
 
 6 - Application Service (from APPLICATION layer) applies APPLICATION layer 
-specific logic to each item of the Flux and returns this Flux to Controller 
-(from PRESENTATION layer);
+logic to each item of the Flux and returns this Flux to Controller (from 
+PRESENTATION layer);
 
 7 - Controller (from PRESENTATION layer) transforms the Flux to Flux of DTOs,
 subscribes to the Flux and sends this DTOs to client via SSE connection.
