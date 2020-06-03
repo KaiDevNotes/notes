@@ -16,7 +16,7 @@ Books and sources:
 
 
 * "The Reactive Manifesto" defines requirements for reactive systems, so 
-such system shoul be:
+such system should be:
 - Responsive
 - Resilient
 - Elastic
@@ -173,60 +173,60 @@ across an asynchronous, network boundary (see Diagram 8.14 B1 p. 459)
 [+] WORKFLOW EXAMPLE OF REACTIVE APPLICATION
 
 
-Workflow of Reactive application which should handle external requests (http 
-requests, console commands etc.) consists of the next steps:
-
-1 - We create instance of Publisher (Flux/Mono) at some point of request 
-processing logic in appropriate layer/level of our application;
-
-2 - Then this Publisher is moved via all necessary layers/levels of our 
-application where each layer/level adds layer-specific logic for processing,
-filtering and transformation of each item (via methods ::map(), ::filter() etc.) 
-which is pushed by the Publisher;
-
-3 - And finally at some point of request processing logic we subscribe to the
-Publisher and send pushed item(s) as response to the request.
-
-In other words, as reaction to external request, we construct a Pipeline (chain
-of mappers, filters, processors) which will move and process item(s) to the 
-source of external request as soon as this item(s) will be produced and pushed 
-by the Publisher to the Pipeline.  
-
-
 Let's consider the next Reactive application which can be created according to 
 DDD and will perform next logic:
 - Accepts SSE connection from a client; 
 - Obtains data via WebSocket connection from 3rd party service;
 - Applies logic which is specific for domain and application layers to the data
 as soon as it arrives via WebSocket connection;
-- Sends back processed data to the client via established SSE connection as 
-response. 
+- Sends processed data to the client via established SSE connection as response. 
 
 Workflow can be described in the next way:
 
-1 - Controller (from PRESENTATION layer) accepts request to establish SSE 
-connection. See example of such endpoint on p. 275 of B1;
+1 - Controller (PRESENTATION layer) accepts request to establish SSE connection
+from client. See example of such endpoint on p. 275 of B1;
 
-2 - Controller calls method of Application Service (from APPLICATION layer);
+2 - Controller (PRESENTATION layer) calls method of Application Service 
+(APPLICATION layer);
 
-3 - Application Service (from APPLICATION layer) calls method of 
-Domain Service Interface (from DOMAIN layer);
+3 - Application Service (APPLICATION layer) calls method of Domain Service
+(DOMAIN layer);
 
-4 - Implementation of Domain Service Interface (from INFRASTRUCTURE layer)
-estamblishes WebSocket connection with 3rd party service. Such connection 
-can be established via WebSocketClient as described on p. 273 of B1;
+4 - Domain Service (DOMAIN layer) calls method of Data Provider Interface
+(DOMAIN layer);
 
-5 - Implementation of Domain Service Interface (from INFRASTRUCTURE layer)
-transforms Flux of data types (e.g. via Flux::map()) obtained from 
-WebSocketClient to Flux of types defined in DOMAIN layer, applies DOMAIN 
-logic to each item and returns this Flux to Application Service (from 
-APPLICATION layer);
+5 - Implementation of Data Provider Interface (INFRASTRUCTURE layer) estamblishes
+WebSocket connection with 3rd party service. Such connection can be established 
+via WebSocketClient as described on p. 273 of B1;
 
-6 - Application Service (from APPLICATION layer) applies APPLICATION layer 
+6 - Implementation of Data Provider Interface (INFRASTRUCTURE layer) transforms 
+Flux of data types (e.g. via Flux::map()) obtained from WebSocketClient to Flux 
+of types (Value Objects) defined in DOMAIN layer as soon as data arrives from 
+WebSocket connection, and returns the Flux of domain types to Domain Service 
+(DOMAIN layer);
+
+7 - Domain Service (DOMAIN layer) applies DOMAIN logic to each item of the Flux 
+(e.g. via Flux::map(), Flux::filter() etc.) and returns this Flux to Application 
+Service (APPLICATION layer);
+
+8 - Application Service (APPLICATION layer) applies APPLICATION layer 
 logic to each item of the Flux and returns this Flux to Controller (from 
 PRESENTATION layer);
 
-7 - Controller (from PRESENTATION layer) transforms the Flux to Flux of DTOs,
-subscribes to the Flux and sends this DTOs to client via SSE connection.
+9 - Controller (PRESENTATION layer) transforms this Flux to Flux of DTOs,
+subscribes to the Flux, obtains DTOs as soon as it available and sends this DTOs
+to the client via SSE connection.
 
 
+In general, workflow of the reactive application can be described as creation 
+of data pipeline (Data Stream or Publisher/Flux/Mono, in terms of Reactive 
+Streams specification) between 3rd party service and client which makes request 
+to our reactive application. Several layers/levels of application are involved 
+in this data pipeline creation process and each such layer adds layer-specific 
+processing logic to the pipeline (e.g. via Flux::map() etc.).
+
+
+So reactive application is a data pipeline with necessary processing logic for 
+each data item which flows (is pushed) through the pipeline. In general, it is
+similar Kafka Streams application, which is graph (topology) of data processing 
+nodes.
