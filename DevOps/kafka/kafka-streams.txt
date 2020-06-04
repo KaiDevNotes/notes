@@ -1,0 +1,405 @@
+
+
+Books and sources:
+
+[B1]: Kafka Streams in Action. B. Bejeck. 2018
+
+
+--------------------------------------------------------
+--------------------------------------------------------
+
+
+
+
+
+[*] Kafka
+
+
+* Kafka is a publisher/subscriber system, is a message broker or in other words
+is an intermediary which exchanges messages between two types of parties (from 
+producer to consumer) which do not necessarily know each other. (B1 p. 48)
+
+
+* Kafka does not keep any state regarding the producers or consumers. (B1 p. 48)
+
+
+* The underlying technology of a Kafka topic is a log. Each Kafka topic 
+has 1 or more partitions. Each Partition is a log (log file, see Figure 2.6 
+(B1 p. 50). Partitions of a topic can be distributed across several Kafka 
+broker instances (Kafka nodes), see Figure 2.9 (B1 p. 55). So it is possible 
+to say that Kafka topic is a distributed log.
+
+
+* Log is an append-only, totally ordered sequence of records ordered by time.
+(B1 p. 49)
+
+
+* Records which come into topic are divided/grouped into partitions if topic 
+has more than 1 partition. This records are grouped based on record key or 
+using any distribution algorithm (e.g. round-robin) in case when record does 
+not have key. See Figure 2.9 (B1 p. 55)
+
+
+* The order of messages across partitions is not guaranteed, but the order of 
+messages within each partition is guaranteed. (B1 p. 51)
+
+
+* Records with the same key will always be sent to the same partition and in 
+order. (B1 p. 51)
+
+
+* Ways of logs clearing:
+If you have independent, standalone events or messages, use log deletion. 
+If you have updates to events or messages, you will want to use log compaction.
+(B1 p. 61)
+
+
+* Consumer Group is a group of consumers for a topic with the same "gruop.id"
+(or in other words group of instances of an application which consume messages
+from the topic) where each consumer is assigned to one partition (in ideal case
+where number of consumers is equal to number of partitions), or where each 
+consumer is assigned to several partitions of the topic (if number of consumers
+is less than number of partitions). (B1 p. 69)
+
+
+* This consumer-per-partition pattern maximizes throughput, but if you spread 
+your consumers across multiple applications or machines, the total thread count 
+across all instances should not exceed the total number of partitions in the 
+topic. Any threads in excess of the total partition count will be idle. If a 
+consumer fails, the leader broker assigns its partitions to another active 
+consumer. (B1 p. 69)
+
+
+
+
+
+[*] Kafka Streams
+
+
+* Kafka Streams application is a graph (or topology) of processing nodes (e.g.
+mappers, filters, transformers e.t.c.) which are combined to provide powerful 
+and complex stream processing (B1 p. 42, 146)
+
+
+* When to use stream processing, and when not to use it:
+If you need to report on or take action immediately as data arrives, stream 
+processing is a good approach. If you need to perform in-depth analysis or are 
+compiling a large repository of data for later analysis, a stream processing 
+approach may not be a good fit. (B1 p. 32)
+
+
+* There are 2 different APIs (approaches) for building Kafka Streams application:
+
+1 - Kafka Streams API (KStream) is high-level API which allows developers to 
+create robust applications with minimal code;
+
+2 - Processor API is more low-level API which provides more control. So we can 
+do almost anything we want by writing custom processors and assembling this 
+processors into topology.
+
+
+* Records flow through the topology/graph in a depth-first manner. 
+This approach has significant implications: each record (a key/value pair) is 
+processed by the entire topology/graph before another record is forwarded 
+through the topology. Because each record is processed depth-first through the 
+whole DAG (Directed Acyclic Graph), there is NO NEED to have BACKPRESSURE built
+into Kafka Streams. (B1 p. 37)
+
+
+* Serde is a combination of serializer and deserializer.
+
+
+* The KStream::branch() method takes an array of predicates and returns an array
+which contains an equal number of KStream instances, each one accepting records 
+which match the corresponding predicate. As records from the original stream 
+flow through the branch processor, each record is matched against the supplied 
+predicates in the order that they are provided. The processor assigns records 
+to a stream on the first match; no attempts are made to match additional 
+predicates. The branch processor drops records if they do not match any of the 
+given predicates. The order of the streams in the returned array matches the 
+order of the predicates provided to the KStream::branch() method. (B1 p. 100)
+
+
+* KStream::selectKey() method returns a new KStream instance that produces 
+records with a new key (possibly a different type) and the same value.
+(B1 p. 102)
+
+
+* REPARTITIONING is a process of re-grouping messages which consists of 3 steps:
+- read messages from an existing topic;
+- change key for necessary messages;
+- send this messages to a new topic.
+As a result this messages will be grouped into paritition based on new key.
+
+
+* REPARTITIONING in Kafka Streams can be easely acheived by using the 
+KStream::through() method, as illustrated in Figure 4.7. 
+It means that first of all we should change/create key for necessary messages 
+via KStream::selectKey() or KStream::map() and next call KStream::through(). 
+KStream::through() method creates an intermediate topic, and the current KStream
+instance will start writing records to that topic. A new KStream instance, which
+is returned from the KStream::through() method, uses the same intermediate topic
+as its source. This way, the data is seamlessly repartitioned. (B1 p. 115)
+
+
+* AUTO-REPARTITIONING. In Kafka Streams, whenever you invoke a method that could
+result in generating a new key (selectKey(), map(), or transform()), an internal 
+Boolean flag is set to true, indicating that the new KStream instance requires 
+repartitioning. With this Boolean flag set, if you perform a join, reduce, or 
+aggregation operation, the repartitioning is handled for you automatically.
+(B1 p. 125)
+
+
+* Because the .selectKey() method modifies the key, both [coffeeStream] and 
+[electronicsStream] require REPARTITIONING. It is worth repeating that 
+repartitioning is necessary because you need to ensure that identical keys are 
+written to the same partition. This repartitioning is handled automatically. 
+Additionally, when you start your Kafka Streams application, topics involved
+in a join are checked to make sure they have the same number of partitions; 
+if any mismatches are found, a TopologyBuilderException is thrown. It is 
+responsibility of developer to ensure that keys involved in a join are of the 
+same type. (B1 p. 130) 
+
+
+* KStream::groupByKey() vs KStream::groupBy():
+- KStream::groupByKey() is used when your KStream already has non-null keys. 
+More importantly, the "needs repartitioning" flag is never set.
+- KStream::groupBy() method assumes that you have modified the key for the 
+grouping, so the repartition flag is set to true. After calling GroupBy, 
+joins, aggregations, and the like will result in automatic REPARTITIONING.
+So the main point is that you should prefer GroupByKey over GroupBy whenever 
+possible in order to avoid REPARTITIONING. (B1 p. 151)
+
+
+* The STATE STORES provided by Kafka Streams meet both the locality and 
+fault-tolerance requirements. They are local to the defined processors and do 
+not share access across processes or threads. State stores also use topics for
+backup and quick recovery. (B1 p. 120)
+
+
+* Each StreamTask has its own STATE STORE. (B1 p. 114)
+
+
+* Each StreamTask has its own copy of a local STATE STORE, and StreamThread 
+instances do not share StreamTask instances or data. As records which flow 
+through the topology, each node is visited in a depth-first manner, meaning 
+that there is never concurrent access to STATE STORES from any given processor. 
+(B1 p. 181)
+
+
+* Although you have two processors which forward records to one processor and 
+access one STATE STORE, you do not have to be concerned about concurrency 
+issues. Remember, parent processors forward records to child processors in a 
+depth-first manner, so each parent processor serially calls the child processor. 
+Additionally, Kafka Streams only uses one thread per task, so there are never 
+any concurrency access issues. (B1 p. 188)
+
+
+* KStream::join(). See Figure 4.15 as a description of stream joining. 
+(B1 p. 127).
+There are 3 types of join operation:
+- INNER JOIN -- KStream::join(), see description (B1 p. 128)
+- OUTER JOIN -- KStream::outerJoin(), see description (B1 p. 131)
+- LEFT-OUTER JOIN -- KStream::leftJoin(), see description (B1 p. 132)
+
+
+* TIMESTAMPS (B1 p. 132) are used in key areas of Kafka Streams functionality:
+- Joining streams;
+- Updating a changelog (KTable API);
+- Deciding when the Processor.punctuate() method is triggered (Processor API).
+
+ 
+* Timestamp can be obtained from 2 sources and choice of the source needs 
+careful consideration:
+- from message metadata via provided (by library) timestamp extractors;
+- from body of message value via custom timestamp extractor.
+(B1 p. 132)
+
+
+* According to Kafka Streams library definitions: 
+- KStream is a stream of events which are comparable to inserts into database;
+- KTable is a stream of updates for existing records/messages which are 
+comparable to updates in database. In other words KTable is a changelog where 
+older records are replaced by newer records with the same key. KTables are 
+essential for performing aggregation operations. (B1 p. 143. 166)
+
+
+* Having a key is essential for the KTable to work, just as you can not update 
+a record in a database table without having the key. (B1 p. 144)
+
+
+* Calling KStream::groupBy() returns a KGroupedStream instance. Then, calling 
+KGroupedStream::reduce() is what will get you to a KTable instance.
+(B1 p. 149)
+
+
+* ::aggregate() vs ::reduce()
+Although reducing is a form of aggregation, a reduce operation will yield the 
+same type of object. An aggregation also sums results, but it could return a 
+different type of object. (B1 p. 151)
+
+
+* Meterialized view is a object (or temporary table) which contains results of
+a query. (B1 p. 165)
+
+
+* Also note that the Processor::process() and Punctuator::punctuate() methods 
+are not called concurrently. (B1 p. 181)
+
+
+* Remember that with the Processor API, the order in which you define nodes 
+does not establish a parent-child relationship. The parent-child relationship 
+is determined by providing the names of previously defined processors.
+(B1 p. 191)
+
+
+* CONSUMER LAG is a difference between how fast the producers place records
+on the broker and when consumers read those messages, or in more details
+difference between the most recent offset produced and the last offset consumed 
+(from the same topic). See Figure 7.3 for visualization (B1 p. 199).
+
+
+* When you start your Kafka Streams application, it does not automatically 
+begin processing data - some coordination has to happen first. The consumer 
+needs to fetch metadata and subscription information; the application needs 
+to start StreamThread instances and assign TopicPartition instances to 
+StreamTask instances.
+This process of assigning or redistributing StreamTask instances (workload) 
+among StreamThread instances of one or several application instances on one 
+or sevaral machnes is called REBALANCING. (B1 p. 214)
+
+
+* REBALANCING allows SCALING of a Kafka Streams application up and down. 
+It means that we can add new application instances while an existing application
+is already running, and the REBALANCING process will redistribute the workload
+(StreamTask instances), we can remove instances of an existing application and
+this action will also trigger REBALANCING process.
+
+
+* Example of SCALING and REBALANCING:
+
+(1) Suppose we have one instance of Kafka Streams application (or topology, 
+    graph of processing nodes) with 2 source topics: A and B. 
+    Each topic has 3 partitions: A (AP1, AP2, AP3) and B (BP1, BP2, BP3).
+    When we start the instance (AppInstance1) Kafka Streams application 
+    with one StreamThread instance (StreamThread-1-1) REBALANCING process will 
+    be triggered number of StreamTask instances will be calculated as maximum 
+    number of partitions across the input topics A and B: max(3, 3) == 3.
+    Then TopicPartition instances of input topics A and B will be distributed 
+    evenly across these 3 StreamTask instances so that each StreamTask instance
+    will handle 3 TopicPartition instances, one from each topic:
+
+    [Machine1]--[AppInstance1]---[StreamThread-1-1]-+-[StreamTask1]--[AP1, BP1]
+                                                    +-[StreamTask2]--[AP3, BP3]
+                                                    +-[StreamTask3]--[AP2, BP2]
+
+(2) The instance of Kafka Streams application (AppInstance1) can be scaled 
+    vertically by adding resources to the Machine1 and one additional 
+    StreamThread instance (StreamThread-1-2).
+    In such case REBALANCING process will redistribute StreamTask instances
+    (workload) across StreamThread instances, so that StreamThread-1-1 will 
+    will handle 2 StreamTask instances, and StreamThread-1-2 will handle 1 
+    StreamTask instance:
+
+    [Machine1]--[AppInstance1]-+-[StreamThread-1-1]-+-[StreamTask1]--[AP1, BP1]
+                               |                    +-[StreamTask2]--[AP3, BP3]
+                               |
+                               +-[StreamThread-1-2]---[StreamTask3]--[AP2, BP2]
+
+(3) Also Kafka Streams application can be scaled horizontally by adding one
+    more machine (Machine2) with another instance of our Kafka Streams 
+    application (AppInstance2, with the same "gruop.id" as AppInstance1) which 
+    we configure to have one StreamThread instance (StreamThread-2-1), so after 
+    REBALANCING process we will have the next distribution of workload 
+    (StreamTask instances): 
+
+    [Machine1]--[AppInstance1]-+-[StreamThread-1-1]---[StreamTask1]--[AP1, BP1]
+                               |
+                               +-[StreamThread-1-2]---[StreamTask2]--[AP3, BP3]
+
+    [Machine2]--[AppInstance2]-+-[StreamThread-2-1]---[StreamTask3]--[AP2, BP2]
+
+(4) We can scale our Kafka Streams application until number of StreamThread 
+    instances across all Kafka Streams application instances riches number of
+    StreamTask instances. It means that if we add one more StreamThread instance
+    to existing application instances this StreamThread instance will stay idle
+    until next REBALANCING.
+    The same will happen if we started one more application instance with one 
+    StreamThread instance, in this case StreamThread instance and as a result
+    application instance will stay idle. (B1 p. 269)
+
+
+* Also REBALANCING can be triggered by adding partitions to Kafka Streams 
+application source topic(s).
+
+
+* The transition between RUNNING and REBALANCING states is the most frequent 
+and has the most impact on performance, because during the rebalancing phase 
+no processing occurs. (B1 p. 215)
+
+
+* It is necessary to keep the number of rebalances to a minimum. When a rebalance
+occurs, you are not processing data, and you would like to have your application 
+processing data as much as possible. (B1 p. 217)
+
+
+* Possible state transitions of Kafka Streams application. See Figure 7.13 
+(B1 p. 215)
+
++---------+      +---------+      +-------------+
+| CREATED |----->| RUNNING |<---->| REBALANCING |
++---------+      +---------+      +-------------+
+        |         |   |                   |  |
+        |         |   |    +---------+    |  |
+        |         |   +--->|  ERROR  |<---+  |
+        |         |        +---------+       |
+        |         |                |         |
+        |         |  +----------+  |         |
+        |         +->| PENDING  |<-+         |
+        +----------->| SHUTDOWN |<-----------+
+                     +----------+
+                          |
+    +-------------+       |
+    | NOT RUNNING |<------+
+    +-------------+
+
+
+* Purpose of @Rule and @ClassRule anotations in JUnit tests:
+Rules provide an excellent abstraction for using external resources in your 
+tests. After you create your class extending ExternalResource, all you need 
+to do is create a variable in your test and use the @Rule or @ClassRule 
+annotation, and all the setup and teardown methods will be executed 
+automatically.
+The difference between @Rule and @ClassRule is how often before() and after() 
+are called. The @Rule annotation executes before() and after() methods for each 
+individual test in the class. @ClassRule executes the before() and after() 
+methods once; before() is executed prior to any test execution, and after() is 
+called when the last test in the class completes. 
+Setting up an EmbeddedKafkaCluster is relatively resource intensive, so it makes 
+sense that you will only want to set it up once per test class.
+(B1 p. 232)
+
+
+* Keeping most of the business logic out of the processor is a good idea.
+(B1 p. 180)
+
+
+* Strive to keep business logic in standalone classes that are entirely 
+independent of your Kafka Streams application. (B1 p. 236)
+
+
+* Advanced features of Kafka Streams are:
+
+- Kafka Connect - allows incorporate other data sources into your Kafka Streams
+applications; Kafka Connect is explicitly designed for streaming data from other 
+data-storage application into Kafka and for streaming data from Kafka into 
+another data-storage application such as MongoDB or Elasticsearch.
+ 
+- Interactive queries - allow you to see data in a stream as it flows through 
+your Kafka Streams application, without the need for a relational database;
+
+- KSQL - alows you quickly build powerful streaming applications without code. 
+KSQL promises to deliver the power and flexibility of Kafka Streams to workers 
+who are not developers.
+
+
