@@ -25,7 +25,7 @@ producer to consumer) which do not necessarily know each other. (B1 p. 48)
 
 * The underlying technology of a Kafka topic is a log. Each Kafka topic 
 has 1 or more partitions. Each Partition is a log (log file, see Figure 2.6 
-(B1 p. 50). Partitions of a topic can be distributed across several Kafka 
+(B1 p. 50)). Partitions of a topic can be distributed across several Kafka 
 broker instances (Kafka nodes), see Figure 2.9 (B1 p. 55). So it is possible 
 to say that Kafka topic is a distributed log.
 
@@ -77,7 +77,7 @@ consumer. (B1 p. 69)
 
 
 * Kafka Streams application is a graph (or topology) of processing nodes (e.g.
-mappers, filters, transformers e.t.c.) which are combined to provide powerful 
+mappers, filters, transformers etc.) which are combined to provide powerful 
 and complex stream processing (B1 p. 42, 146)
 
 
@@ -94,7 +94,7 @@ approach may not be a good fit. (B1 p. 32)
 create robust applications with minimal code;
 
 2 - Processor API is more low-level API which provides more control. So we can 
-do almost anything we want by writing custom processors and assembling this 
+do almost everything we want by writing custom processors and assembling this 
 processors into topology.
 
 
@@ -129,7 +129,7 @@ records with a new key (possibly a different type) and the same value.
 - read messages from an existing topic;
 - change key for necessary messages;
 - send this messages to a new topic.
-As a result this messages will be grouped into paritition based on new key.
+As a result this messages will be grouped into parititions based on new key.
 
 
 * REPARTITIONING in Kafka Streams can be easely acheived by using the 
@@ -239,8 +239,8 @@ same type of object. An aggregation also sums results, but it could return a
 different type of object. (B1 p. 151)
 
 
-* Meterialized view is a object (or temporary table) which contains results of
-a query. (B1 p. 165)
+* Materialized view is an object (or temporary table) which contains results of
+a query execution against data source. (B1 p. 165)
 
 
 * Also note that the Processor::process() and Punctuator::punctuate() methods 
@@ -266,7 +266,7 @@ to start StreamThread instances and assign TopicPartition instances to
 StreamTask instances.
 This process of assigning or redistributing StreamTask instances (workload) 
 among StreamThread instances of one or several application instances on one 
-or sevaral machnes is called REBALANCING. (B1 p. 214)
+or several machines is called REBALANCING. (B1 p. 214)
 
 
 * REBALANCING allows SCALING of a Kafka Streams application up and down. 
@@ -281,9 +281,9 @@ this action will also trigger REBALANCING process.
 (1) Suppose we have one instance of Kafka Streams application (or topology, 
     graph of processing nodes) with 2 source topics: A and B. 
     Each topic has 3 partitions: A (AP1, AP2, AP3) and B (BP1, BP2, BP3).
-    When we start the instance (AppInstance1) Kafka Streams application 
+    When we start the instance (AppInstance1) of our Kafka Streams application 
     with one StreamThread instance (StreamThread-1-1) REBALANCING process will 
-    be triggered number of StreamTask instances will be calculated as maximum 
+    be triggered and number of StreamTask instances will be calculated as maximum 
     number of partitions across the input topics A and B: max(3, 3) == 3.
     Then TopicPartition instances of input topics A and B will be distributed 
     evenly across these 3 StreamTask instances so that each StreamTask instance
@@ -317,13 +317,13 @@ this action will also trigger REBALANCING process.
                                |
                                +-[StreamThread-1-2]---[StreamTask2]--[AP3, BP3]
 
-    [Machine2]--[AppInstance2]-+-[StreamThread-2-1]---[StreamTask3]--[AP2, BP2]
+    [Machine2]--[AppInstance2]---[StreamThread-2-1]---[StreamTask3]--[AP2, BP2]
 
 (4) We can scale our Kafka Streams application until number of StreamThread 
     instances across all Kafka Streams application instances riches number of
     StreamTask instances. It means that if we add one more StreamThread instance
-    to existing application instances this StreamThread instance will stay idle
-    until next REBALANCING.
+    to one of existing application instances this StreamThread instance will 
+    stay idle until next REBALANCING.
     The same will happen if we started one more application instance with one 
     StreamThread instance, in this case StreamThread instance and as a result
     application instance will stay idle. (B1 p. 269)
