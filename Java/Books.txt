@@ -28,3 +28,4 @@
 28) Тайная опора. Л. Петрановская. 2015
 29) Hands-On Reactive Programming in Spring 5. O. Dokuka. 2018
 30) Kafka Streams in Action. B. Bejeck. 2018
+31) Grokking Algorithms. Bhargava. 2016
