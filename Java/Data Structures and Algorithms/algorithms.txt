@@ -1,0 +1,488 @@
+
+
+
+[B1]: Grokking Algorithms. Bhargava. 2016
+
+
+
+-----------------------------------------
+-----------------------------------------
+
+
+
+
+
+[+] COMMON NOTES
+
+
+* Algorithm is a set of operations which are necessary to solve particular 
+problem (or class of problems) or perform particular task (calculation).
+
+
+* Algorithm can be designed according to one of the algorithm design strategies 
+(approaches, ways to think about a problem) such as:
+- Divide-and-conquer strategy (D&C);
+- Dynamic-programming (DP);
+- Linear-programming (LP);
+- Greedy strategy;
+- etc.
+
+
+* Run (execution) time (speed, complexity) of an algorithm is expressed by 
+Big O notation. Big O notation tells us the number of operations which will be 
+performed by algorithm or in other words Big O notation shows how number of 
+Operations (performed by algorithm) depends on number of elements against which 
+algorithm is run (input). E.g. "binary search" has O(log(n)) complexity and it 
+means that:
+O(log(n)) --> [number-of-operations = logarithm of number-of-elements]
+So algorithm's execution (run) time is calculated as:
+[execution-time = number-of-operations * operation-execution-time]
+Also algorithm's speed is not measured in seconds, but in growth of the number 
+of operations. We talk about how quickly the run time of an algorithm increases 
+as the size of the input increases, e.g. O(log(n)) is faster than O(n), but it 
+becomes a lot faster as the size of the input increases. 
+We usually ignore constants in Big O notation if two algorithms have different 
+Big O, but sometimes the constant can make a difference. Quicksort vs. merge 
+sort is one example. Quicksort has a smaller constant than merge sort. So if 
+they both have O(n*log(n)) complexity, quicksort is faster. And quicksort is 
+faster in practice because it hits the average case way more often than the 
+worst case.(B1 p. 32-35, 87)
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+[+] Divide-and-conquer strategy (D&C)
+
+
+* Solvable problems:
+- sorting (e.g. quicksort, merge sort);
+- multiplying large numbers (e.g. the Karatsuba algorithm);
+- finding the closest pair of points;
+- syntactic analysis (e.g. top-down parsers);
+- computing the discrete Fourier transform (FFT).
+
+
+* D&C is a well-known recursive technique for solving problems using 2 steps:
+1 - Figure out the base case which is the simplest (solvable) case;
+2 - Divide (decrease) your problem recursively until it becomes the base case.
+In other words we break a problem down into a base case and a recursive case.
+(B1 p. 70, 72)
+
+
+* D&C works by breaking a problem down recursively into smaller and smaller 
+pieces. If you are using D&C on an array, the base case is probably an empty 
+array or an array with one element. (B1 p. 91)
+
+
+* Recursion is when a function calls itself. And every recursive function has 
+two parts: 
+1 - recursive case - when the function calls itself;
+2 - base case - when the function does not call itself again, so it does not go 
+into an infinite loop.
+(B1 p. 60, 69)
+
+
+* Recursion is used when it makes the solution clearer. There is no performance 
+benefit of using recursion; in fact, loops are sometimes better for performance. 
+Loops may achieve a performance gain for your program. Recursion may achieve a 
+performance gain for your programmer. And we have to choose which is more 
+important in our situation. (B1 p. 59)
+
+
+* D&C implementation and application examples:
+- Division of farm evenly into square plots using Euclid's algorithm  (B1 p. 71)
+- Quicksort implementation (B1 p. 79)
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+[+] Breadth-first search algorithm (BFS)
+
+
+* Solvable problems:
+- find path from one node to another in an unweighted graph;
+- find the shortest path from one node to another in an unweighted graph.
+
+
+* Graph is a way to model how different things are connected to one another.
+Each graph is made up of nodes and edges and each graph can be implemented 
+based on hash table, where key is a node name, and value is a set of node names 
+which are connected to the node. (B1 p. 118, 124)
+
+
+* BFS finds the path with the smallest number of edges. (B1 p. 135)
+
+
+* BFS is implemented based on Queue which is FIFO (First In, First Out) data 
+structure. (B1 p. 122)
+
+
+* BFS steps: 
+1 - add initial node to queue;
+2 - take a node from the queue and check if it is target node (node which we 
+are searching for);
+3 - if yes - finish, if not - add to queue all nodes which are connected to 
+the node;
+4 - repeat 2-3 until we find target node or queue becomes empty.
+(B1 p. 126)
+
+
+* BFS implementation and application example. (B1 p. 126)
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+[+] Dijkstra's algorithm
+
+
+* Solvable problems:
+- find the shortest path in a weighted graph.
+
+
+* Dijkstra’s algorithm steps: 
+1 - find the cheapest node;
+2 - check whether there is a cheaper path to the neighbors of this node. If so,
+update their costs;
+3 - repeat until you have done this for every node in the graph;
+4 - calculate the final path. 
+(B1 p. 139)
+
+
+* According to Dijkstra's algorithm once you process a node, it means that 
+there is no cheaper way to get to the node. (B1 p. 149)
+
+
+* Dijkstra's algorithm only works with directed acyclic graph (DAG). 
+(B1 p. 141)
+
+
+* It is not possible to use Dijkstra's algorithm for graph with negative-weight 
+edges. For such graphs we can use Bellman-Ford algorithm. (B1 p. 148, 149)
+
+
+* Full example of Dijkstra's algorithm application. (B1 p. 141)
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+[+] Greedy strategy
+
+
+* Solvable problems:
+- the classroom scheduling problem;
+- the knapsack problem (but it will be not the optimal solution, optimal 
+solution can be achieved using dynamic-programming approach);
+- the set-covering problem (NP-complete);
+- the traveling-salesperson problem (NP-complete).
+
+
+* Essence of Greedy algorithm (strategy) is if at each step we pick the locally 
+optimal solution then we will end up with the globally optimal solution, e.g.:
+- to solve "The classroom scheduling problem" we have to choose a class which 
+finishes sooner than others, then we have to choose a class which starts after 
+finish of the previously chosen class but finishes sooner than others, and so 
+on;
+- to solve "The knapsack problem" we have to pick the most expensive thing that 
+will fit in our knapsack. Then pick the next most expensive thing that will fit 
+in our knapsack with previously chosen thing, and so on... 
+(B1 p. 163)
+
+
+* The traveling-salesperson problem and the set-covering problem both have 
+something in common: we have to calculate every possible solution (combination) 
+and pick one that yeilds the smallest/shortest result. 
+Both of these problems are NP-complete. (B1 p. 176)
+
+
+* Checking each combination of items takes O(2^n), where n - number of items. 
+(B1 p. 181)
+
+
+* If you want to find the shortest path that connects several points, that is 
+the traveling-salesperson problem, which is NP-complete. (B1 p. 178)
+
+
+* NP-complete problems have no known fast solution, but it can be solved by 
+greedy algorithm which is called approximation algorithm with less accuracy
+and O(n^2) complexity which is much faster than exact algorithm which has O(n!) 
+complexity.
+So if we have an NP-complete problem, our best bet is to use an approximation 
+algorithm, because Greedy algorithms are easy to write and fast to run, so 
+they make good approximation algorithms. (B1 p. 164, 179)
+
+
+* Steps of approximation algorithm (greedy algorithm) to solve the set-covering 
+problem are:
+1 - Pick the element which covers the most items which have not been covered yet. 
+It is OK if the element covers some items which have been covered already.
+2 - Repeat until all the items are covered.
+(B1 p. 166)
+
+
+* Signs of NP-complete problem:
+- your algorithm runs quickly with small number of items but really slows down 
+with more items;
+- "all combinations of X" phrase usually points to an NP-complete problem;
+- do we have to calculate "every possible version" of X because we can not 
+break it down into smaller sub-problems? Might be NP-complete;
+- if our problem involves a sequence (such as a sequence of cities, like 
+traveling salesperson), and it is hard to solve, it might be NP-complete;
+- if our problem involves a set (like a set of radio stations) and it is hard 
+to solve, it might be NP-complete;
+- if we can restate our problem as the set-covering problem or the traveling-
+salesperson problem, then our problem is definitely NP-complete.
+(B1 p. 178)
+
+
+* Example of solving "The set-covering problem" using approximation algorithm. 
+(B1 p. 165)
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+[+] Dynamic-programming (DP)
+
+
+* Solvable problems:
+- optimization of something for which we have a constraint, e.g. the knapsack 
+problem;
+- longest common substring problem;
+- longest common subsequence problem.
+
+
+* Dynamic-programming (DP) is a technique to solve a hard problem by breaking 
+it up into subproblems, solving the subproblems first and finally solving the
+whole problem. (B1 p. 180, 182)
+
+
+* Dynamic-programming is useful when we are trying to optimize something given 
+a constraint. E.g. in "the knapsack problem", we have to maximize the value of 
+goods we are trying to stole, constrained by the size of the knapsack. 
+(B1 p. 197, 205)
+
+
+* According to dynamic-programming approach we cannot work with fractions of 
+items. (B1 p. 194)
+
+
+* Dynamic-programming approach only works when each subproblem is discrete 
+(each subproblem does not depend on other subproblems). (B1 p. 196)
+
+
+* Tips which are useful to come up with a DP solution (algorithm):
+- every dynamic-programming solution (algorithm) involves a grid;
+- each cell is a subproblem, so we have to think about how we can divide our 
+problem into subproblems;
+- values in cells are usually what we are trying to optimize.
+(B1 p. 198, 205)
+
+
+* There is no single formula for calculating a dynamic-programming solution, 
+but there are some example formulas to solve the next problems:
+- the knapsack problem (B1 p. 189);
+- the longest common substring problem (B1 p. 201);
+- the longest common subsequence problem (B1 p. 204);
+
+
+* DP application examples:
+- the knapsack problem (B1 p. 180);
+- the longest common substring (B1 p. 197).
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+[+] K-nearest neighbors (KNN)
+
+
+* Solvable problems:
+- classification - categorization of an object into one of groups based on 
+features (properties) of the object; 
+- regression - response prediction of an object which has already been 
+categorized into one of groups.
+(B1 p. 215)
+
+
+* Steps of KNN classification. (B1 p. 208)
+
+
+* Features of an object are properties of the object which are used to find 
+distance between different objects during KNN classification. (B1 p. 210)
+
+
+* The distance tells us how similar several objects are. It means that we can
+transform each of the objects into set of features/properties (feature 
+extraction process) and then find distance between the sets of 
+features/properties. (B1 p. 213)
+
+
+* To find the distance between two points (each point is an object with 2 
+features: "x" and "y"), we use the Pythagorean formula. See formula on p. 210 
+of B1 or in java it will look like:
+double distance = Math.sqrt(Math.pow((x1-x2), 2) + Math.pow((y1-y2), 2));
+
+
+* Structure of Pythagorean formula for N-features is the same as for 2 features
+See formula on p. 213 of B1 or in java it will look like:
+double distance = Math.sqrt(Math.pow((a1-a2), 2) + Math.pow((b1-b2), 2) + ... + 
++ Math.pow((w1-w2), 2) + ...);
+
+
+* Picking good features is an important part of a successful KNN algorithm. 
+(B1 p. 221)
+
+
+* KNN classification rule of thumb: 
+- if we have N objects, then we should look at sqrt(N) neighbors during 
+classification. (B1 p. 252)
+
+
+* The first step of OCR (optical character recognition), where you go through 
+images of numbers and extract features, is called  training. 
+Most machine-learning algorithms have a training step: before your computer can 
+do the task, it must be trained. (B1 p. 219)
+
+
+* KNN application examples:
+- classification example (classifying oranges vs. grapefruit) (B1 p. 206);
+- regression (prediction) example (B1 p. 215).
+
+
+
+
+
+-----------------------------------------
+
+
+
+
+
+[+] Other notes about data structures and algorithms:
+
+
+
+* B-trees is a special type of binary tree, are commonly used to store data 
+in databases. (B1 p. 225)
+
+* Searching for an element in a binary search tree takes O(log(n)) time on 
+average and O(n) time in the worst case. (B1 p. 224)
+
+
+
+* Inverted index is a data structure: a hash that maps words to places where 
+they appear. It is commonly used to build search engines. (B1 p. 226)
+
+
+
+* The Fourier transform. (B1 p. 226)
+https://betterexplained.com/articles/an-interactive-guide-to-the-fourier-transform/
+
+
+
+* MapReduce is a distributed algorithm which consists of two functions (map and 
+reduce) and is used to execute tasks in parallel by spreading tasks among cores 
+or machines. (B1 p. 228)
+
+* The best you can do with a sorting algorithm is roughly O(n*log(n)). It is 
+well known that you cannot sort an array in O(n) time—unless you use a parallel 
+algorithm! There is a parallel version of quicksort that will sort an array in 
+O(n) time. (B1 p. 227)
+
+
+
+* Bloom filters and HyperLogLog are probabilistic algorithms and are used as 
+replacement of hash table for cases when it is necessary to search something in 
+very large set of data and to answer a question if an item is already in set or 
+not. Since this algorithms are probabilistic they might provide false answers 
+but consume less memory then hash table which can provide accurate answers all 
+the time. (B1 p. 230)
+
+
+
+* Secure hash algorithm (SHA) is a locality insensitive, one way hash function 
+which transforms content (string) to another string (hash).
+Use cases:
+- files comparison - calculate SHA hashes of each file and compare the hashes;
+- password checking - we store SHA hash of password and when it is necessary 
+to check the password we calculate hash of provided password and compare it 
+with stored hash.
+(B1 p. 232)
+
+
+
+* Locality-sensitive hashing like Simhash allows us to compare hashes and see 
+how similar two strings (content, files) are. (B1 p. 235)
+
+
+
+* Diffie-Hellman algorithm (predecessor of RSA) is an encryption algorithm 
+according to which content is encrypted using public key and can be decrypted 
+using private key only. (B1 p. 236)
+
+* When someone wants to send you a message, they encrypt it using the public 
+key. An encrypted message can only be decrypted using the private key. As long 
+as you are the only person with the private key, only you will be able to 
+decrypt this message! (B1 p. 237)
+
+
+
+* Linear programming
+Linear programming is used to maximize something given some constraints. For 
+example, suppose our company makes two products, shirts and totes. Shirts need 
+1 meter of fabric and 5 buttons. Totes need 2 meters of fabric and 2 buttons. 
+You have 11 meters of fabric and 20 buttons. We make $2 per shirt and $3 per 
+tote. How many shirts and totes should we make to maximize your profit? Here 
+we are trying to maximize profit, and we are constrained by the amount of 
+materials you have. (B1 p. 237)
+
+* All the graph algorithms can be done through linear programming instead. 
+Linear programming is a much more general framework, and graph problems are a 
+subset of that. (B1 p. 238)
+
+* Linear programming uses the Simplex algorithm. (B1 p. 238)
+
+
+
+
+
