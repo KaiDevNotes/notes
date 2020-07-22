@@ -98,7 +98,21 @@ per transaction in all cases. (B1 p. 250)
 
 
 * A Bounded Context is often housed in a single project. Packege structure
-which can be like in example in (B1 p. 67).
+which can be like in example in (B1 p. 67):
+- *.domain.* - represents Domain Layer and may contain: Aggregates, Entities, 
+Value Objects, Domain Servicesx, interfaces of Aggregate Repositories, Domain 
+Events etc.;
+- *.application.* - represents Application Layer and may contain: Application
+Services, Comman Handlers, Commands, Application Events, Application Event Bus
+interface etc.;
+- *.infrastructure.* - represents Infrastructure Layer and may contain:
+implementations of interfaces from Domain layer (e.g. interfaces of Aggregate 
+Repositories) and Application layer (e.g. Application Event Bus interface). 
+Next this implementations are injected into necessary place via, e.g. Spring 
+Context configuration.;
+- *.presentation.* - represents Presentation Layer and may contain objects 
+(controllers) which are responsible for handling requests from clients (Web, 
+CLI etc.) and invokation of logic which is defined in Application Layer. 
 
 
 * A powerful architectural style for hosting a Bounded Context is Hexagonal. 
@@ -106,7 +120,19 @@ which can be like in example in (B1 p. 67).
 On a greenfield project it would be well to consider using Hexagonal as the 
 overarching style. (B1 p. 119)
 Hexagonal architecture (aka Ports and Adapters) implies FROM-OUTSIDE-TO-INSIDE 
-dependencies direction.
+dependencies direction and it means that:
+- classes/objects (code) from Domain Layer (*.domain.* package) should not 
+depend on classes/objects (code) from any other layers/packages (should not 
+have imports/links to code from other layers/packages);
+- classes/objects (code) from Application Layer (*.application.* package) are
+allowed to depend on classes/objects (code) from Domain Layer only and should 
+not depend on classes/objects (code) from other: Infrastructure and Presentation
+Layers;
+- classes/objects (code) from Infrastructure Layer (*.infrastructure.* package) 
+are allowed to depend on classes/objects (code) from Domain and Application 
+Layers and should not depend on classes/objects (code) from Presentation Layer; 
+- classes/objects (code) from Presentation Layer (*.presentation.* package) are 
+allowed to depend on classes/objects (code) from all Layers.
 
 
 * A Single Team for a Single Bounded Context. (B1 p. 67)
