@@ -30,3 +30,4 @@
 30) Kafka Streams in Action. B. Bejeck. 2018
 31) Grokking Algorithms. Bhargava. 2016
 32) JHipster. Mini-book. Matt Raible. 2019
+33) Full Stack Development with JHipster. Sasidharan. 2020
