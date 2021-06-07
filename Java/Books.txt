@@ -32,3 +32,4 @@
 32) JHipster. Mini-book. Matt Raible. 2019
 33) Full Stack Development with JHipster. Sasidharan. 2020
 34) Software Architecture with Spring 5.0. R. Enriquez. 2018
+35) Building winning algorithmic trading systems. K. J. Davey. 2014
