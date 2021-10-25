@@ -1,0 +1,86 @@
+
+
+[*] Parallel processing of batches using Flux API:
+
+
+CODE:
+
+@Component
+@Slf4j
+public class Checker implements CommandLineRunner {
+
+    @Override
+    public void run(String... args) {
+        var result = Flux.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .doOnNext(item -> log.info("### Flux of items: {}", item))
+                .buffer(2)
+                .parallel()
+                .runOn(Schedulers.parallel())
+                .map(batch -> {
+                    sleep(2);
+                    log.info("### Flux of batches: {}", batch);
+                    return batch;
+                })
+                .flatMap(Flux::fromIterable)
+                .doOnNext(item -> log.info("### Flux of items after flatMap: {}", item))
+                .sequential()
+                .toStream()
+                .peek(item -> log.info("### Stream of items: {}", item))
+                .collect(toList());
+        log.info("### Processing result: {}", result);
+    }
+
+    private void sleep(long seconds) {
+        try {
+            TimeUnit.SECONDS.sleep(seconds);
+        } catch (Exception e) {
+            log.error("### sleep error", e);
+        }
+    }
+}
+
+
+---------------------------------------------
+
+
+OUTPUT:
+
+
+2021-10-26 09:33:05.340  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 1
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 2
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 3
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 4
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 5
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 6
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 7
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 8
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 9
+2021-10-26 09:33:05.342  INFO 19288 --- [           main] root.Checker                             : ### Flux of items: 10
+2021-10-26 09:33:07.352  INFO 19288 --- [     parallel-3] root.Checker                             : ### Flux of batches: [5, 6]
+2021-10-26 09:33:07.352  INFO 19288 --- [     parallel-4] root.Checker                             : ### Flux of batches: [7, 8]
+2021-10-26 09:33:07.352  INFO 19288 --- [     parallel-5] root.Checker                             : ### Flux of batches: [9, 10]
+2021-10-26 09:33:07.352  INFO 19288 --- [     parallel-1] root.Checker                             : ### Flux of batches: [1, 2]
+2021-10-26 09:33:07.352  INFO 19288 --- [     parallel-2] root.Checker                             : ### Flux of batches: [3, 4]
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-5] root.Checker                             : ### Flux of items after flatMap: 9
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-3] root.Checker                             : ### Flux of items after flatMap: 5
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-2] root.Checker                             : ### Flux of items after flatMap: 3
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-1] root.Checker                             : ### Flux of items after flatMap: 1
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-5] root.Checker                             : ### Flux of items after flatMap: 10
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-3] root.Checker                             : ### Flux of items after flatMap: 6
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-2] root.Checker                             : ### Flux of items after flatMap: 4
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 9
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-1] root.Checker                             : ### Flux of items after flatMap: 2
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 5
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-4] root.Checker                             : ### Flux of items after flatMap: 7
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 3
+2021-10-26 09:33:07.354  INFO 19288 --- [     parallel-4] root.Checker                             : ### Flux of items after flatMap: 8
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 1
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 10
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 6
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 4
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 2
+2021-10-26 09:33:07.354  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 7
+2021-10-26 09:33:07.355  INFO 19288 --- [           main] root.Checker                             : ### Stream of items: 8
+2021-10-26 09:33:07.355  INFO 19288 --- [           main] root.Checker                             : ### Processing result: [9, 5, 3, 1, 10, 6, 4, 2, 7, 8]
+
+

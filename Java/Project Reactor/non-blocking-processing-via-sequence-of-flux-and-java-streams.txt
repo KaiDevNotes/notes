@@ -1,0 +1,66 @@
+
+
+[*] Proof that elements in sequence Flux -> Stream are processed one-by-one 
+	without blocking/aggregation during convertion from Flux to Stream
+
+
+CODE:
+
+@Component
+@Slf4j
+public class Checker implements CommandLineRunner {
+
+    private FluxSink<Integer> sink;
+
+    @Override
+    public void run(String... args) {
+        var stream = Flux.<Integer>create(sink -> this.sink = sink).toStream()
+                .peek(item -> log.info("### streamed item: {}", item));
+        var executor = Executors.newFixedThreadPool(2);
+        executor.submit(() -> {
+            for (int item = 1; item <= 5; item++) {
+                sleep(5);
+                log.info("### produced item: {}", item);
+                sink.next(item);
+            }
+        });
+        executor.submit(() -> stream.forEach(item -> log.info("### consumed item: {}", item)));
+    }
+
+    private void sleep(long seconds) {
+        try {
+            TimeUnit.SECONDS.sleep(seconds);
+        } catch (Exception e) {
+            log.error("### sleep error", e);
+        }
+    }
+}
+
+
+---------------------------------------------
+
+
+OUTPUT:
+
+
+2021-10-26 09:25:47.843  INFO 16168 --- [pool-1-thread-1] root.Checker                             : ### produced item: 1
+2021-10-26 09:25:47.844  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### streamed item: 1
+2021-10-26 09:25:47.844  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### consumed item: 1
+
+2021-10-26 09:25:52.848  INFO 16168 --- [pool-1-thread-1] root.Checker                             : ### produced item: 2
+2021-10-26 09:25:52.848  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### streamed item: 2
+2021-10-26 09:25:52.848  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### consumed item: 2
+
+2021-10-26 09:25:57.857  INFO 16168 --- [pool-1-thread-1] root.Checker                             : ### produced item: 3
+2021-10-26 09:25:57.857  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### streamed item: 3
+2021-10-26 09:25:57.857  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### consumed item: 3
+
+2021-10-26 09:26:02.864  INFO 16168 --- [pool-1-thread-1] root.Checker                             : ### produced item: 4
+2021-10-26 09:26:02.864  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### streamed item: 4
+2021-10-26 09:26:02.864  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### consumed item: 4
+
+2021-10-26 09:26:07.876  INFO 16168 --- [pool-1-thread-1] root.Checker                             : ### produced item: 5
+2021-10-26 09:26:07.877  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### streamed item: 5
+2021-10-26 09:26:07.877  INFO 16168 --- [pool-1-thread-2] root.Checker                             : ### consumed item: 5
+
+
