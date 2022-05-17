@@ -1,0 +1,194 @@
+
+
+Books and sources:
+
+[B1]: Introduction to Neural Networks with Java. Jeff Heaton. 2005
+[B2]: Java Deep Learning Projects. Rezaul Karim. 2018
+
+
+--------------------------------------------------------
+--------------------------------------------------------
+
+
+
+
+* Neural networks are particularly useful for solving problems that cannot be 
+expressed as a series of steps, problems such as classifying into groups, 
+recognizing patterns, series prediction, data mining... (B1 p. 37)
+
+
+
+
+
+[+] BASIC STRUCTURE
+
+
+* Neural network (NN) is a group of interconnected neurons. Each connection 
+(synapse) has weight. If there is no connection between two neurons, then their 
+connection weight is zero. These weights are what determine the output of the 
+NN. Therefore, it can be said that the connection weights form the memory 
+of the NN. (B1 p. 38)
+
+
+* Weights of all connections in NN can be represented as weight matrix.
+
+
+* Neuron is a basic element of NN. Neuron receives input from other neurones 
+and produces output (activates/fires). A neuron will activate when the sum of 
+its inputs satisfies the neuron's activation function.
+
+
+* Sum of neuron's inputs can be found using equation 2.1 B1 p. 52
+
+
+* Neuron activation function can be one of the next:
+- SIGMOID - produces values in range [0, 1] - equation 4.1 B1 p. 114
+- TANH - produces values in range [-1, 1] - equation 4.2 B1 p. 115
+- LINEAR - equation 4.3 B1 p. 116
+- ...
+
+
+* Neurons are grouped into layers which can be INPUT, OUTPUT or HIDDEN layer. 
+HIDDEN layer resides between INPUT and OUTPUT layers.
+
+
+* Neurons number calculation for each layer:
+
+- INPUT layer - each neuron should represent some independent variable that has 
+an influence on output of NN, e.g. the number of input neurons that will be 
+used in OCR example (B1 chapter 7) is the number of pixels that might represent 
+any given character which is 5x7 grid which contains a total of 35 pixels. 
+So INPUT layer of NN for OCR example will have 35 neurons. 
+
+- OUTPUT layer - depends on NN purpose, e.g. if NN is used for noise reduction 
+on a signal, then it is likely that the number of neurons in INPUT and OUTPUT 
+layers will be the same, or if the NN is used for items classification into 
+groups, then it is preferable to have a neuron for each group, e.g. in OCR 
+example it is necessary to recognize 26 characters so OUTPUT layer should have 
+26 neurons.
+
+- HIDDEN layer - neurons number can be found using one of the next methods:
+> forward selection - figure 5.2 B1 p. 132
+> backward selection - figure 5.3 B1 p. 132
+There are also several rules of thumb: neurons number should be...
+...between the size of INPUT and OUTPUT layers
+...2/3 of sum size of INPUT and OUTPUT layers
+...less than twice of INPUT layer size
+
+
+* Currently there is no theoretical reason to use NN with more than two HIDDEN 
+layers. In fact, for many practical problems, there is no reason to use NN with 
+more than one HIDDEN layer. (B1 p. 130). 
+In order to determine number of HIDDEN layers see also table 5.1 B1 p. 130
+
+
+* Feedforward NN is a network where neurons are only connected to the next 
+layer. There are no connections with neurons in previous layers or themselves. 
+Additionally neurons will not be connected to neurons beyond the next layer. 
+(B1 p. 154)
+
+
+
+
+
+[+] TRAINING/LEARNING
+
+
+* Training is the process by which connection weights are assigned. 
+Most training algorithms begin by assigning random numbers to the weight matrix. 
+Then the validity of NN is examined. Next the weights are adjusted based on how 
+valid NN performed. This process is repeated until the validation error is 
+within an acceptable limit. (B1 p. 38)
+
+
+* The goal of NN training is minimization of error.
+
+
+* There are several forms of learning:
+- SUPERVISED - provides NN with training sets and anticipated output which is 
+used for error calculation.
+- UNSUPERVISED - provides NN with training sets, but no anticipated output is 
+provided.
+- REINFORCEMENT - NN parameters are adapted based on the feedback obtained 
+from the environment, which in turn provides feedback based on the decisions 
+made by the NN.
+
+
+* Types of learning and solvable problems (B2 p. 40):
+- SUPERVISED - classification, regression, ranking
+- UNSUPERVISED - clustering, segmentation, dimension reduction
+- REINFORCEMENT - dimension process, reward system, recommendation system
+Also expanded list of solvable problems grouped by learning type can be found 
+on B2 p. 46 
+
+
+
+* There are also several approaches to perform SUPERVISED trainig:
+- backpropagation - chapter 5 of B1
+- genetic algorithm (GA) - chapter 8 of B1
+- simulated annealing (SA) - chapter 9 of B1
+- ...
+
+
+* Backpropagation is a very effective approach of NN training, but it is often
+affected by "local minima" problem which is false optimal weight matrix that 
+prevents the training algorithm from seeing true optimal solution.
+So GA and SA approaches can be used in order to avoid "local minima" problem.
+
+
+* Genetic algorithm (GA) is adaptive search algorithm, which can be used for:
+- optimization: production scheduling, call routing for call centers, routing 
+for transportation, determining electrical circuit layouts
+- machine learning design: designing NN, designing and controlling robots
+- business applications: financial trading, credit evaluation, budget 
+allocation, fraud detection
+Generally GA can be used when:
+- search space is large, complex, or not easily understood 
+- there is no programmatic method that can be used to narrow the search space
+- traditional optimization methods are not sufficient
+
+
+* Simulated annealing (SA) algorithm generally can be used to find the minimum 
+of an arbitrary equation that has a specified number of inputs. In other words 
+SA will find the inputs to the equation that will produce a minimum result.
+Weight matrix of NN is an excellent set of inputs for SA algorithm: different
+weight matrixes are checked until such weight matrix is found with which the 
+validation error is within an acceptable limit.
+
+
+* GA seem to be less popular than SA for NN training, since GA takes considerably 
+more processing time, and memory than SA. (B1 p. 271)
+
+
+* Since GA and SA can be utilized to solve search space and optimization problems
+this algorithms also can be used to find a solution for NP-complete problems.
+See implementation exmaples of such solutions for the traveling salesman problem
+which is NP-complete in chapters 8 and 9 of B1.
+
+
+
+
+
+[+] NN INPUT/OUTPUT PROCESSING
+
+
+* NN input data shuold be floating point numbers. If it is necessary to process 
+non-numeric data then it is necessary to normalize this data to a numeric 
+representation.
+
+
+* FUZZY LOGIC is often used to process data before it is fed to NN, or to process 
+outputs from NN.
+
+
+* Difference between FUZZY and CRISP LOGIC is that CRISP LOGIC can only answer
+TRUE or FALSE to set membership question and it is unable to answer a fuzzy 
+question like "Is temperature X more like WARM or HOT?"
+In other words FUZZY LOGIC attempts to more closely emulate the way the human 
+mind thinks of set membership.
+Description and implementation of FUZZY LOGIC can be found in chapter 12 B1.
+
+
+
+
+
