@@ -158,6 +158,8 @@ https://habrahabr.ru/post/128017/
 [NOTES]\Java\Java SE\Collections Framework\HashMap.pdf
 [NOTES]\Java\Java SE\Collections Framework\Collections Framework.txt
 
+[NOTES]\Java\Data Structures and Algorithms\algorithms.txt
+
 
 ----------------------------------------------------------------------------------------------
 
