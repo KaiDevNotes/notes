@@ -1,0 +1,78 @@
+
+
+Spring Cloud application which has functional tests (based on Docker Testcontainers) can be easily run locally and analyzed.
+
+Assume our spring cloud application has MariaDB and Kafka as infrastructure dependencies.
+
+
+[*] Steps are:
+
+
+[1] Run the application locally
+
+	[1] Create LocalDevApplicationRunner under base packege inside src/test/[java OR groovy]
+		of module which contains functional test.
+	
+		[JAVA]
+		public class LocalDevApplicationRunner {
+			public static void main(String[] args) {
+				var application = new SpringApplication(ApplicationRunner.class);
+				System.setProperty("spring.profiles.active", "comma,separated,profiles,names");
+				application.run(args);
+			}
+		}
+		
+		[GROOVY]
+		class LocalDevApplicationRunner {
+			static void main(String[] args) {
+				def application = new SpringApplication(ApplicationRunner.class)
+				System.setProperty('spring.profiles.active', 'comma,separated,profiles,names')
+				application.run(args)
+			}
+		}
+		
+		Where ApplicationRunner.class is a base spring application class, which contains main() method 
+		and has @SpringCloudApplication annotation.
+		
+		Also in [spring.profiles.active] property we should specify all profiles which are activated 
+		in base functional test via @ActiveProfiles annotation.
+	
+	[2] Run LocalDevApplicationRunner
+	
+	
+[2] Use the application via Swagger UI or Kafka 
+
+
+[3] MariaDB analysis
+
+	[1] Find currenctly running maria-db docker container
+		
+		$ docker ps
+		
+	[2] Connect to the container
+	
+		$ winpty docker exec -it [container-id] bash
+		
+	[3] Start MYSQL CLI in order to communicate with DB
+	
+		$ mysql -u[username] -p[password]
+		
+	[4] Run SQL queries
+	
+	
+[4] Kafka analysis
+
+	[1] Find currenctly running kafka docker container
+		
+		$ docker ps
+		
+	[2] Connect to the container
+	
+		$ winpty docker exec -it [container-id] bash
+	
+	[3] Use Kafka producer or consumer utility. 
+		E.g. via consumer utility we can listen to particular topic and print new messages:
+	
+		$ kafka-console-consumer --topic [topic-name] --from-beginning --bootstrap-server localhost:9092
+		
+		
