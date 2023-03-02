@@ -537,6 +537,15 @@ and FUNCTIONAL paradigms)
 верхних/внешних уровней, т.е. зависимости направлены снаружи внутрь 
 (FROM-OUTSIDE-TO-INSIDE dependencies direction). Смотри описание Hexagonal, 
 Onion, Clean архитектур.
+In other words DIP allows the Inner layer (e.g. Domain) to call methods in 
+an Outer layer (e.g. Infrastructure), but without being coupled to its 
+implementation. For example, a Service inside the Domain layer can retrieve 
+information from another system by calling methods of an Interface declared 
+in the Domain layer but implemented in the Infrastructure layer. In other 
+words, Domain is able to call Infrastructure but without seeing the actual 
+method implementation invoked. Direction of the call (Domain --> Infrastructure)  
+and direction of code dependency (Infrastructure --> Domain) are inverted, 
+thus its name is "Dependency inversion principle".
 
 
 
