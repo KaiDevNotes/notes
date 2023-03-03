@@ -131,6 +131,9 @@ ARCHITECTURE AND DESIGN:
 [NOTES]\Java\Architecture and Design\Architectural approaches\SAGA pattern for distributed transactions.pdf
 [NOTES]\Java\Architecture and Design\TDD\Classicist And Mockist TDD Comparison.pdf
 
+https://victorrentea.ro/blog/overengineering-in-onion-hexagonal-architectures/
+[NOTES]\Java\Architecture and Design\Architectural approaches\Overengineering in Concentric Architectures.pdf
+
 
 ----------------------------------------------------------------------------------------------
 
