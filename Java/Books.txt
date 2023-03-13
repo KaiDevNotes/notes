@@ -34,3 +34,4 @@
 34) Software Architecture with Spring 5.0. R. Enriquez. 2018
 35) Building winning algorithmic trading systems. K. J. Davey. 2014
 36) Introduction to Neural Networks with Java. Jeff Heaton. 2005
+37) System Design Interview. 2nd edition. Alex Xu
