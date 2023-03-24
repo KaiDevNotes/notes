@@ -135,6 +135,10 @@ Layers and should not depend on classes/objects (code) from Presentation Layer;
 allowed to depend on classes/objects (code) from all Layers.
 
 
+* Since code from Domain Layer does not depend on code from other layers/packages
+of application then it can be maintained as separate library, e.g. maven module.
+
+
 * A Single Team for a Single Bounded Context. (B1 p. 67)
 
 
