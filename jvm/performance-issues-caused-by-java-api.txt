@@ -1,0 +1,132 @@
+
+
+
+
+
+[SOURCES]
+
+https://blog.fastthread.io/2023/03/07/known-java-apis-unknown-performance-impact-confoo-2023/
+
+
+
+
+
+-----------------------------------------------------------
+
+
+
+
+
+[*] java.util.UUID#randomUUID()
+
+
+
+Problem description:
+
+ 
+The method call will take more time if operation system kernel does not have enough ENTROPY (or randomness) at that point of time. It means that thread executing the method will stuck in such situation and subsequently it will decrease application responsivness.
+
+
+
+Possible solutions:
+
+
+1. Upgrade to RHEL >= 7 in case of RHEL usage
+
+2. Install "Haveged" library
+
+3. Use another source of randomness in *nix systems. In particular /dev/urandom can be configured instead of /dev/random via -Djava.security.egd=file:/dev/urandom
+
+
+
+
+
+-----------------------------------------------------------
+
+
+
+
+
+[*] java.lang.System#getProperty()
+
+
+
+Problem description:
+
+
+The method uses synchronized method java.util.Hashtable#get() under the hood. It means that only one thread is allowed to execute the method at particular point of time and other cuncurrent thread will go to BLOCKED state. As a result it will decrease application responsivness.
+
+
+
+Possible solutions:
+
+
+1. Avoid using the method in critical code path of your application.
+
+2. Upgrade to JDK 11 in which java.lang.System#getProperty() uses java.util.concurrent.ConcurrentHashMap instead of java.util.Hashtable under the hood.
+
+3. If JDK version < 11 then we can "cache" frequently accessible system property inside constant, e.g.:
+
+public class SystemPropertiesHolder {
+	public static final String PROPERTY_1_VALUE = System.getProperty("property-1-name");
+}
+
+
+
+
+
+-----------------------------------------------------------
+
+
+
+
+
+[*] java.util.HashMap#put() or #get() concurrent invocation
+
+
+
+Problem description:
+
+
+Concurrent calls to java.util.HashMap#put()/#get() may cause infinite loop due to JVM glitch. And the infinity loop will subsequently cause CPU load spikes.
+
+
+
+Possible solutions:
+
+
+1. Use java.util.concurrent.ConcurrentHashMap instead of java.util.HashMap in concurrent environment.
+
+
+
+
+
+-----------------------------------------------------------
+
+
+
+
+
+[*] java.util.Collection#clear()
+
+
+
+Problem description:
+
+
+java.util.Collection is the top level interface of java collection framework and most of implementations of the interface (e.g. ArrayList) store elements in array (Object[]). The problem is that #clear() just set null instead of each element in the array but array size remains the same and occupies the same amount of memory.
+
+
+
+Possible solutions:
+
+
+1. Make not needed collection to eligible for GC by setting null or new empty collection instance to reference. 
+
+2. Use java.util.ArrayList#trimToSize() instead of java.util.Collection#clear()
+
+
+
+
+
+
