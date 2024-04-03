@@ -36,3 +36,4 @@
 36) Introduction to Neural Networks with Java. Jeff Heaton. 2005
 37) System Design Interview. 2nd edition. Alex Xu
 38) JVM Performance Engineering and Troubleshooting. Ram Lakshmanan.
+39) Software Architecture. The hard parts. Neal Ford. 1st edition. 2021

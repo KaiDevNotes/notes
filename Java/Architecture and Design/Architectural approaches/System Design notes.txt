@@ -1,0 +1,90 @@
+﻿
+
+
+Books and sources:
+
+[B1]: System Design Interview. Alex Xu. 2nd edition
+
+
+--------------------------------------------------------
+--------------------------------------------------------
+
+
+
+* Scaling from zero to millions of users. (B1 ch. 1)
+
+- Keep web tier stateless
+- Build redundancy at every tier
+- Cache data as much as you can
+- Support multiple data centers
+- Host static assets in CDN
+- Scale your data tier by sharding
+- Split tiers into individual services
+- Monitor your system and use automation tools
+
+
+
+* We should keep a mircoservice stateless in order to be able to scale it horizontally.
+
+
+* Redundancy is a prerequisite of failover.
+
+
+
+* TRANSACTIONAL OUTBOX PATTERN
+
+https://microservices.io/patterns/data/transactional-outbox.html
+
+PROBLEM: 
+
+How to publish messages as part of a database transaction?
+
+E.g. service should read entity from DB, perform some calculations based
+on the data from the entity, send calculations result to another service,
+update status of the entity and save the entity. All this stuff should be 
+performed in one transaction.
+
+SOLUTION: 
+
+Service reads entity from DB, performs some calculations based
+on the data from the entity, updates status of the entity and saves the entity.
+ALSO the service put a row into another DB table (task for calculations sending) 
+during the same DB transaction. Then separate scheduled process of the service 
+will take the task and send calculation results to target service making sure 
+that calculation results were dilivered successfully to the target service.
+
+  
+
+* Use exponential delay for RETRIES in order to not overload target server 
+in case when the server works too slowly at particular moment.
+
+
+* Use queues (e.g. Kafka) to achieve low coupling between distributed components 
+of system and ability to scale the components independently.
+
+
+
+* CONSISTENT HASHING (B1 ch. 5)
+
+This approach solves re-hashing problem and is used for load distribution 
+evenly between several nodes, e.g. data between DB shards or cache nodes. 
+
+Re-hashing problem is about re-destribution of data between nodes during up/down
+scaling (nodes added/removed), in the same way as HashMap entries should be 
+redestributed between buckets when number of buckets is increased.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

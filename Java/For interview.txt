@@ -8,6 +8,7 @@ BOOKS:
 [B3]: Java 8. Полное руководство.
 [B4]: Java. Методы программирования.
 [B5]: Spring in action
+[B6]: System Design Interview. Alex Xu. 2nd edition
 
 
 ----------------------------------------------------------------------------------------------
@@ -133,6 +134,8 @@ ARCHITECTURE AND DESIGN:
 
 https://victorrentea.ro/blog/overengineering-in-onion-hexagonal-architectures/
 [NOTES]\Java\Architecture and Design\Architectural approaches\Overengineering in Concentric Architectures.pdf
+
+Scaling from zero to millions of users. (B6 ch. 1)
 
 
 ----------------------------------------------------------------------------------------------
