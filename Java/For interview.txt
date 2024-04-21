@@ -7,8 +7,7 @@ BOOKS:
 [B2]: Data Structures and Algorithms. R. Lefore
 [B3]: Java 8. Полное руководство.
 [B4]: Java. Методы программирования.
-[B5]: Spring in action
-[B6]: System Design Interview. Alex Xu. 2nd edition
+[B5]: System Design Interview. Alex Xu. 2nd edition
 
 
 ----------------------------------------------------------------------------------------------
@@ -39,13 +38,6 @@ https://jsehelper.blogspot.com.by/2016/12/java-core-4.html
 
 [Процесс создания, использования и уничтожения объектов.]
 [B1]: p. 270-295
-
-
-[Форматирование строк, чисел, дат.]
-[B1]: p. 323-336
-Описание использования:
-- метода String.format()
-- типа java.util.Calendar
 
 
 [Обработка исключений.]
@@ -82,15 +74,13 @@ https://habrahabr.ru/post/337350/
 
 
 
-[Процесс Garbage Collection.]
+[Garbage Collection]
 https://habrahabr.ru/post/112676/
 [NOTES]\Java\Java SE\Garbage Collection. Visualization.pdf
 http://javaconceptoftheday.com/types-of-references-in-java-strong-soft-weak-and-phantom/
 [NOTES]\Java\Java SE\Garbage Collection. Types Of References.pdf
+https://stackoverflow.com/questions/1910194/how-does-java-garbage-collection-work-with-circular-references
 
-
-[Работа с XML.]
-[B4]: p. 395-448
 
 
 [Многопоточность.]
@@ -99,6 +89,8 @@ https://jsehelper.blogspot.com.by/2016/01/multithreading-1.html
 [NOTES]\Java\Java SE\Multithreading\FAQ\FAQ. Part 1.pdf
 https://jsehelper.blogspot.com.by/2016/01/multithreading-2.html  
 [NOTES]\Java\Java SE\Multithreading\FAQ\FAQ. Part 2.pdf
+
+[NOTES]\Java\Java SE\Multithreading\Notes. Java Concurrency in Practice.txt
 
 [java.util.concurrent]
 https://dev.by/lenta/main/pochemu-oni-ne-umeyut-pisat-mnogopotochnye-programmy 
@@ -111,6 +103,9 @@ https://tproger.ru/translations/java8-concurrency-tutorial-2/
 [NOTES]\Java\Java SE\Multithreading\Concurrency API\Concurrency API. Part 2.pdf
 https://tproger.ru/translations/java8-concurrency-tutorial-3/  
 [NOTES]\Java\Java SE\Multithreading\Concurrency API\Concurrency API. Part 3.pdf
+
+https://belief-driven-design.com/looking-at-java-21-virtual-threads-bd181/
+[NOTES]\Java\Java SE\Multithreading\virtual-threads-overview.pdf
 
 
 ----------------------------------------------------------------------------------------------
@@ -135,7 +130,9 @@ ARCHITECTURE AND DESIGN:
 https://victorrentea.ro/blog/overengineering-in-onion-hexagonal-architectures/
 [NOTES]\Java\Architecture and Design\Architectural approaches\Overengineering in Concentric Architectures.pdf
 
-Scaling from zero to millions of users. (B6 ch. 1)
+Scaling from zero to millions of users. (B5 ch. 1)
+
+[NOTES]\Java\Architecture and Design\Architectural approaches\System Design notes.txt
 
 
 ----------------------------------------------------------------------------------------------
@@ -186,12 +183,10 @@ https://jsehelper.blogspot.com.by/2016/03/spring-framework-2.html
 https://jsehelper.blogspot.com.by/2016/03/spring-framework-3.html  
 [NOTES]\Java\Spring Framework\FAQ\FAQ. Part 3.pdf
 
+https://reflectoring.io/spring-bean-lifecycle/
+[NOTES]\Java\Spring Framework\spring-bean-lifecycle.pdf
 
-[B5]: p.29-68
-
-
-BeanPostProcessor:
-https://docs.spring.io/spring/docs/current/javadoc-api/org/springframework/beans/factory/config/BeanPostProcessor.html
+https://www.baeldung.com/spring-inject-prototype-bean-into-singleton
 
 
 ----------------------------------------------------------------------------------------------
@@ -220,6 +215,10 @@ https://jsehelper.blogspot.com.by/2016/03/object-relational-mapping-orm-hibernat
 
 http://docs.jboss.org/hibernate/orm/5.2/userguide/html_single/Hibernate_User_Guide.html#entity-inheritance
 
+https://www.baeldung.com/spring-hibernate-n1-problem
+
+https://www.baeldung.com/jpa-entity-graph
+
 
 [Транзакции. ACID.]
 https://ru.wikipedia.org/wiki/ACID
@@ -242,14 +241,10 @@ SQL
 
 [NOTES]\Java\Persistence\SQL Notes.txt
 [NOTES]\Java\Persistence\SQL-query practice.txt
+[NOTES]\Java\Persistence\MySQL. Indexes. Best practices.pdf
 
 
 [B4]: p. 793-812
-
-
-[Использование индексов в MySQL.]
-https://ruhighload.com/post/%D0%A0%D0%B0%D0%B1%D0%BE%D1%82%D0%B0+%D1%81+%D0%B8%D0%BD%D0%B4%D0%B5%D0%BA%D1%81%D0%B0%D0%BC%D0%B8+%D0%B2+MySQL
-[NOTES]\Java\Persistence\MySQL. Indexes. Best practices.pdf
 
 
 ----------------------------------------------------------------------------------------------
