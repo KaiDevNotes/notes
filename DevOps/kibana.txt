@@ -1,0 +1,25 @@
+
+
+[*] Log messages count per host:
+
+
+	[1] Create Vertical bar visualization:
+	
+		Menu button --> Visualize --> Create Visualization --> Vertical Bar --> Choose a source (select target service name)		
+		
+		
+	[2] Set time interval.		
+		
+		
+	[3] Add filter:
+	
+		Provide log message snippet for which we need to aggregate count per host, e.g. [message is "com.aerospike.client.AerospikeException$Timeout"]		
+		
+		
+	[4] Add messages count breakdown per host:
+
+		Metrics --> Add --> Y-axis --> Aggregation: Count
+
+		Baskets --> Add --> X-axis --> Aggregation: Terms --> Field: host.keyword --> Enable aggregation: click [Eye] icon
+
+
