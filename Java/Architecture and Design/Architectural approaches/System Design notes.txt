@@ -66,22 +66,31 @@ of system and ability to scale the components independently.
 
 * CONSISTENT HASHING (B1 ch. 5)
 
-This approach solves re-hashing problem and is used for load distribution 
-evenly between several nodes, e.g. data between DB shards or cache nodes. 
+This approach solves re-hashing problem and is used for load distribution
+evenly between several nodes, e.g. data between DB shards or cache nodes.
 
 Re-hashing problem is about re-destribution of data between nodes during up/down
-scaling (nodes added/removed), in the same way as HashMap entries should be 
+scaling (nodes added/removed), in the same way as HashMap entries should be
 redestributed between buckets when number of buckets is increased.
 
 
 
+* We should strive to avoid direct access of incoming load (processing of
+HTTP requests, messages etc.) to limited resources (cpu, memory, connections in
+pools etc.). E.g. if processing of each incoming request requires access to...:
 
+- Relational DB with limited connection pool - in this case we can consider
+caching in order to avoid DB access for each request and not exhaust connection
+pool, or we can consider usage of NoSQL DB which is optimized for high friquency
+access by key.
 
+- 3rd party service via HTTP request - in this case we can consider caching
 
-
-
-
-
+- Memory (e.g. amount of objects created in memory during request processing
+directly depends on a request param value) - in this case we should apply limit
+on possible value of such request param and validate the limitation before the
+request processing in order to avoid exhausting of heap space and as a result
+OutOfMemoryError.
 
 
 
