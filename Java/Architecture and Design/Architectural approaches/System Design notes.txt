@@ -94,6 +94,9 @@ OutOfMemoryError.
 
 
 
+* Validation of input data should be done on server side. Even if validation is
+done on client side we should not rely on it.
+
 
 
 
