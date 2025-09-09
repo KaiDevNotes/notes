@@ -133,6 +133,7 @@ https://victorrentea.ro/blog/overengineering-in-onion-hexagonal-architectures/
 Scaling from zero to millions of users. (B5 ch. 1)
 
 [NOTES]\Java\Architecture and Design\Architectural approaches\System Design notes.txt
+[NOTES]\Java\Architecture and Design\Architectural approaches\System design and scaling recommendations.pdf
 
 
 ----------------------------------------------------------------------------------------------
