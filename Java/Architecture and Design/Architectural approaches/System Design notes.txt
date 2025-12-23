@@ -99,4 +99,9 @@ done on client side we should not rely on it.
 
 
 
+* In places where we have to do log.error(...) consider increment error metric 
+and have an alert configured for the metric.
 
+
+
+ 
