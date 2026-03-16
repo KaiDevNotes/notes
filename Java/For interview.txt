@@ -104,7 +104,7 @@ https://tproger.ru/translations/java8-concurrency-tutorial-2/
 https://tproger.ru/translations/java8-concurrency-tutorial-3/  
 [NOTES]\Java\Java SE\Multithreading\Concurrency API\Concurrency API. Part 3.pdf
 
-https://belief-driven-design.com/looking-at-java-21-virtual-threads-bd181/
+https://medium.com/@aravindcsebe/virtual-threads-in-java-21-a-deep-dive-into-lightweight-concurrency-c1743e7dbe04
 [NOTES]\Java\Java SE\Multithreading\virtual-threads-overview.pdf
 
 
