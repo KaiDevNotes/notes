@@ -1,7 +1,4 @@
-﻿
-
-To deploy Static Content project (HTML, CSS, JS) on Tomcat we need to:
-
+﻿To deploy Static Content project (HTML, CSS, JS) on Tomcat we need to:
 
 
 
