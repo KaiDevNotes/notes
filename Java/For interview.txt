@@ -106,6 +106,7 @@ https://tproger.ru/translations/java8-concurrency-tutorial-3/
 
 https://medium.com/@aravindcsebe/virtual-threads-in-java-21-a-deep-dive-into-lightweight-concurrency-c1743e7dbe04
 [NOTES]\Java\Java SE\Multithreading\virtual-threads-overview.pdf
+[NOTES]\Java\Java SE\Multithreading\spring-web-flux-vs-spring-mvc-and-virtual-threads.pdf
 
 
 ----------------------------------------------------------------------------------------------
