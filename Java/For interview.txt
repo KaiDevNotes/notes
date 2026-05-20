@@ -203,6 +203,10 @@ JPA, HIBERNATE
 --------------
 
 
+https://medium.com/@syed.fawzul.azim/java-persistence-api-jpa-hibernate-74c0bc991da0
+[NOTES]\Java\Persistence\JPA and Hibernate. Overview and best practices.pdf
+
+
 https://jsehelper.blogspot.com.by/2016/03/java-persistence-api-jpa-1.html  
 [NOTES]\Java\Persistence\JPA\FAQ\FAQ. Part 1.pdf
 https://jsehelper.blogspot.com.by/2016/04/java-persistence-api-jpa-2.html  
